@@ -19,6 +19,7 @@ export const BranchLocator: React.FC = () => {
 
   const regionTabs: { id: Region; label: string }[] = [
     { id: 'all', label: 'Semua Cawangan' },
+    { id: 'ampang', label: 'Selangor' },
     { id: 'kv', label: 'Klang Valley' },
     { id: 'ns', label: 'Negeri Sembilan' },
     { id: 'perak', label: 'Perak' },

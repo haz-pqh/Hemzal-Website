@@ -41,7 +41,7 @@ export const BRANCHES: Branch[] = [
     id: 'taman-permata',
     name: 'Hemzal Crispy Chicken Taman Permata',
     region: 'kl',
-    regionLabel: 'Klang Valley',
+    regionLabel: 'Taman Permata',
     address: 'Persiaran Permata, Taman Permata, 53300 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur',
     city: 'Kuala Lumpur',
     state: 'WP Kuala Lumpur',

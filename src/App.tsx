@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { MenuItem, CartItem } from './types';
+import { MenuItem, CartItem, PortionOption } from './types';
 import { MENU_ITEMS } from './data/menuData';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ChefStory } from './components/ChefStory';
 import { MenuSection } from './components/MenuSection';
-import { CrunchLab } from './components/CrunchLab';
 import { BranchLocator } from './components/BranchLocator';
 import { Testimonials } from './components/Testimonials';
 import { ContactSection } from './components/ContactSection';
@@ -37,7 +36,7 @@ export default function App() {
   }, [cart]);
 
   // Modal states
-  const [customizingItem, setCustomizingItem] = useState<MenuItem | null>(null);
+  const [customizingState, setCustomizingState] = useState<{ item: MenuItem; portion?: PortionOption } | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isFranchiseModalOpen, setIsFranchiseModalOpen] = useState(false);
 
@@ -63,10 +62,10 @@ export default function App() {
   // Add customized item to cart
   const handleAddToCart = (newCartItem: CartItem) => {
     setCart((prev) => {
-      // Check if exact same item with same spice, dip, and addons exists
       const existingIndex = prev.findIndex(
         (ci) =>
           ci.item.id === newCartItem.item.id &&
+          ci.selectedPortion?.label === newCartItem.selectedPortion?.label &&
           ci.selectedSpice === newCartItem.selectedSpice &&
           ci.selectedDip === newCartItem.selectedDip &&
           JSON.stringify(ci.selectedAddons) === JSON.stringify(newCartItem.selectedAddons) &&
@@ -88,19 +87,24 @@ export default function App() {
       return [...prev, newCartItem];
     });
 
-    showToast(`✓ "${newCartItem.item.name}" ditambah ke troli!`);
+    const portionLabel = newCartItem.selectedPortion ? ` (${newCartItem.selectedPortion.label})` : '';
+    showToast(`✓ "${newCartItem.item.name}${portionLabel}" ditambah ke troli!`);
   };
 
   // Quick add with defaults
-  const handleQuickAdd = (item: MenuItem) => {
+  const handleQuickAdd = (item: MenuItem, initialPortion?: PortionOption) => {
+    const selectedPortion = initialPortion || (item.portions && item.portions.length > 0 ? item.portions[0] : undefined);
+    const basePrice = selectedPortion ? selectedPortion.price : item.price;
+
     const newCartItem: CartItem = {
-      cartId: `${item.id}-${Date.now()}`,
+      cartId: `${item.id}-${selectedPortion?.label || 'default'}-${Date.now()}`,
       item,
       quantity: 1,
+      selectedPortion,
       selectedSpice: item.spiceLevel === 3 ? 'Extra Berapi 🔥🔥' : 'Pedas Padu (Spicy)',
       selectedDip: item.availableDips?.[0],
       selectedAddons: [],
-      totalPrice: item.price,
+      totalPrice: basePrice,
     };
     handleAddToCart(newCartItem);
     confetti({ particleCount: 30, spread: 40 });
@@ -169,17 +173,10 @@ export default function App() {
         {/* 2. Chef Story & 4 Pillars of Taste */}
         <ChefStory />
 
-        {/* 3. Interactive Craving Pairing Lab */}
-        <CrunchLab
-          items={MENU_ITEMS}
-          onSelectItem={(item) => setCustomizingItem(item)}
-          onQuickAdd={handleQuickAdd}
-        />
-
-        {/* 4. Full Menu & Price List */}
+        {/* 3. Full Menu & Price List */}
         <MenuSection
           items={MENU_ITEMS}
-          onSelectItem={(item) => setCustomizingItem(item)}
+          onSelectItem={(item, portion) => setCustomizingState({ item, portion })}
           onQuickAdd={handleQuickAdd}
         />
 
@@ -208,8 +205,9 @@ export default function App() {
 
       {/* Item Customizer Modal */}
       <ItemCustomizerModal
-        item={customizingItem}
-        onClose={() => setCustomizingItem(null)}
+        item={customizingState?.item || null}
+        initialPortion={customizingState?.portion}
+        onClose={() => setCustomizingState(null)}
         onAddToCart={handleAddToCart}
       />
 
@@ -263,3 +261,4 @@ export default function App() {
     </div>
   );
 }
+

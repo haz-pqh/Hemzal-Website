@@ -1,12 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { MenuItem } from '../types';
-import { Flame, Star, Search, Plus, Sparkles, Filter, Check, ShoppingBag, Eye } from 'lucide-react';
+import { MenuItem, PortionOption } from '../types';
+import { Flame, Star, Search, Plus, Sparkles, Filter, Check, ShoppingBag, Eye, Award, Layers, ShieldCheck } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
 
 interface MenuSectionProps {
   items: MenuItem[];
-  onSelectItem: (item: MenuItem) => void;
-  onQuickAdd: (item: MenuItem) => void;
+  onSelectItem: (item: MenuItem, initialPortion?: PortionOption) => void;
+  onQuickAdd: (item: MenuItem, initialPortion?: PortionOption) => void;
 }
 
 export const MenuSection: React.FC<MenuSectionProps> = ({
@@ -18,12 +18,14 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [spiceFilter, setSpiceFilter] = useState<number | null>(null);
 
+  // Track selected portion preview for cards
+  const [cardPortions, setCardPortions] = useState<Record<string, PortionOption>>({});
+
   const categories = [
     { id: 'all', label: 'Semua Menu', count: items.length },
-    { id: 'signature', label: 'Signature Chicken', count: items.filter(i => i.category === 'signature').length },
-    { id: 'combos', label: 'Set Kombo & Bucket', count: items.filter(i => i.category === 'combos').length },
-    { id: 'burgers', label: 'Burgers & Wraps', count: items.filter(i => i.category === 'burgers').length },
-    { id: 'sides', label: 'Snek & Sos Celup', count: items.filter(i => i.category === 'sides').length },
+    { id: 'signature', label: 'Signature Set (2/6/10 pcs)', count: items.filter(i => i.category === 'signature').length },
+    { id: 'combos', label: 'Special Bucket Promo', count: items.filter(i => i.category === 'combos').length },
+    { id: 'sides', label: 'Add-On Coleslaw & Snek', count: items.filter(i => i.category === 'sides').length },
     { id: 'drinks', label: 'Minuman Segar', count: items.filter(i => i.category === 'drinks').length },
   ];
 
@@ -39,25 +41,145 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
     });
   }, [items, activeCategory, searchQuery, spiceFilter]);
 
+  const specialBucketItem = items.find((i) => i.id === 'hemzal-special-bucket');
+
+  const handlePortionSelect = (itemId: string, portion: PortionOption) => {
+    playPopSound();
+    setCardPortions((prev) => ({ ...prev, [itemId]: portion }));
+  };
+
   return (
     <section id="menu" className="py-20 bg-[#0c0c0e] relative overflow-hidden">
+      {/* Subtle Glows */}
+      <div className="absolute top-20 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-[radial-gradient(ellipse_at_center,rgba(227,30,36,0.08),transparent_70%)] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-1.5 bg-[#1a1a1e] border border-[#E31E24]/40 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-widest text-[#E31E24]">
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
+          <div className="inline-flex items-center gap-2 bg-[#1a1a1e] border border-[#E31E24]/40 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest text-[#E31E24]">
             <Flame className="w-3.5 h-3.5 fill-[#E31E24]" />
-            <span>Pilihan Gourmet Terhebat</span>
+            <span>Pilihan Gourmet Rasmi Hemzal</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight">
-            MENU <span className="text-[#FDB913]">HEMZAL CRISPY</span>
+            MENU & <span className="text-[#FDB913]">SENARAI HARGA</span>
           </h2>
 
           <p className="text-neutral-300 text-sm sm:text-base">
-            Setiap hidangan digoreng panas mengikut tempahan anda. Pilih perisa kegemaran dan sesuaikan tahap kepedasan mengikut citarasa.
+            <span className="text-[#FDB913] font-bold">"Rangup di luar, Juicy di dalam!"</span> — Ayam segar diperap harian dengan resepi eksklusif dan dihidang panas mengikut tempahan anda.
           </p>
         </div>
+
+        {/* FEATURED PROMO BANNER: HEMZAL SPECIAL BUCKET (Image 2) */}
+        {specialBucketItem && (
+          <div className="mb-12 bg-gradient-to-r from-[#8a0c10] via-[#c21419] to-[#8a0c10] rounded-3xl p-6 sm:p-8 border border-[#FDB913]/40 shadow-2xl relative overflow-hidden">
+            {/* Background badge */}
+            <div className="absolute -right-10 -bottom-10 w-72 h-72 bg-[#FDB913]/10 rounded-full blur-2xl pointer-events-none" />
+            
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+              
+              {/* Image & Price Ribbon */}
+              <div className="lg:col-span-5 relative rounded-2xl overflow-hidden shadow-2xl h-64 sm:h-72 bg-neutral-900 border border-white/20 group">
+                <img
+                  src={specialBucketItem.image}
+                  alt={specialBucketItem.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30" />
+                
+                {/* Official Slogan Badge */}
+                <div className="absolute top-3 left-3 bg-white text-black font-black text-[11px] px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
+                  <Flame className="w-3 h-3 text-[#E31E24] fill-[#E31E24]" />
+                  <span>Rangup di luar, Juicy di dalam!</span>
+                </div>
+
+                {/* Price Tag Box */}
+                <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md border border-[#FDB913]/60 px-3.5 py-1.5 rounded-xl text-right">
+                  <span className="text-[10px] text-neutral-400 line-through block leading-none">
+                    Harga Asal RM 57.00
+                  </span>
+                  <span className="text-xl sm:text-2xl font-black text-[#FDB913] leading-tight">
+                    RM 53.90
+                  </span>
+                  <span className="text-[9px] text-emerald-400 font-bold block">Jimat RM 3.10!</span>
+                </div>
+              </div>
+
+              {/* Offer Details */}
+              <div className="lg:col-span-7 space-y-4 text-white">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="bg-[#FDB913] text-black font-black text-xs uppercase px-3 py-1 rounded-full shadow">
+                    🔥 Tawaran Istimewa Pembukaan
+                  </span>
+                  <span className="bg-black/40 text-[#FDB913] font-semibold text-xs px-3 py-1 rounded-full border border-white/10">
+                    www.hemzalcrispychicken.com
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white flex items-center gap-2">
+                    <span>HEMZAL SPECIAL BUCKET</span>
+                  </h3>
+                  <p className="text-xs sm:text-sm text-neutral-100 mt-1 leading-relaxed">
+                    Pakej hidangan pesta lengkap terlaris! Nikmati 10 ketul ayam rangup berjus bersama 10 pek sos cili serta LENGKAP dengan 5 cawan sos gourmet istimewa:
+                  </p>
+                </div>
+
+                {/* Included 5 gourmet sauce cups breakdown */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                  <div className="bg-black/50 border border-white/10 p-2 rounded-xl flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+                    <span className="font-semibold text-neutral-200">10 pcs Ayam Crispy</span>
+                  </div>
+                  <div className="bg-black/50 border border-white/10 p-2 rounded-xl flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />
+                    <span className="font-semibold text-neutral-200">10 pcs Chili Sauce</span>
+                  </div>
+                  <div className="bg-black/50 border border-white/10 p-2 rounded-xl flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#FDB913] shrink-0" />
+                    <span className="font-semibold text-neutral-200">1 cup Garlic Sauce</span>
+                  </div>
+                  <div className="bg-black/50 border border-white/10 p-2 rounded-xl flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+                    <span className="font-semibold text-neutral-200">1 cup Cheese Sauce</span>
+                  </div>
+                  <div className="bg-black/50 border border-white/10 p-2 rounded-xl flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                    <span className="font-semibold text-neutral-200">1 cup Korean Habanero</span>
+                  </div>
+                  <div className="bg-black/50 border border-white/10 p-2 rounded-xl flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-teal-400 shrink-0" />
+                    <span className="font-semibold text-neutral-200">1 cup Furikake & Togarashi</span>
+                  </div>
+                </div>
+
+                {/* Action CTA */}
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <button
+                    onClick={() => {
+                      playPopSound();
+                      onQuickAdd(specialBucketItem);
+                    }}
+                    className="px-6 py-3 bg-[#FDB913] hover:bg-yellow-400 text-black font-black text-xs sm:text-sm uppercase tracking-wider rounded-xl shadow-xl flex items-center gap-2 transition-all cursor-pointer"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    <span>Pesan Special Bucket • RM 53.90</span>
+                  </button>
+
+                  <button
+                    onClick={() => onSelectItem(specialBucketItem)}
+                    className="px-4 py-3 bg-black/40 hover:bg-black/60 text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-white/20 transition-colors cursor-pointer"
+                  >
+                    Kustomisasi
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        )}
 
         {/* Filters & Search Toolbar */}
         <div className="space-y-4 mb-10">
@@ -73,7 +195,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cari ayam, burger, combo, sos..."
+                placeholder="Cari Original, Cheese, Garlic, Habanero..."
                 className="w-full pl-10 pr-4 py-2.5 bg-[#16161a] border border-white/10 rounded-xl text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#FDB913] transition-colors"
               />
               {searchQuery && (
@@ -185,109 +307,153 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredItems.map((item) => (
-              <div
-                key={item.id}
-                className="group bg-[#141418] hover:bg-[#18181f] rounded-3xl border border-white/10 hover:border-[#FDB913]/40 transition-all duration-300 overflow-hidden flex flex-col shadow-xl hover:shadow-2xl hover:shadow-black/50"
-              >
-                {/* Image & Badges */}
-                <div className="relative h-56 w-full overflow-hidden bg-[#1f1f24]">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#141418] via-transparent to-black/40" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredItems.map((item) => {
+              const activePortion = cardPortions[item.id] || (item.portions && item.portions.length > 0 ? item.portions[0] : undefined);
+              const displayPrice = activePortion ? activePortion.price : item.price;
 
-                  {/* Top Badges */}
-                  <div className="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5">
-                    {item.isBestSeller && (
-                      <span className="bg-[#E31E24] text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-md shadow-md flex items-center gap-1">
-                        <Flame className="w-3 h-3 fill-white" /> Best Seller
-                      </span>
-                    )}
-                    {item.isChefSpecial && (
-                      <span className="bg-[#FDB913] text-black text-[10px] font-black uppercase px-2.5 py-1 rounded-md shadow-md flex items-center gap-1">
-                        <Star className="w-3 h-3 fill-black" /> Pilihan Chef
-                      </span>
-                    )}
-                  </div>
+              return (
+                <div
+                  key={item.id}
+                  className="group bg-[#141418] hover:bg-[#18181f] rounded-3xl border border-white/10 hover:border-[#FDB913]/40 transition-all duration-300 overflow-hidden flex flex-col shadow-xl hover:shadow-2xl hover:shadow-black/50"
+                >
+                  {/* Image & Badges */}
+                  <div className="relative h-56 w-full overflow-hidden bg-[#1f1f24]">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#141418] via-transparent to-black/40" />
 
-                  {/* Spice Level Indicator */}
-                  <div className="absolute top-3.5 right-3.5 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold text-white border border-white/10 flex items-center gap-1">
-                    {item.spiceLevel === 0 && <span className="text-emerald-400 font-normal">Tak Pedas</span>}
-                    {item.spiceLevel === 1 && <span className="text-[#FDB913]">🌶️ Biasa</span>}
-                    {item.spiceLevel === 2 && <span className="text-orange-500">🌶️🌶️ Pedas</span>}
-                    {item.spiceLevel === 3 && <span className="text-[#E31E24] font-black">🔥🔥 Berapi</span>}
-                  </div>
-
-                  {/* Portions / Calories footer inside photo */}
-                  <div className="absolute bottom-3 left-3.5 text-[11px] text-neutral-300 font-medium flex items-center gap-2">
-                    {item.servings && <span className="bg-black/60 px-2 py-0.5 rounded">{item.servings}</span>}
-                    {item.calories && <span className="bg-black/60 px-2 py-0.5 rounded">{item.calories} kcal</span>}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                  <div className="space-y-1.5">
-                    <h3 className="font-black text-lg text-white group-hover:text-[#FDB913] transition-colors leading-snug">
-                      {item.name}
-                    </h3>
-                    <p className="text-xs font-semibold text-[#FDB913]">
-                      {item.tagline}
-                    </p>
-                    <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  {/* Price & Action Buttons */}
-                  <div className="pt-3 border-t border-white/5 flex items-center justify-between gap-2">
-                    <div>
-                      <span className="text-[10px] text-neutral-400 block uppercase font-bold">Harga</span>
-                      <div className="flex items-baseline gap-1.5">
-                        <span className="text-xl font-black text-[#FDB913]">
-                          RM {item.price.toFixed(2)}
+                    {/* Top Badges */}
+                    <div className="absolute top-3.5 left-3.5 flex flex-wrap gap-1.5">
+                      {item.isBestSeller && (
+                        <span className="bg-[#E31E24] text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-md shadow-md flex items-center gap-1">
+                          <Flame className="w-3 h-3 fill-white" /> Best Seller
                         </span>
-                        {item.originalPrice && (
-                          <span className="text-xs text-neutral-500 line-through">
-                            RM {item.originalPrice.toFixed(2)}
+                      )}
+                      {item.isChefSpecial && (
+                        <span className="bg-[#FDB913] text-black text-[10px] font-black uppercase px-2.5 py-1 rounded-md shadow-md flex items-center gap-1">
+                          <Star className="w-3 h-3 fill-black" /> Pilihan Chef
+                        </span>
+                      )}
+                      {item.isNew && (
+                        <span className="bg-amber-500 text-black text-[10px] font-black uppercase px-2.5 py-1 rounded-md shadow-md">
+                          Baharu
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Spice Level Indicator */}
+                    <div className="absolute top-3.5 right-3.5 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold text-white border border-white/10 flex items-center gap-1">
+                      {item.spiceLevel === 0 && <span className="text-emerald-400 font-normal">Tak Pedas</span>}
+                      {item.spiceLevel === 1 && <span className="text-[#FDB913]">🌶️ Biasa</span>}
+                      {item.spiceLevel === 2 && <span className="text-orange-400">🌶️🌶️ Pedas</span>}
+                      {item.spiceLevel === 3 && <span className="text-[#E31E24] font-black">🔥🔥 Berapi</span>}
+                    </div>
+
+                    {/* Portions / Slogan footer inside photo */}
+                    <div className="absolute bottom-3 left-3.5 right-3.5 text-[11px] text-neutral-300 font-medium flex items-center justify-between">
+                      <span className="bg-black/70 px-2 py-0.5 rounded text-[#FDB913] font-bold text-[10px]">
+                        {item.sauceInfo ? `✓ ${item.sauceInfo}` : 'Rangup di luar, juicy di dalam'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                    <div className="space-y-1.5">
+                      <h3 className="font-black text-lg text-white group-hover:text-[#FDB913] transition-colors leading-snug">
+                        {item.name}
+                      </h3>
+                      <p className="text-xs font-semibold text-[#FDB913]">
+                        {item.tagline}
+                      </p>
+                      <p className="text-xs text-neutral-300 line-clamp-2 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+
+                    {/* Portion Tier Selector (2 PCS / 6 PCS / 10 PCS) from the poster */}
+                    {item.portions && item.portions.length > 0 && (
+                      <div className="space-y-1.5 pt-1">
+                        <span className="text-[10px] text-neutral-400 uppercase font-bold flex items-center gap-1">
+                          <Layers className="w-3 h-3 text-[#FDB913]" /> Pilih Saiz / Kuantiti:
+                        </span>
+                        <div className="grid grid-cols-3 gap-1.5">
+                          {item.portions.map((portion) => {
+                            const isSelected = activePortion?.label === portion.label;
+                            return (
+                              <button
+                                key={portion.label}
+                                type="button"
+                                onClick={() => handlePortionSelect(item.id, portion)}
+                                className={`py-1.5 px-2 rounded-xl text-center border transition-all cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-[#E31E24] border-[#E31E24] text-white shadow-md font-black'
+                                    : 'bg-[#1a1a20] border-white/10 text-neutral-400 hover:text-white hover:border-white/30 font-medium'
+                                }`}
+                              >
+                                <span className="text-[11px] block">{portion.label}</span>
+                                <span className="text-[10px] font-bold text-[#FDB913] block">
+                                  RM {portion.price.toFixed(2)}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Price & Action Buttons */}
+                    <div className="pt-3 border-t border-white/5 flex items-center justify-between gap-2">
+                      <div>
+                        <span className="text-[10px] text-neutral-400 block uppercase font-bold">
+                          {activePortion ? activePortion.label : 'Harga'}
+                        </span>
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="text-xl font-black text-[#FDB913]">
+                            RM {displayPrice.toFixed(2)}
                           </span>
-                        )}
+                          {item.originalPrice && !activePortion && (
+                            <span className="text-xs text-neutral-500 line-through">
+                              RM {item.originalPrice.toFixed(2)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {/* Customize Button */}
+                        <button
+                          onClick={() => onSelectItem(item, activePortion)}
+                          className="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                          title="Pilih kepedasan & sos"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                          <span>Kustom</span>
+                        </button>
+
+                        {/* Quick Add Button */}
+                        <button
+                          onClick={() => {
+                            playPopSound();
+                            onQuickAdd(item, activePortion);
+                          }}
+                          className="p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-[#E31E24] hover:bg-[#FDB913] text-white hover:text-black font-black text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md shadow-[#E31E24]/30 cursor-pointer"
+                          title="Tambah Cepat ke Troli"
+                        >
+                          <Plus className="w-4 h-4" />
+                          <span className="hidden sm:inline">Pesan</span>
+                        </button>
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-2">
-                      {/* Customize Button */}
-                      <button
-                        onClick={() => onSelectItem(item)}
-                        className="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-                        title="Pilih kepedasan & sos"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                        <span>Kustom</span>
-                      </button>
-
-                      {/* Quick Add Button */}
-                      <button
-                        onClick={() => {
-                          playPopSound();
-                          onQuickAdd(item);
-                        }}
-                        className="p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-[#E31E24] hover:bg-[#FDB913] text-white hover:text-black font-black text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md shadow-[#E31E24]/30 cursor-pointer"
-                        title="Tambah Cepat ke Troli"
-                      >
-                        <Plus className="w-4 h-4" />
-                        <span className="hidden sm:inline">Pesan</span>
-                      </button>
-                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 

@@ -90,7 +90,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     msg += `🛒 *SENARAI ITEM DIPESAN:*\n`;
 
     cart.forEach((item, index) => {
-      msg += `\n*${index + 1}. ${item.item.name}* (x${item.quantity})\n`;
+      const portionText = item.selectedPortion ? ` (${item.selectedPortion.label})` : '';
+      msg += `\n*${index + 1}. ${item.item.name}${portionText}* (x${item.quantity})\n`;
       msg += `   • Tahap: ${item.selectedSpice}\n`;
       if (item.selectedDip) msg += `   • Sos Celup: ${item.selectedDip}\n`;
       if (item.selectedAddons.length > 0) {
@@ -281,6 +282,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <div className="flex items-start justify-between gap-1">
                       <h5 className="font-black text-xs text-white leading-tight truncate">
                         {cartItem.item.name}
+                        {cartItem.selectedPortion && (
+                          <span className="text-[#FDB913] font-bold ml-1">
+                            ({cartItem.selectedPortion.label})
+                          </span>
+                        )}
                       </h5>
                       <button
                         onClick={() => onRemoveItem(cartItem.cartId)}

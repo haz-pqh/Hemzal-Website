@@ -8,6 +8,14 @@ export interface CustomizationOption {
   price: number;
 }
 
+export interface PortionOption {
+  label: string; // e.g. "2 PCS", "6 PCS", "10 PCS", "1 CUP 4 ONZ", "2 CUP 4 ONZ"
+  price: number;
+  pieces?: number;
+  originalPrice?: number;
+  isPopular?: boolean;
+}
+
 export interface MenuItem {
   id: string;
   name: string;
@@ -15,7 +23,7 @@ export interface MenuItem {
   description: string;
   price: number;
   originalPrice?: number;
-  category: 'signature' | 'combos' | 'burgers' | 'sides' | 'drinks';
+  category: 'signature' | 'combos' | 'sides' | 'drinks';
   image: string;
   isBestSeller?: boolean;
   isChefSpecial?: boolean;
@@ -25,8 +33,10 @@ export interface MenuItem {
   servings?: string;
   pieces?: number;
   availableDips?: string[];
+  sauceInfo?: string;
+  includedItems?: string[];
+  portions?: PortionOption[];
   options?: {
-    sizes?: { name: string; priceMultiplier: number }[];
     addons?: CustomizationOption[];
   };
 }
@@ -35,6 +45,7 @@ export interface CartItem {
   cartId: string;
   item: MenuItem;
   quantity: number;
+  selectedPortion?: PortionOption;
   selectedSpice: SpiceLevel;
   selectedDip?: string;
   selectedAddons: CustomizationOption[];
@@ -81,3 +92,4 @@ export interface PromoVoucher {
   minSpend: number;
   description: string;
 }
+

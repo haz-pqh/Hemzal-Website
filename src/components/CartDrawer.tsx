@@ -114,7 +114,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     msg += `----------------------------------------\n`;
     msg += `Mohon sahkan pesanan dan sediakan hidangan panas. Terima kasih! 🙏`;
 
-    const targetPhone = selectedBranch.whatsapp || '60123456789';
+    const targetPhone = selectedBranch.whatsapp || '60164175976';
     const waUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`;
     window.open(waUrl, '_blank');
   };

@@ -18,23 +18,39 @@ export const CateringFranchiseModal: React.FC<CateringFranchiseModalProps> = ({
   const [paxCount, setPaxCount] = useState<number>(50);
   const [packageType, setPackageType] = useState<'standard' | 'premium' | 'royale'>('premium');
 
-  // Catering price calculations
-  const pricePerPax = {
-    standard: 14.00, // 1pc Mega Chicken + Rice/Wedges + Teh Ais
-    premium: 18.50,  // 2pc Mega Chicken + Wedges + Coleslaw + Drinks + Sos
-    royale: 24.00,   // 2pc Mega Chicken + Burger + Wedges + Coleslaw + Dips + Dessert + Free Delivery
+  // Catering price calculations strictly based on Hemzal Menu (Ayam RM4.50/pc, Coleslaw RM3.50, Sos Gourmet RM2/RM3, Sos Cili Percuma)
+  const packages = {
+    standard: {
+      name: 'Pakej 2 Ketul Crispy',
+      price: 9.00,
+      description: '2x Ketul Ayam Goreng Crispy + Sos Cili Percuma',
+      items: ['2x Ketul Ayam Crispy (RM4.50/ketul)', 'Sos Cili Istimewa (Percuma)', 'Pek Kotak Bersih & Tisu'],
+    },
+    premium: {
+      name: 'Pakej Combo 2 Ketul + Coleslaw + Sos',
+      price: 14.50,
+      description: '2x Ayam + 1x Coleslaw 4oz + 1x Sos Gourmet + Sos Cili Percuma',
+      items: ['2x Ketul Ayam Crispy', '1x Hemzal Coleslaw Segar (4oz)', '1x Sos Gourmet (Keju/Garlic/Korean)', 'Sos Cili Istimewa (Percuma)'],
+    },
+    royale: {
+      name: 'Pakej Feast 3 Ketul + Coleslaw + 2 Sos',
+      price: 20.00,
+      description: '3x Ayam + 1x Coleslaw 4oz + 2x Sos Gourmet + Sos Cili Percuma',
+      items: ['3x Ketul Ayam Crispy', '1x Hemzal Coleslaw Segar (4oz)', '2x Sos Gourmet Pilihan (Keju/Garlic/Korean/Furikake/Togarashi)', 'Sos Cili Istimewa (Percuma)'],
+    },
   };
 
-  const estimatedTotal = paxCount * pricePerPax[packageType];
+  const currentPackage = packages[packageType];
+  const estimatedTotal = paxCount * currentPackage.price;
 
   const handleSendWhatsApp = () => {
     playPopSound();
     confetti({ particleCount: 70, spread: 50 });
     const text = activeTab === 'catering'
-      ? `Hai Hemzal Catering! Saya ingin tempah katering untuk ${paxCount} Pax (Pakej ${packageType.toUpperCase()}). Anggaran RM ${estimatedTotal.toFixed(2)}. Boleh bantu saya?`
+      ? `Hai Hemzal Catering! Saya ingin tempah katering untuk ${paxCount} Pax (${currentPackage.name}). Anggaran RM ${estimatedTotal.toFixed(2)}. Kandungan: ${currentPackage.description}. Boleh bantu saya?`
       : `Hai Hemzal HQ! Saya berminat untuk memohon peluang perkongsian Francais Cawangan Hemzal Crispy Chicken. Mohon maklumat lanjut.`;
     
-    window.open(`https://wa.me/60123456789?text=${encodeURIComponent(text)}`, '_blank');
+    window.open(`https://wa.me/60164175976?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   return (
@@ -115,52 +131,85 @@ export const CateringFranchiseModal: React.FC<CateringFranchiseModalProps> = ({
               </div>
 
               {/* Package Selector */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-neutral-300 uppercase">Pilih Pakej Katering</label>
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-neutral-300 uppercase">Pilih Pakej Katering (Menu Hemzal)</label>
+                  <span className="text-[10px] text-[#FDB913] font-semibold">100% Mengikut Menu Rasmi</span>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   
                   <button
                     type="button"
                     onClick={() => setPackageType('standard')}
-                    className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+                    className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                       packageType === 'standard'
-                        ? 'bg-[#E31E24]/20 border-[#E31E24] text-white'
-                        : 'bg-[#1a1a22] border-white/5 text-neutral-400'
+                        ? 'bg-gradient-to-b from-[#E31E24]/25 to-[#E31E24]/10 border-[#E31E24] text-white shadow-lg'
+                        : 'bg-[#1a1a22] border-white/5 text-neutral-400 hover:border-white/20'
                     }`}
                   >
-                    <span className="text-xs font-black block text-white">Pakej Standard</span>
-                    <span className="text-xs text-[#FDB913] font-bold">RM 14.00 / pax</span>
-                    <p className="text-[10px] text-neutral-400 mt-1">1x Ayam Mega, Wedges & Minuman</p>
+                    <div>
+                      <span className="text-xs font-black block text-white">2 Ketul Crispy Set</span>
+                      <span className="text-xs text-[#FDB913] font-bold">RM 9.00 / pax</span>
+                    </div>
+                    <p className="text-[10px] text-neutral-400 mt-1.5 leading-snug">
+                      2x Ayam Crispy + Sos Cili Percuma
+                    </p>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setPackageType('premium')}
-                    className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+                    className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer relative flex flex-col justify-between ${
                       packageType === 'premium'
-                        ? 'bg-[#FDB913]/20 border-[#FDB913] text-white'
-                        : 'bg-[#1a1a22] border-white/5 text-neutral-400'
+                        ? 'bg-gradient-to-b from-[#FDB913]/25 to-[#FDB913]/10 border-[#FDB913] text-white shadow-lg'
+                        : 'bg-[#1a1a22] border-white/5 text-neutral-400 hover:border-white/20'
                     }`}
                   >
-                    <span className="text-xs font-black block text-white">Pakej Premium (Popular)</span>
-                    <span className="text-xs text-[#FDB913] font-bold">RM 18.50 / pax</span>
-                    <p className="text-[10px] text-neutral-400 mt-1">2x Ayam Mega, Wedges, Coleslaw & Sos</p>
+                    <span className="absolute -top-2 right-3 bg-[#FDB913] text-black text-[8px] font-black px-1.5 py-0.2 rounded-full uppercase">
+                      Popular
+                    </span>
+                    <div>
+                      <span className="text-xs font-black block text-white">Combo Crispy + Coleslaw</span>
+                      <span className="text-xs text-[#FDB913] font-bold">RM 14.50 / pax</span>
+                    </div>
+                    <p className="text-[10px] text-neutral-300 mt-1.5 leading-snug">
+                      2x Ayam + 1x Coleslaw 4oz + 1x Sos Gourmet + Sos Cili Percuma
+                    </p>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setPackageType('royale')}
-                    className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+                    className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                       packageType === 'royale'
-                        ? 'bg-purple-500/20 border-purple-500 text-white'
-                        : 'bg-[#1a1a22] border-white/5 text-neutral-400'
+                        ? 'bg-gradient-to-b from-purple-600/25 to-purple-600/10 border-purple-500 text-white shadow-lg'
+                        : 'bg-[#1a1a22] border-white/5 text-neutral-400 hover:border-white/20'
                     }`}
                   >
-                    <span className="text-xs font-black block text-white">Pakej Royale Feast</span>
-                    <span className="text-xs text-[#FDB913] font-bold">RM 24.00 / pax</span>
-                    <p className="text-[10px] text-neutral-400 mt-1">2x Ayam + Burger + Wedges + Free Penghantaran</p>
+                    <div>
+                      <span className="text-xs font-black block text-white">Feast 3 Ketul + 2 Sos</span>
+                      <span className="text-xs text-[#FDB913] font-bold">RM 20.00 / pax</span>
+                    </div>
+                    <p className="text-[10px] text-neutral-400 mt-1.5 leading-snug">
+                      3x Ayam + 1x Coleslaw 4oz + 2x Sos Gourmet + Sos Cili Percuma
+                    </p>
                   </button>
 
+                </div>
+
+                {/* Package Breakdown Card */}
+                <div className="bg-[#181822] p-3 rounded-xl border border-white/10 space-y-1.5">
+                  <span className="text-[11px] font-black uppercase text-[#FDB913] flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3" /> Kandungan Setiap Pax ({currentPackage.name}):
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-neutral-200">
+                    {currentPackage.items.map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 

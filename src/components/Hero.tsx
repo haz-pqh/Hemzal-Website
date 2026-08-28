@@ -203,7 +203,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                   loop
                   muted
                   playsInline
-                  className="w-full h-100 sm:h-96 object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-96 sm:h-[28rem] lg:h-[32rem] object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 
                 {/* Gradient Shadow Overlay */}

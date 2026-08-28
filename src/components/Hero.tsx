@@ -186,7 +186,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
           >
             
             {/* Ambient Background Circle */}
-            <div className="absolute w-72 h-72 sm:w-96 sm:h-150 rounded-full bg-gradient-to-tr from-[#E31E24]/30 to-[#FDB913]/30 blur-3xl" />
+            <div className="absolute w-72 h-72 sm:w-96 sm:h-92 rounded-full bg-gradient-to-tr from-[#E31E24]/30 to-[#FDB913]/30 blur-3xl" />
 
             {/* Glowing Platter Frame */}
             <div className="relative group w-full max-w-md">
@@ -203,7 +203,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                   loop
                   muted
                   playsInline
-                  className="w-full h-80 sm:h-96 object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-100 sm:h-96 object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 
                 {/* Gradient Shadow Overlay */}

@@ -170,26 +170,26 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
               </div>
 
               {/* Floating Badge 1: 5-Star Rating */}
-              <div className="absolute -top-4 -left-4 sm:-left-6 bg-[#16161a]/95 backdrop-blur-md border border-[#FDB913]/50 text-white px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce duration-1000">
-                <div className="w-9 h-9 rounded-xl bg-[#FDB913]/20 flex items-center justify-center text-[#FDB913]">
-                  <Star className="w-5 h-5 fill-[#FDB913]" />
+              <div className="absolute -top-3 left-2 sm:-top-4 sm:-left-6 bg-[#16161a]/95 backdrop-blur-md border border-[#FDB913]/50 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 sm:gap-3 animate-bounce duration-1000">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#FDB913]/20 flex items-center justify-center text-[#FDB913] shrink-0">
+                  <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-[#FDB913]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1">
-                    <span className="font-black text-sm text-white">4.9 / 5.0</span>
+                    <span className="font-black text-xs sm:text-sm text-white">4.9 / 5.0</span>
                   </div>
-                  <p className="text-[10px] text-neutral-400">12,000+ Review Puas Hati</p>
+                  <p className="text-[9px] sm:text-[10px] text-neutral-400">12,000+ Review</p>
                 </div>
               </div>
 
               {/* Floating Badge 2: Mega Portion */}
-              <div className="absolute -bottom-4 -right-4 sm:-right-6 bg-[#16161a]/95 backdrop-blur-md border border-[#E31E24]/50 text-white px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#E31E24]/20 flex items-center justify-center text-[#E31E24]">
-                  <Flame className="w-5 h-5 fill-[#E31E24]" />
+              <div className="absolute -bottom-3 right-2 sm:-bottom-4 sm:-right-6 bg-[#16161a]/95 backdrop-blur-md border border-[#E31E24]/50 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 sm:gap-3">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#E31E24]/20 flex items-center justify-center text-[#E31E24] shrink-0">
+                  <Flame className="w-4 h-4 sm:w-5 sm:h-5 fill-[#E31E24]" />
                 </div>
                 <div>
-                  <p className="font-black text-xs text-white uppercase tracking-wider">Potongan Mega</p>
-                  <p className="text-[10px] text-[#FDB913]">Extra Rangup & Berjus</p>
+                  <p className="font-black text-[11px] sm:text-xs text-white uppercase tracking-wider">Potongan Mega</p>
+                  <p className="text-[9px] sm:text-[10px] text-[#FDB913]">Extra Rangup & Berjus</p>
                 </div>
               </div>
 

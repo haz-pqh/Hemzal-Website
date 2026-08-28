@@ -143,7 +143,7 @@ export default function App() {
   const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-[#0c0c0e] text-neutral-100 selection:bg-[#E31E24] selection:text-white relative">
+    <div className="min-h-screen bg-[#0c0c0e] text-neutral-100 selection:bg-[#E31E24] selection:text-white relative w-full max-w-full overflow-x-hidden">
       
       {/* Navbar */}
       <Navbar
@@ -153,7 +153,7 @@ export default function App() {
       />
 
       {/* Main Sections */}
-      <main>
+      <main className="w-full max-w-full overflow-x-hidden">
         {/* 1. Hero Section */}
         <Hero
           onExploreMenu={() => {

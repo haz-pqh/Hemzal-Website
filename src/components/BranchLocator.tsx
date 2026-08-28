@@ -40,7 +40,7 @@ export const BranchLocator: React.FC = () => {
   }, [selectedRegion, branchSearch, onlyOpen, currentHour]);
 
   return (
-    <section id="cawangan" className="py-20 bg-[#0e0e11] relative border-t border-b border-white/5">
+    <section id="cawangan" className="py-20 bg-[#0e0e11] relative overflow-hidden border-t border-b border-white/5">
       {/* Background Glows */}
       <div className="absolute top-1/3 left-10 w-96 h-96 bg-[#FDB913]/10 rounded-full blur-[130px] pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#E31E24]/10 rounded-full blur-[130px] pointer-events-none" />

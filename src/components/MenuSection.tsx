@@ -40,7 +40,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   }, [items, activeCategory, searchQuery, spiceFilter]);
 
   return (
-    <section id="menu" className="py-20 bg-[#0c0c0e] relative">
+    <section id="menu" className="py-20 bg-[#0c0c0e] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}

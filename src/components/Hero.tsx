@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Flame, Star, Volume2, ShieldCheck, Award, ArrowRight, Sparkles, Clock, CheckCircle2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { playCrunchSound } from '../utils/sound';
+import promoVid from '/hemzal-promo-vid.mp4';
+import promoPic from '/hemzal-promo-pic.png';
 
 interface HeroProps {
   onExploreMenu: () => void;
@@ -195,8 +197,8 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
               <div className="relative rounded-3xl overflow-hidden bg-[#161619] border border-white/15 shadow-2xl">
                 <video
                   ref={videoRef}
-                  src="/hemzal-promo-vid.mp4"
-                  poster="/hemzal-promo-pic.png"
+                  src={promoVid}
+                  poster={promoPic}    
                   autoPlay
                   loop
                   muted

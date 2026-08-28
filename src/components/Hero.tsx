@@ -210,7 +210,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0e] via-transparent to-black/30 pointer-events-none" />
 
                 {/* Overlaid Banner at Bottom */}
-                <div className="absolute bottom-0 inset-x-0 p-5 flex items-end justify-between bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none">
+                {/* <div className="absolute bottom-0 inset-x-0 p-5 flex items-end justify-between bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none">
                   <div>
                     <span className="text-[10px] uppercase font-bold tracking-widest text-[#FDB913]">
                       Best Seller No. 1
@@ -222,7 +222,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                     <span className="text-xs text-neutral-400 line-through">RM 14.00</span>
                     <p className="text-xl font-black text-[#FDB913]">RM 9.90</p>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Floating Badge 1: 5-Star Rating */}

@@ -194,7 +194,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
               {/* Main Promo Video (Loop) - EDIT THE 'src' ATTRIBUTE BELOW TO CHANGE VIDEO */}
               <div className="relative rounded-3xl overflow-hidden bg-[#161619] border border-white/15 shadow-2xl">
                 <video
-                  ref={videoRef}
+                  {/* ref={videoRef} */}
                   src="hemzal-promo-vid.mp4"
                   poster="hemzal-promo-pic.png"
                   autoPlay

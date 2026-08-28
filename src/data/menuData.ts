@@ -8,6 +8,31 @@ export interface SauceOption {
   description: string;
 }
 
+/**
+ * Calculates number of included gourmet sauce cups based on piece count:
+ * 1 pc = 1 cup (if sauce item)
+ * 2-3 pcs = 1 cup
+ * 4-5 pcs = 2 cups
+ * 6-7 pcs = 3 cups
+ * 8-9 pcs = 4 cups
+ * 10-11 pcs = 5 cups
+ * Formula: Math.max(1, Math.floor(pieces / 2))
+ */
+export function calculateSauceCups(pieces: number, isSauceSet: boolean = true): number {
+  if (!isSauceSet || pieces <= 0) return 0;
+  return Math.max(1, Math.floor(pieces / 2));
+}
+
+/**
+ * Calculates total chicken set price:
+ * Total = (pieces * RM 4.50) + (sauceCups * unitSaucePrice)
+ */
+export function calculateChickenPrice(pieces: number, unitPiecePrice: number = 4.50, unitSaucePrice: number = 0): number {
+  if (pieces <= 0) return 0;
+  const sauceCups = unitSaucePrice > 0 ? calculateSauceCups(pieces, true) : 0;
+  return (pieces * unitPiecePrice) + (sauceCups * unitSaucePrice);
+}
+
 export const GOURMET_SAUCES: SauceOption[] = [
   {
     id: 'sos-cili',
@@ -76,12 +101,9 @@ export const MENU_ITEMS: MenuItem[] = [
       'Sos Japanese Togarashi (+RM3.00)',
     ],
     portions: [
-      { label: '1 PCS', price: 4.50, pieces: 1 },
       { label: '2 PCS', price: 9.00, pieces: 2 },
-      { label: '4 PCS', price: 18.00, pieces: 4 },
       { label: '6 PCS', price: 27.00, pieces: 6, isPopular: true },
       { label: '10 PCS', price: 45.00, pieces: 10 },
-      { label: '12 PCS', price: 54.00, pieces: 12 },
     ],
     options: {
       addons: [
@@ -100,20 +122,20 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     id: 'hemzal-cheese',
     name: 'Hemzal CHEESE SET',
-    tagline: 'Ayam Crispy + 1 Cup Sos Keju Meleleh (+RM2.00)',
-    description: 'Campuran beberapa jenis keju kualiti premium yang terpilih! Tekstur berkrim kaya dengan rasa keju lemak masin yang menyelerakan. Sos cili sentiasa percuma.',
+    tagline: 'Campuran Beberapa Jenis Keju Kualiti Premium (2/6/10 Pcs)',
+    description: 'Campuran beberapa jenis keju kualiti premium yang terpilih! Tekstur berkrim kaya dengan rasa keju lemak masin yang menyelerakan. Dihidang bersama sos keju & sos cili percuma.',
     price: 11.00,
     category: 'signature',
     image: 'https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=900&q=80',
     isBestSeller: true,
     spiceLevel: 1,
     calories: 520,
-    servings: 'Kustom sebarang ketul (RM4.50/Pcs + RM2.00 Sos)',
+    servings: '2 / 6 / 10 Ketul Ayam Goreng',
     pieces: 2,
     pieceUnitPrice: 4.50,
     defaultSauce: 'Sos Keju',
     saucePrice: 2.00,
-    sauceInfo: '1 Cup Sos Keju (+RM2) + Sos Cili Percuma',
+    sauceInfo: 'Sos Keju Premium + Sos Cili Percuma',
     availableDips: [
       'Sos Keju (+RM2.00)',
       'Sos Cili (Percuma)',
@@ -123,12 +145,9 @@ export const MENU_ITEMS: MenuItem[] = [
       'Sos Japanese Togarashi (+RM3.00)',
     ],
     portions: [
-      { label: '1 PCS', price: 6.50, pieces: 1 },
       { label: '2 PCS', price: 11.00, pieces: 2 },
-      { label: '4 PCS', price: 20.00, pieces: 4 },
-      { label: '6 PCS', price: 29.00, pieces: 6, isPopular: true },
-      { label: '10 PCS', price: 47.00, pieces: 10 },
-      { label: '12 PCS', price: 56.00, pieces: 12 },
+      { label: '6 PCS', price: 33.00, pieces: 6, isPopular: true },
+      { label: '10 PCS', price: 55.00, pieces: 10 },
     ],
     options: {
       addons: [
@@ -147,20 +166,20 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     id: 'hemzal-garlic',
     name: 'Hemzal GARLIC SET',
-    tagline: 'Ayam Crispy + 1 Cup Sos Garlic Chef 5-Bintang (+RM2.00)',
-    description: 'Sos Garlic istimewa yang dicipta oleh Chef Hotel 5 Bintang! Harum bawang putih panggang diadun lembut berkrim yang menyalut sempurna. Sos cili sentiasa percuma.',
+    tagline: 'Sos Garlic Istimewa Ciptaan Chef Hotel 5 Bintang (2/6/10 Pcs)',
+    description: 'Sos Garlic istimewa yang dicipta oleh Chef Hotel 5 Bintang! Harum bawang putih panggang diadun lembut berkrim yang menyalut sempurna. Dihidang bersama sos garlic & sos cili percuma.',
     price: 11.00,
     category: 'signature',
     image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=900&q=80',
     isChefSpecial: true,
     spiceLevel: 0,
     calories: 480,
-    servings: 'Kustom sebarang ketul (RM4.50/Pcs + RM2.00 Sos)',
+    servings: '2 / 6 / 10 Ketul Ayam Goreng',
     pieces: 2,
     pieceUnitPrice: 4.50,
     defaultSauce: 'Sos Garlic',
     saucePrice: 2.00,
-    sauceInfo: '1 Cup Sos Garlic (+RM2) + Sos Cili Percuma',
+    sauceInfo: 'Sos Garlic Chef 5-Bintang + Sos Cili Percuma',
     availableDips: [
       'Sos Garlic (+RM2.00)',
       'Sos Cili (Percuma)',
@@ -170,12 +189,9 @@ export const MENU_ITEMS: MenuItem[] = [
       'Sos Japanese Togarashi (+RM3.00)',
     ],
     portions: [
-      { label: '1 PCS', price: 6.50, pieces: 1 },
       { label: '2 PCS', price: 11.00, pieces: 2 },
-      { label: '4 PCS', price: 20.00, pieces: 4 },
-      { label: '6 PCS', price: 29.00, pieces: 6, isPopular: true },
-      { label: '10 PCS', price: 47.00, pieces: 10 },
-      { label: '12 PCS', price: 56.00, pieces: 12 },
+      { label: '6 PCS', price: 33.00, pieces: 6, isPopular: true },
+      { label: '10 PCS', price: 55.00, pieces: 10 },
     ],
     options: {
       addons: [
@@ -193,21 +209,21 @@ export const MENU_ITEMS: MenuItem[] = [
   // 4. HEMZAL KOREAN HABANERO SET
   {
     id: 'hemzal-habanero',
-    name: 'Hemzal KOREAN HABANERO SET',
-    tagline: 'Ayam Crispy + 1 Cup Sos Habanero Cameron (+RM2.00)',
-    description: 'Dihasilkan dari cili Habanero yang dipetik segar dari Cameron Highland! Pedas menyengat berapi dengan sentuhan manis dan masam membangkitkan selera. Sos cili percuma sentiasa.',
+    name: 'Hemzal HABANERO SET',
+    tagline: 'Cili Habanero Segar Cameron Highland (2/6/10 Pcs)',
+    description: 'Dihasilkan dari cili Habanero yang dipetik segar dari Cameron Highland! Pedas menyengat berapi dengan sentuhan manis dan masam membangkitkan selera. Dihidang bersama sos habanero & sos cili percuma.',
     price: 11.00,
     category: 'signature',
     image: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?auto=format&fit=crop&w=900&q=80',
     isBestSeller: true,
     spiceLevel: 3,
     calories: 490,
-    servings: 'Kustom sebarang ketul (RM4.50/Pcs + RM2.00 Sos)',
+    servings: '2 / 6 / 10 Ketul Ayam Goreng',
     pieces: 2,
     pieceUnitPrice: 4.50,
     defaultSauce: 'Sos Korean Habanero',
     saucePrice: 2.00,
-    sauceInfo: '1 Cup Sos Korean Habanero (+RM2) + Sos Cili Percuma',
+    sauceInfo: 'Sos Habanero Cameron Highland + Sos Cili Percuma',
     availableDips: [
       'Sos Korean Habanero (+RM2.00)',
       'Sos Cili (Percuma)',
@@ -217,12 +233,9 @@ export const MENU_ITEMS: MenuItem[] = [
       'Sos Japanese Togarashi (+RM3.00)',
     ],
     portions: [
-      { label: '1 PCS', price: 6.50, pieces: 1 },
       { label: '2 PCS', price: 11.00, pieces: 2 },
-      { label: '4 PCS', price: 20.00, pieces: 4 },
-      { label: '6 PCS', price: 29.00, pieces: 6, isPopular: true },
-      { label: '10 PCS', price: 47.00, pieces: 10 },
-      { label: '12 PCS', price: 56.00, pieces: 12 },
+      { label: '6 PCS', price: 33.00, pieces: 6, isPopular: true },
+      { label: '10 PCS', price: 55.00, pieces: 10 },
     ],
     options: {
       addons: [
@@ -240,21 +253,21 @@ export const MENU_ITEMS: MenuItem[] = [
   // 5. HEMZAL JAPANESE FURIKAKE SET
   {
     id: 'hemzal-furikake',
-    name: 'Hemzal JAPANESE FURIKAKE SET',
-    tagline: 'Ayam Crispy + 1 Cup Sos Japanese Furikake (+RM3.00)',
-    description: 'Gabungan rasa umami sebenar yang berasal dari Kumamoto, Jepun! Keseimbangan rasa rumpai laut, bijan bakar dan perencah tradisi Jepun yang memikat. Sos cili percuma sentiasa.',
+    name: 'Hemzal FURIKAKE SET',
+    tagline: 'Umami Sebenar Asal Dari Kumamoto Jepun (2/6/10 Pcs)',
+    description: 'Gabungan rasa umami sebenar yang berasal dari Kumamoto, Jepun! Keseimbangan rasa rumpai laut, bijan bakar dan perencah tradisi Jepun yang memikat. Dihidang bersama sos furikake & sos cili percuma.',
     price: 12.00,
     category: 'signature',
     image: 'https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?auto=format&fit=crop&w=900&q=80',
     isChefSpecial: true,
     spiceLevel: 0,
     calories: 470,
-    servings: 'Kustom sebarang ketul (RM4.50/Pcs + RM3.00 Sos)',
+    servings: '2 / 6 / 10 Ketul Ayam Goreng',
     pieces: 2,
     pieceUnitPrice: 4.50,
     defaultSauce: 'Sos Japanese Furikake',
     saucePrice: 3.00,
-    sauceInfo: '1 Cup Sos Japanese Furikake (+RM3) + Sos Cili Percuma',
+    sauceInfo: 'Sos Furikake Kumamoto Jepun + Sos Cili Percuma',
     availableDips: [
       'Sos Japanese Furikake (+RM3.00)',
       'Sos Cili (Percuma)',
@@ -264,12 +277,9 @@ export const MENU_ITEMS: MenuItem[] = [
       'Sos Japanese Togarashi (+RM3.00)',
     ],
     portions: [
-      { label: '1 PCS', price: 7.50, pieces: 1 },
       { label: '2 PCS', price: 12.00, pieces: 2 },
-      { label: '4 PCS', price: 21.00, pieces: 4 },
-      { label: '6 PCS', price: 30.00, pieces: 6, isPopular: true },
-      { label: '10 PCS', price: 48.00, pieces: 10 },
-      { label: '12 PCS', price: 57.00, pieces: 12 },
+      { label: '6 PCS', price: 36.00, pieces: 6, isPopular: true },
+      { label: '10 PCS', price: 60.00, pieces: 10 },
     ],
     options: {
       addons: [
@@ -287,21 +297,21 @@ export const MENU_ITEMS: MenuItem[] = [
   // 6. HEMZAL JAPANESE TOGARASHI SET
   {
     id: 'hemzal-togarashi',
-    name: 'Hemzal JAPANESE TOGARASHI SET',
-    tagline: 'Ayam Crispy + 1 Cup Sos Japanese Togarashi (+RM3.00)',
-    description: 'Campuran 7 jenis rempah-ratus tradisi masyarakat Tokyo! Menggabungkan lada cili Shichimi, kulit oren kering, bijan dan halia untuk aroma herba pedas unik. Sos cili percuma sentiasa.',
+    name: 'Hemzal TOGARASHI SET',
+    tagline: '7 Rempah-Ratus Tradisi Masyarakat Tokyo (2/6/10 Pcs)',
+    description: 'Campuran 7 jenis rempah-ratus tradisi masyarakat Tokyo! Menggabungkan lada cili Shichimi, kulit oren kering, bijan dan halia untuk aroma herba pedas unik. Dihidang bersama sos togarashi & sos cili percuma.',
     price: 12.00,
     category: 'signature',
     image: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=900&q=80',
     isNew: true,
     spiceLevel: 2,
     calories: 475,
-    servings: 'Kustom sebarang ketul (RM4.50/Pcs + RM3.00 Sos)',
+    servings: '2 / 6 / 10 Ketul Ayam Goreng',
     pieces: 2,
     pieceUnitPrice: 4.50,
     defaultSauce: 'Sos Japanese Togarashi',
     saucePrice: 3.00,
-    sauceInfo: '1 Cup Sos Japanese Togarashi (+RM3) + Sos Cili Percuma',
+    sauceInfo: 'Sos Togarashi Tokyo + Sos Cili Percuma',
     availableDips: [
       'Sos Japanese Togarashi (+RM3.00)',
       'Sos Cili (Percuma)',
@@ -311,12 +321,9 @@ export const MENU_ITEMS: MenuItem[] = [
       'Sos Japanese Furikake (+RM3.00)',
     ],
     portions: [
-      { label: '1 PCS', price: 7.50, pieces: 1 },
       { label: '2 PCS', price: 12.00, pieces: 2 },
-      { label: '4 PCS', price: 21.00, pieces: 4 },
-      { label: '6 PCS', price: 30.00, pieces: 6, isPopular: true },
-      { label: '10 PCS', price: 48.00, pieces: 10 },
-      { label: '12 PCS', price: 57.00, pieces: 12 },
+      { label: '6 PCS', price: 36.00, pieces: 6, isPopular: true },
+      { label: '10 PCS', price: 60.00, pieces: 10 },
     ],
     options: {
       addons: [

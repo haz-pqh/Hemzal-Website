@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { MenuItem, CustomizationOption, CartItem, PortionOption } from '../types';
 import { X, Plus, Minus, Check, Sparkles, MessageSquare, ShoppingBag, Layers, Flame, Info } from 'lucide-react';
 import { playPopSound, playCrunchSound } from '../utils/sound';
-import { GOURMET_SAUCES } from '../data/menuData';
+import { GOURMET_SAUCES, calculateSauceCups, calculateChickenPrice } from '../data/menuData';
 
 interface ItemCustomizerModalProps {
   item: MenuItem | null;
@@ -21,7 +21,8 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
 
   const isChickenItem = item.category === 'signature' || item.pieceUnitPrice !== undefined;
   const unitPiecePrice = item.pieceUnitPrice || 4.50;
-  const baseSauceFee = item.saucePrice || 0;
+  const unitSaucePrice = item.saucePrice || 0;
+  const isSauceSet = unitSaucePrice > 0;
 
   // Initial piece count
   const initialPieces = initialPortion?.pieces || item.pieces || 2;
@@ -37,19 +38,24 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
   const [specialInstructions, setSpecialInstructions] = useState<string>('');
   const [orderQuantity, setOrderQuantity] = useState<number>(1);
 
+  // Calculate included sauce cups dynamically: 2-3 pcs=1 cup, 4-5 pcs=2 cups, 6-7 pcs=3 cups, 8-9 pcs=4 cups, 10-11 pcs=5 cups
+  const includedSauceCups = useMemo(() => {
+    return isSauceSet ? calculateSauceCups(customPieces, true) : 0;
+  }, [isSauceSet, customPieces]);
+
   // Handler for custom piece counter
   const handlePieceChange = (newPieces: number) => {
     if (newPieces < 1) return;
     playPopSound();
     setCustomPieces(newPieces);
     
-    // Check if matches predefined portion
+    // Calculate exact price: (pieces * RM 4.50) + (cups * saucePrice)
+    const calculatedPrice = calculateChickenPrice(newPieces, unitPiecePrice, unitSaucePrice);
+    
     const matchingPredefined = item.portions?.find((p) => p.pieces === newPieces);
     if (matchingPredefined) {
       setSelectedPortion(matchingPredefined);
     } else {
-      // Calculate custom price: pieces * 4.50 + baseSauceFee
-      const calculatedPrice = newPieces * unitPiecePrice + baseSauceFee;
       setSelectedPortion({
         label: `${newPieces} PCS`,
         price: calculatedPrice,
@@ -79,10 +85,10 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
   // Base price computation
   const currentBasePrice = useMemo(() => {
     if (isChickenItem) {
-      return customPieces * unitPiecePrice + baseSauceFee;
+      return calculateChickenPrice(customPieces, unitPiecePrice, unitSaucePrice);
     }
     return selectedPortion ? selectedPortion.price : item.price;
-  }, [isChickenItem, customPieces, unitPiecePrice, baseSauceFee, selectedPortion, item.price]);
+  }, [isChickenItem, customPieces, unitPiecePrice, unitSaucePrice, selectedPortion, item.price]);
 
   const unitTotal = useMemo(() => {
     const addonsTotal = selectedAddons.reduce((sum, a) => sum + a.price, 0);
@@ -208,46 +214,56 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
                 </span>
               </div>
 
-              {/* Quick Preset Buttons (1, 2, 4, 6, 10, 12 pcs) */}
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                {[1, 2, 4, 6, 10, 12].map((pcs) => {
+              {/* Official Flyer Preset Buttons (2 PCS, 6 PCS, 10 PCS) */}
+              <div className="grid grid-cols-3 gap-2.5">
+                {[2, 6, 10].map((pcs) => {
                   const isSelected = customPieces === pcs;
-                  const presetPrice = pcs * unitPiecePrice + baseSauceFee;
+                  const matchedPortion = item.portions?.find(p => p.pieces === pcs);
+                  const presetPrice = matchedPortion ? matchedPortion.price : calculateChickenPrice(pcs, unitPiecePrice, unitSaucePrice);
                   return (
                     <button
                       type="button"
                       key={pcs}
                       onClick={() => handlePieceChange(pcs)}
-                      className={`p-2 rounded-xl border text-center transition-all cursor-pointer relative flex flex-col justify-between ${
+                      className={`p-3 rounded-2xl border text-center transition-all cursor-pointer relative flex flex-col justify-between ${
                         isSelected
-                          ? 'bg-gradient-to-b from-[#E31E24] to-[#B31217] border-[#FDB913] text-white shadow-lg scale-[1.03]'
+                          ? 'bg-gradient-to-b from-[#E31E24] to-[#B31217] border-[#FDB913] text-white shadow-xl scale-[1.02]'
                           : 'bg-[#121216] border-white/10 text-neutral-300 hover:border-white/30 hover:bg-[#1a1a22]'
                       }`}
                     >
                       {pcs === 6 && (
-                        <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#FDB913] text-black text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase leading-none">
+                        <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#FDB913] text-black text-[9px] font-black px-2 py-0.5 rounded-full uppercase leading-none shadow-sm">
                           Popular
                         </span>
                       )}
-                      <span className="text-xs font-black tracking-wide block">{pcs} PCS</span>
-                      <span className="text-[10px] font-bold text-[#FDB913] mt-0.5">RM {presetPrice.toFixed(2)}</span>
+                      <span className="text-sm font-black tracking-wide block">{pcs} PCS</span>
+                      <span className="text-xs font-black text-[#FDB913] mt-1">RM {presetPrice.toFixed(2)}</span>
                     </button>
                   );
                 })}
               </div>
 
               {/* Interactive Custom Piece Stepper */}
-              <div className="bg-[#121216] p-3 rounded-xl border border-white/10 flex items-center justify-between gap-3">
-                <div className="space-y-0.5">
+              <div className="bg-[#121216] p-3.5 rounded-xl border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="space-y-1">
                   <span className="text-xs font-bold text-white block">
-                    Kustom Sebarang Bilangan Ketul
+                    Kustom Sebarang Bilangan Ketul ({customPieces} PCS)
                   </span>
-                  <span className="text-[11px] text-neutral-400 block">
-                    {customPieces} ketul × RM 4.50 {baseSauceFee > 0 ? `+ RM ${baseSauceFee.toFixed(2)} sos` : ''} = <strong className="text-[#FDB913]">RM {currentBasePrice.toFixed(2)}</strong>
-                  </span>
+                  <div className="text-[11px] text-neutral-300 font-mono">
+                    ({customPieces} pcs × RM 4.50)
+                    {isSauceSet && (
+                      <span className="text-[#FDB913]"> + ({includedSauceCups} cup sos × RM {unitSaucePrice.toFixed(2)})</span>
+                    )}
+                    {' '}= <strong className="text-[#FDB913] font-sans text-xs">RM {currentBasePrice.toFixed(2)}</strong>
+                  </div>
+                  {isSauceSet && (
+                    <span className="text-[10px] text-emerald-400 block font-sans">
+                      ✓ Termasuk {includedSauceCups} cup sos gourmet ({item.defaultSauce || 'Sos'}) + Sos Cili Percuma
+                    </span>
+                  )}
                 </div>
 
-                <div className="flex items-center bg-[#1c1c24] rounded-xl border border-white/15 p-1">
+                <div className="flex items-center bg-[#1c1c24] rounded-xl border border-white/15 p-1 self-end sm:self-auto">
                   <button
                     type="button"
                     onClick={() => handlePieceChange(Math.max(1, customPieces - 1))}

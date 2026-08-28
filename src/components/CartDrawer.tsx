@@ -48,8 +48,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     }
   }
 
-  const deliveryFee = orderType === 'delivery' ? (rawSubtotal >= 40 ? 0 : 5.00) : 0;
-  const grandTotal = Math.max(0, rawSubtotal - discount + deliveryFee);
+  // Delivery fee is based on real-time Grab Express / Lalamove rates (calculated upon address confirmation)
+  const foodTotal = Math.max(0, rawSubtotal - discount);
 
   const handleApplyVoucher = () => {
     setVoucherError('');
@@ -78,12 +78,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     // Format rich WhatsApp message text
     let msg = `🍗 *PESANAN HEMZAL CRISPY CHICKEN*\n`;
     msg += `----------------------------------------\n`;
-    msg += `👤 *Nama Pelanggan:* ${customerName.trim() || 'Pelanggan Walk-In/Online'}\n`;
+    msg += `👤 *Nama Pelanggan:* ${customerName.trim() || 'Pelanggan Online'}\n`;
     msg += `📞 *Telefon:* ${customerPhone.trim() || 'N/A'}\n`;
-    msg += `📌 *Jenis Pesanan:* ${orderType === 'delivery' ? 'Penghantaran (Delivery)' : `Ambil Sendiri di Outlet (${selectedBranch.name})`}\n`;
+    msg += `📌 *Jenis Pesanan:* ${orderType === 'delivery' ? 'Penghantaran (Grab / Lalamove Delivery)' : `Ambil Sendiri di Outlet (${selectedBranch.name})`}\n`;
     
     if (orderType === 'delivery') {
       msg += `🏠 *Alamat Hantar:* ${deliveryAddress.trim() || 'Sila tanya lokasi GPS'}\n`;
+      msg += `🛵 *Kaedah Penghantaran:* Grab Express / Lalamove (Kadar Semasa)\n`;
     }
 
     msg += `----------------------------------------\n`;
@@ -108,9 +109,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       msg += `🏷️ *Diskaun Baucar (${appliedVoucher?.code}):* -RM ${discount.toFixed(2)}\n`;
     }
     if (orderType === 'delivery') {
-      msg += `🚚 *Caj Penghantaran:* ${deliveryFee === 0 ? 'PERCUMA (Atas RM40)' : `RM ${deliveryFee.toFixed(2)}`}\n`;
+      msg += `🛵 *Caj Penghantaran:* Mengikut caj sebenar Grab / Lalamove (disemak mengikut jarak)\n`;
+      msg += `🔥 *JUMLAH MAKANAN:* *RM ${foodTotal.toFixed(2)}* (+ Caj Grab/Lalamove)\n`;
+    } else {
+      msg += `🔥 *JUMLAH KESELURUHAN:* *RM ${foodTotal.toFixed(2)}*\n`;
     }
-    msg += `🔥 *JUMLAH KESELURUHAN:* *RM ${grandTotal.toFixed(2)}*\n`;
     msg += `----------------------------------------\n`;
     msg += `Mohon sahkan pesanan dan sediakan hidangan panas. Terima kasih! 🙏`;
 
@@ -214,22 +217,26 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               </select>
             </div>
           ) : (
-            <div className="space-y-1.5 bg-[#18181f] p-3.5 rounded-2xl border border-white/5">
-              <label className="text-xs font-bold text-[#FDB913] uppercase flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
+            <div className="space-y-2 bg-[#18181f] p-3.5 rounded-2xl border border-white/5">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-[#FDB913] uppercase flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5" /> Alamat Penghantaran:
+                </label>
+                <span className="text-[10px] text-[#FDB913] bg-[#FDB913]/10 border border-[#FDB913]/20 px-2 py-0.5 rounded-full font-semibold">
+                  Kadar Grab / Lalamove
                 </span>
-                <span className="text-[10px] text-emerald-400 font-normal">
-                  {rawSubtotal >= 40 ? '✓ Free Delivery' : 'Free atas RM40'}
-                </span>
-              </label>
+              </div>
               <input
                 type="text"
                 value={deliveryAddress}
                 onChange={(e) => setDeliveryAddress(e.target.value)}
-                placeholder="No rumah, jalan, taman, poskod..."
+                placeholder="No rumah, jalan, taman, poskod bandar..."
                 className="w-full px-3 py-2 bg-[#121216] border border-white/10 rounded-xl text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#FDB913]"
               />
+              <div className="flex items-center gap-1.5 text-[10px] text-neutral-400 bg-white/5 p-2 rounded-lg border border-white/5">
+                <Truck className="w-3.5 h-3.5 text-[#FDB913] shrink-0" />
+                <span>Caj penghantaran bergantung kepada jarak & kadar sebenar <strong>Grab Express / Lalamove</strong>.</span>
+              </div>
             </div>
           )}
 
@@ -412,21 +419,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               )}
 
               {orderType === 'delivery' && (
-                <div className="flex justify-between">
-                  <span>Caj Penghantaran</span>
-                  <span>
-                    {deliveryFee === 0 ? (
-                      <span className="text-emerald-400 font-bold">PERCUMA</span>
-                    ) : (
-                      `RM ${deliveryFee.toFixed(2)}`
-                    )}
+                <div className="flex justify-between items-center text-xs">
+                  <span>Caj Penghantaran (Grab / Lalamove)</span>
+                  <span className="text-[#FDB913] font-semibold text-[11px]">
+                    Mengikut kadar semasa aplikasi
                   </span>
                 </div>
               )}
 
               <div className="flex justify-between text-sm font-black text-white pt-2 border-t border-white/10">
-                <span>Jumlah Keseluruhan</span>
-                <span className="text-lg text-[#FDB913]">RM {grandTotal.toFixed(2)}</span>
+                <span>Jumlah Makanan</span>
+                <span className="text-lg text-[#FDB913]">RM {foodTotal.toFixed(2)}</span>
               </div>
             </div>
 
@@ -436,11 +439,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#25D366] via-[#20BA5A] to-[#128C7E] hover:from-[#2bf376] hover:to-[#16a594] text-black font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-[#25D366]/20 transition-all cursor-pointer"
             >
               <MessageSquare className="w-5 h-5 fill-black" />
-              <span>Hantar Pesanan ke WhatsApp • RM {grandTotal.toFixed(2)}</span>
+              <span>Hantar Pesanan ke WhatsApp • RM {foodTotal.toFixed(2)}</span>
             </button>
 
             <p className="text-[10px] text-center text-neutral-400">
-              Pesanan anda akan dihantar terus kepada staf dapur outlet untuk persediaan pantas.
+              {orderType === 'delivery'
+                ? 'Caj rider Grab Express / Lalamove akan disemak dan dimaklumkan melalui WhatsApp mengikut alamat anda.'
+                : 'Pesanan anda akan dihantar terus kepada staf dapur outlet untuk persediaan pantas.'}
             </p>
 
           </div>

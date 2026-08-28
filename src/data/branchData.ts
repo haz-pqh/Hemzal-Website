@@ -11,7 +11,7 @@ export const BRANCHES: Branch[] = [
     city: 'Ampang / Kuala Lumpur',
     state: 'Selangor / WP Kuala Lumpur',
     phone: '+60 3-9274 8899',
-    whatsapp: '60123456789',
+    whatsapp: '60164175976',
     openingHours: '10:30 AM – 11:00 PM (Setiap Hari)',
     openHour: 10.5,
     closeHour: 23.0,

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Flame, ShieldCheck, Heart, Send, CheckCircle2, Instagram, Facebook, Video, MapPin, Phone, Mail } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { playPopSound } from '../utils/sound';
+import { RateYourCrunch } from './RateYourCrunch';
 
 interface FooterProps {
   onOpenFranchise: () => void;
@@ -24,6 +25,9 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
       {/* Background Decor */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
         
+        {/* Rate Your Last Crunch Feature Widget */}
+        <RateYourCrunch />
+
         {/* Top Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
           

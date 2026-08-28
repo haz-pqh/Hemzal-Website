@@ -188,12 +188,12 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                     <span>Pesan Special Bucket • RM 53.90</span>
                   </button>
 
-                  <button
+                  {/* <button
                     onClick={() => onSelectItem(specialBucketItem)}
                     className="px-4 py-3 bg-black/40 hover:bg-black/60 text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-white/20 transition-colors cursor-pointer"
                   >
                     Kustomisasi
-                  </button>
+                  </button> */}
                 </div>
 
               </div>

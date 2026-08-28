@@ -78,7 +78,7 @@ export const CateringFranchiseModal: React.FC<CateringFranchiseModalProps> = ({
         </div>
 
         {/* Modal Content */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1 text-sm">
+        <div data-lenis-prevent className="p-6 overflow-y-auto space-y-6 flex-1 text-sm custom-scrollbar">
           
           {activeTab === 'catering' ? (
             <div className="space-y-6">

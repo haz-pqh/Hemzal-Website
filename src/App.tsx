@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Lenis from 'lenis';
 import { MenuItem, CartItem, PortionOption } from './types';
 import { MENU_ITEMS } from './data/menuData';
 import { Navbar } from './components/Navbar';
@@ -43,13 +44,52 @@ export default function App() {
   // Toast notification
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const lenisRef = useRef<Lenis | null>(null);
 
+  // Initialize Lenis smooth scroll
   useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 1.5,
+    });
+    lenisRef.current = lenis;
+
+    let rafId: number;
+    function raf(time: number) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
+
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 400);
     };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // Global anchor smooth click listener
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest('a');
+      if (!target) return;
+      const href = target.getAttribute('href');
+      if (href && href.startsWith('#') && href.length > 1) {
+        const targetElement = document.querySelector(href);
+        if (targetElement) {
+          e.preventDefault();
+          lenis.scrollTo(targetElement as HTMLElement, { offset: -60, duration: 1.2 });
+        }
+      }
+    };
+    document.addEventListener('click', handleAnchorClick);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('click', handleAnchorClick);
+      lenis.destroy();
+      lenisRef.current = null;
+    };
   }, []);
 
   const showToast = (msg: string) => {
@@ -66,7 +106,6 @@ export default function App() {
         (ci) =>
           ci.item.id === newCartItem.item.id &&
           ci.selectedPortion?.label === newCartItem.selectedPortion?.label &&
-          ci.selectedSpice === newCartItem.selectedSpice &&
           ci.selectedDip === newCartItem.selectedDip &&
           JSON.stringify(ci.selectedAddons) === JSON.stringify(newCartItem.selectedAddons) &&
           ci.specialInstructions === newCartItem.specialInstructions
@@ -101,7 +140,6 @@ export default function App() {
       item,
       quantity: 1,
       selectedPortion,
-      selectedSpice: item.spiceLevel === 3 ? 'Extra Berapi 🔥🔥' : 'Pedas Padu (Spicy)',
       selectedDip: item.availableDips?.[0],
       selectedAddons: [],
       totalPrice: basePrice,
@@ -141,7 +179,11 @@ export default function App() {
   };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { duration: 1.2 });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -162,11 +204,19 @@ export default function App() {
         <Hero
           onExploreMenu={() => {
             const el = document.getElementById('menu');
-            el?.scrollIntoView({ behavior: 'smooth' });
+            if (lenisRef.current && el) {
+              lenisRef.current.scrollTo(el, { offset: -50, duration: 1.2 });
+            } else {
+              el?.scrollIntoView({ behavior: 'smooth' });
+            }
           }}
           onFindBranch={() => {
             const el = document.getElementById('cawangan');
-            el?.scrollIntoView({ behavior: 'smooth' });
+            if (lenisRef.current && el) {
+              lenisRef.current.scrollTo(el, { offset: -50, duration: 1.2 });
+            } else {
+              el?.scrollIntoView({ behavior: 'smooth' });
+            }
           }}
         />
 

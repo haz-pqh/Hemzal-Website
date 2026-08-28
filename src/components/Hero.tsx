@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Flame, Star, Volume2, ShieldCheck, Award, ArrowRight, Sparkles, Clock, CheckCircle2 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { playCrunchSound } from '../utils/sound';
 
 interface HeroProps {
@@ -9,6 +10,20 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
   const [crunchActive, setCrunchActive] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.log('Autoplay prevented or waiting for interaction:', err);
+        });
+      }
+    }
+  }, []);
 
   const handleCrunchClick = () => {
     playCrunchSound();
@@ -36,28 +51,48 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
             
             {/* Top Eyebrow Badge */}
-            <div className="inline-flex items-center gap-2 bg-[#1b1b1f] border border-[#FDB913]/40 rounded-full px-4 py-1.5 shadow-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="inline-flex items-center gap-2 bg-[#1b1b1f] border border-[#FDB913]/40 rounded-full px-4 py-1.5 shadow-lg"
+            >
               <span className="flex h-2 w-2 rounded-full bg-[#E31E24] animate-ping" />
               <Award className="w-4 h-4 text-[#FDB913]" />
               <span className="text-xs font-bold uppercase tracking-widest text-[#FDB913]">
                 Resepi Eksklusif Chef Mohammad Helmi
               </span>
-            </div>
+            </motion.div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight text-white leading-[1.05] uppercase">
+            <motion.h1
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight text-white leading-[1.05] uppercase"
+            >
               RANGUP DI <span className="text-[#FDB913] drop-shadow-[0_4px_24px_rgba(253,185,19,0.4)]">LUAR</span>,
               <br />
               JUICY DI <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E31E24] to-[#ff4d52]">DALAM.</span>
-            </h1>
+            </motion.h1>
 
             {/* Subheading */}
-            <p className="text-base sm:text-lg text-neutral-300 max-w-2xl font-normal leading-relaxed">
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="text-base sm:text-lg text-neutral-300 max-w-2xl font-normal leading-relaxed"
+            >
               Nikmati ayam goreng gourmet Malaysia bertaraf hotel 5-bintang. Diperap 24 jam dengan 18 rempah rahsia, disalut tepung keemasan rangup dan dihidang panas bersama sos istimewa.
-            </p>
+            </motion.p>
 
             {/* Interactive Crunch Audio Button */}
-            <div className="pt-1">
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="pt-1"
+            >
               <button
                 id="hero-crunch-test-btn"
                 onClick={handleCrunchClick}
@@ -70,10 +105,15 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                 <Volume2 className={`w-4 h-4 ${crunchActive ? 'animate-bounce' : ''}`} />
                 <span>{crunchActive ? '💥 KRUP KRAP! RANGUP PADU!' : '🔊 Dengar Bunyi Kerangupan'}</span>
               </button>
-            </div>
+            </motion.div>
 
             {/* Primary Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 pt-2 w-full sm:w-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col sm:flex-row items-center gap-4 pt-2 w-full sm:w-auto"
+            >
               <button
                 id="hero-order-btn"
                 onClick={onExploreMenu}
@@ -91,10 +131,15 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
               >
                 <span>Cari Cawangan Terdekat</span>
               </button>
-            </div>
+            </motion.div>
 
             {/* Trust Badges Bar */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 w-full max-w-2xl border-t border-white/10 text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.48, ease: [0.16, 1, 0.3, 1] }}
+              className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 w-full max-w-2xl border-t border-white/10 text-left"
+            >
               <div className="flex items-center gap-2.5 bg-white/5 p-2.5 rounded-xl border border-white/5">
                 <ShieldCheck className="w-5 h-5 text-[#FDB913] shrink-0" />
                 <div className="text-[11px]">
@@ -126,12 +171,17 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                   <p className="text-neutral-400">Potongan Gergasi</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
           </div>
 
           {/* Right Column: Visual Showpiece & Floating Badges */}
-          <div className="lg:col-span-5 relative flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 relative flex items-center justify-center"
+          >
             
             {/* Ambient Background Circle */}
             <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-[#E31E24]/30 to-[#FDB913]/30 blur-3xl" />
@@ -141,20 +191,24 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
               {/* Outer Decorative Ring */}
               <div className="absolute -inset-1.5 bg-gradient-to-r from-[#E31E24] via-[#FDB913] to-[#E31E24] rounded-3xl blur-md opacity-40 group-hover:opacity-75 transition duration-500 animate-pulse" />
 
-              {/* Main Image Container */}
+              {/* Main Promo Video (Loop) - EDIT THE 'src' ATTRIBUTE BELOW TO CHANGE VIDEO */}
               <div className="relative rounded-3xl overflow-hidden bg-[#161619] border border-white/15 shadow-2xl">
-                <img
-                  src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&q=85&w=1000"
-                  alt="Hemzal Crispy Chicken Signature Platter"
+                <video
+                  ref={videoRef}
+                  src="https://assets.mixkit.co/videos/preview/mixkit-frying-crispy-chicken-in-a-pan-43407-large.mp4"
+                  poster="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&q=85&w=1000"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
                   className="w-full h-80 sm:h-96 object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                  loading="eager"
                 />
                 
                 {/* Gradient Shadow Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0e] via-transparent to-black/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0e] via-transparent to-black/30 pointer-events-none" />
 
                 {/* Overlaid Banner at Bottom */}
-                <div className="absolute bottom-0 inset-x-0 p-5 flex items-end justify-between bg-gradient-to-t from-black via-black/80 to-transparent">
+                <div className="absolute bottom-0 inset-x-0 p-5 flex items-end justify-between bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none">
                   <div>
                     <span className="text-[10px] uppercase font-bold tracking-widest text-[#FDB913]">
                       Best Seller No. 1
@@ -170,7 +224,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
               </div>
 
               {/* Floating Badge 1: 5-Star Rating */}
-              <div className="absolute -top-3 left-2 sm:-top-4 sm:-left-6 bg-[#16161a]/95 backdrop-blur-md border border-[#FDB913]/50 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 sm:gap-3 animate-bounce duration-1000">
+              <div className="absolute -top-3 left-2 sm:-top-4 sm:-left-6 bg-[#16161a]/95 backdrop-blur-md border border-[#FDB913]/50 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 sm:gap-3 animate-bounce duration-1000 z-30 pointer-events-none">
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#FDB913]/20 flex items-center justify-center text-[#FDB913] shrink-0">
                   <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-[#FDB913]" />
                 </div>
@@ -183,7 +237,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
               </div>
 
               {/* Floating Badge 2: Mega Portion */}
-              <div className="absolute -bottom-3 right-2 sm:-bottom-4 sm:-right-6 bg-[#16161a]/95 backdrop-blur-md border border-[#E31E24]/50 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 sm:gap-3">
+              <div className="absolute -bottom-3 right-2 sm:-bottom-4 sm:-right-6 bg-[#16161a]/95 backdrop-blur-md border border-[#E31E24]/50 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 sm:gap-3 z-30 pointer-events-none">
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#E31E24]/20 flex items-center justify-center text-[#E31E24] shrink-0">
                   <Flame className="w-4 h-4 sm:w-5 sm:h-5 fill-[#E31E24]" />
                 </div>
@@ -195,7 +249,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
 
             </div>
 
-          </div>
+          </motion.div>
 
         </div>
       </div>

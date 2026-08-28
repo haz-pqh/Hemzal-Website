@@ -16,17 +16,15 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 }) => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [spiceFilter, setSpiceFilter] = useState<number | null>(null);
 
   // Track selected portion preview for cards
   const [cardPortions, setCardPortions] = useState<Record<string, PortionOption>>({});
 
   const categories = [
     { id: 'all', label: 'Semua Menu', count: items.length },
-    { id: 'signature', label: 'Signature Set (2/6/10 pcs)', count: items.filter(i => i.category === 'signature').length },
+    { id: 'signature', label: 'Set Ayam Crispy (Kustom Ketul)', count: items.filter(i => i.category === 'signature').length },
     { id: 'combos', label: 'Special Bucket Promo', count: items.filter(i => i.category === 'combos').length },
-    { id: 'sides', label: 'Add-On Coleslaw & Snek', count: items.filter(i => i.category === 'sides').length },
-    { id: 'drinks', label: 'Minuman Segar', count: items.filter(i => i.category === 'drinks').length },
+    { id: 'sides', label: 'Coleslaw Istimewa', count: items.filter(i => i.category === 'sides').length },
   ];
 
   const filteredItems = useMemo(() => {
@@ -36,10 +34,9 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.tagline.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesSpice = spiceFilter === null || item.spiceLevel === spiceFilter;
-      return matchesCategory && matchesSearch && matchesSpice;
+      return matchesCategory && matchesSearch;
     });
-  }, [items, activeCategory, searchQuery, spiceFilter]);
+  }, [items, activeCategory, searchQuery]);
 
   const specialBucketItem = items.find((i) => i.id === 'hemzal-special-bucket');
 
@@ -69,6 +66,30 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
           <p className="text-neutral-300 text-sm sm:text-base">
             <span className="text-[#FDB913] font-bold">"Rangup di luar, Juicy di dalam!"</span> — Ayam segar diperap harian dengan resepi eksklusif dan dihidang panas mengikut tempahan anda.
           </p>
+
+          {/* Pricing Structure Highlight Bar */}
+          <div className="pt-2 grid grid-cols-2 md:grid-cols-4 gap-2.5 max-w-4xl mx-auto text-left">
+            <div className="bg-[#181820] border border-white/10 p-3 rounded-2xl">
+              <span className="text-[10px] text-neutral-400 uppercase font-black block">Kadar Asas Ayam</span>
+              <strong className="text-sm font-black text-[#FDB913] block">RM 4.50 / Ketul</strong>
+              <span className="text-[10px] text-neutral-300">Kustom sebarang kuantiti</span>
+            </div>
+            <div className="bg-emerald-950/30 border border-emerald-500/30 p-3 rounded-2xl">
+              <span className="text-[10px] text-emerald-400 uppercase font-black block">Sos Cili</span>
+              <strong className="text-sm font-black text-emerald-300 block">PERCUMA (RM 0.00)</strong>
+              <span className="text-[10px] text-emerald-200/80">Disertakan setiap set</span>
+            </div>
+            <div className="bg-[#181820] border border-white/10 p-3 rounded-2xl">
+              <span className="text-[10px] text-neutral-400 uppercase font-black block">Sos Keju / Garlic / Korean</span>
+              <strong className="text-sm font-black text-[#FDB913] block">RM 2.00 / Cup</strong>
+              <span className="text-[10px] text-neutral-300">Sos gourmet signature</span>
+            </div>
+            <div className="bg-[#181820] border border-white/10 p-3 rounded-2xl">
+              <span className="text-[10px] text-neutral-400 uppercase font-black block">Sos Furikake / Togarashi</span>
+              <strong className="text-sm font-black text-[#FDB913] block">RM 3.00 / Cup</strong>
+              <span className="text-[10px] text-neutral-300">Sos import Jepun eksklusif</span>
+            </div>
+          </div>
         </div>
 
         {/* FEATURED PROMO BANNER: HEMZAL SPECIAL BUCKET (Image 2) */}
@@ -184,7 +205,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
         {/* Filters & Search Toolbar */}
         <div className="space-y-4 mb-10">
           
-          {/* Search bar & Spice filter */}
+          {/* Search bar & Quality Assurance Badge */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             
             {/* Search Input */}
@@ -208,51 +229,12 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
               )}
             </div>
 
-            {/* Spice Filter Buttons */}
-            <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
-              <span className="text-xs text-neutral-400 font-bold uppercase shrink-0 mr-1 flex items-center gap-1">
-                <Filter className="w-3 h-3" /> Pedas:
-              </span>
-              <button
-                onClick={() => setSpiceFilter(null)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  spiceFilter === null
-                    ? 'bg-white text-black font-black'
-                    : 'bg-[#18181c] text-neutral-300 hover:bg-[#222228] border border-white/10'
-                }`}
-              >
-                Semua
-              </button>
-              <button
-                onClick={() => setSpiceFilter(0)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  spiceFilter === 0
-                    ? 'bg-emerald-500 text-white font-black'
-                    : 'bg-[#18181c] text-neutral-300 hover:bg-[#222228] border border-white/10'
-                }`}
-              >
-                Tanpa Pedas
-              </button>
-              <button
-                onClick={() => setSpiceFilter(1)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  spiceFilter === 1
-                    ? 'bg-[#FDB913] text-black font-black'
-                    : 'bg-[#18181c] text-neutral-300 hover:bg-[#222228] border border-white/10'
-                }`}
-              >
-                🌶️ Biasa
-              </button>
-              <button
-                onClick={() => setSpiceFilter(3)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  spiceFilter === 3
-                    ? 'bg-[#E31E24] text-white font-black'
-                    : 'bg-[#18181c] text-neutral-300 hover:bg-[#222228] border border-white/10'
-                }`}
-              >
-                🔥🔥 Berapi
-              </button>
+            {/* Original Crispy Recipe Guarantee Pill */}
+            <div className="inline-flex items-center gap-2 bg-[#16161c] border border-[#FDB913]/30 px-3.5 py-1.5 rounded-xl text-xs text-neutral-300">
+              <ShieldCheck className="w-4 h-4 text-[#FDB913] shrink-0" />
+              <span className="text-white font-bold">100% Resepi Original Crispy</span>
+              <span className="text-neutral-500">•</span>
+              <span className="text-neutral-400 text-[11px]">Kepedasan & rasa dipilih melalui sos signature</span>
             </div>
 
           </div>
@@ -299,9 +281,8 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
               onClick={() => {
                 setSearchQuery('');
                 setActiveCategory('all');
-                setSpiceFilter(null);
               }}
-              className="mt-4 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-bold text-white"
+              className="mt-4 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-bold text-white cursor-pointer"
             >
               Reset Pilihan
             </button>
@@ -346,12 +327,9 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                       )}
                     </div>
 
-                    {/* Spice Level Indicator */}
-                    <div className="absolute top-3.5 right-3.5 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold text-white border border-white/10 flex items-center gap-1">
-                      {item.spiceLevel === 0 && <span className="text-emerald-400 font-normal">Tak Pedas</span>}
-                      {item.spiceLevel === 1 && <span className="text-[#FDB913]">🌶️ Biasa</span>}
-                      {item.spiceLevel === 2 && <span className="text-orange-400">🌶️🌶️ Pedas</span>}
-                      {item.spiceLevel === 3 && <span className="text-[#E31E24] font-black">🔥🔥 Berapi</span>}
+                    {/* Original Recipe / Flavor Tag */}
+                    <div className="absolute top-3.5 right-3.5 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-black text-[#FDB913] border border-[#FDB913]/30 flex items-center gap-1">
+                      <span>✓ Original Crispy</span>
                     </div>
 
                     {/* Portions / Slogan footer inside photo */}

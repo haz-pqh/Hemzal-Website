@@ -92,7 +92,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     cart.forEach((item, index) => {
       const portionText = item.selectedPortion ? ` (${item.selectedPortion.label})` : '';
       msg += `\n*${index + 1}. ${item.item.name}${portionText}* (x${item.quantity})\n`;
-      msg += `   • Tahap: ${item.selectedSpice}\n`;
       if (item.selectedDip) msg += `   • Sos Celup: ${item.selectedDip}\n`;
       if (item.selectedAddons.length > 0) {
         msg += `   • Tambahan: ${item.selectedAddons.map(a => `${a.name} (+RM${a.price.toFixed(2)})`).join(', ')}\n`;
@@ -159,7 +158,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         </div>
 
         {/* Body Content */}
-        <div className="p-5 overflow-y-auto flex-1 space-y-5 text-sm">
+        <div data-lenis-prevent className="p-5 overflow-y-auto flex-1 space-y-5 text-sm custom-scrollbar">
           
           {/* 1. Order Type Switcher (Delivery vs Pickup) */}
           <div className="bg-[#18181f] p-1 rounded-2xl border border-white/10 grid grid-cols-2 gap-1">
@@ -297,12 +296,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       </button>
                     </div>
 
-                    <p className="text-[11px] text-[#FDB913] font-medium">
-                      🌶️ {cartItem.selectedSpice}
-                    </p>
-
                     {cartItem.selectedDip && (
-                      <p className="text-[10px] text-neutral-400 truncate">
+                      <p className="text-[11px] text-[#FDB913] font-medium truncate">
                         Sos: {cartItem.selectedDip}
                       </p>
                     )}

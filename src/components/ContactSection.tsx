@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Phone, Mail, Clock, MessageSquare, Send, CheckCircle2, Flame, Sparkles } from 'lucide-react';
+import { Phone, Mail, Clock, MessageSquare, Send, CheckCircle2, Flame, Sparkles, ChevronDown, HelpCircle, Truck, Utensils, ShieldCheck, ShoppingBag } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { motion, AnimatePresence } from 'motion/react';
 import { playPopSound } from '../utils/sound';
 
 export const ContactSection: React.FC = () => {
@@ -12,6 +13,57 @@ export const ContactSection: React.FC = () => {
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
+
+  // FAQ Accordion State
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  const faqs = [
+    {
+      id: 'faq-delivery',
+      question: 'Adakah perkhidmatan penghantaran (Delivery) disediakan?',
+      category: 'Penghantaran',
+      icon: Truck,
+      answer:
+        'Ya! Kami menyediakan penghantaran ke rumah melalui GrabFood, Foodpanda, ShopeeFood serta pesanan terus melalui WhatsApp Delivery dengan radius sehingga 15km dari cawangan terdekat kami. Pesanan atas talian melalui laman web ini akan terus disambungkan ke WhatsApp rasmi untuk semakan caj penghantaran dan penghantaran pantas.',
+    },
+    {
+      id: 'faq-flavor',
+      question: 'Adakah ayam goreng mempunyai pilihan kepedasan yang berbeza?',
+      category: 'Resepi & Sos Signature',
+      icon: Flame,
+      answer:
+        'Kesemua ayam crispy kami dimasak segar menggunakan 100% Resepi Original Crispy signature kami yang rangup di luar dan berjus di dalam. Pilihan kepedasan dan keenakan perisa dinikmati melalui rangkaian 5 Sos Signature kami seperti Sos Cili Pedas, Korean Habanero (ekstrem pedas menggunakan cili segar Cameron Highland), Garlic 5-Star, Sos Keju Meleleh, serta Furikake & Togarashi 7 Rempah Jepun.',
+    },
+    {
+      id: 'faq-halal',
+      question: 'Adakah ayam dan semua ramuan dijamin 100% Halal?',
+      category: 'Status Halal',
+      icon: ShieldCheck,
+      answer:
+        'Semua bekalan ayam kami adalah 100% ayam segar tempatan yang disembelih mengikut syariat Islam dengan sijil Halal JAKIM. Kesemua sos signature dan perapan kami disediakan bersih di Dapur Pusat (Central Kitchen) yang berstatus Halal.',
+    },
+    {
+      id: 'faq-portions',
+      question: 'Berapakah saiz hidangan bagi Hemzal Special Bucket & Set Ayam?',
+      category: 'Saiz Hidangan',
+      icon: Utensils,
+      answer:
+        'Setiap set Signature boleh dipilih dalam kuantiti 2 PCS (hidangan individu), 6 PCS (2-3 orang), atau 10 PCS (keluarga). Bagi "Hemzal Special Bucket", ia mengandungi 10 ketul ayam rangup gergasi bersama 10 pek sos cili dan LENGKAP dengan SEMUA 5 cawan sos signature kami (Garlic, Keju, Habanero, Furikake & Togarashi) — sesuai untuk 3 hingga 5 orang.',
+    },
+    {
+      id: 'faq-catering',
+      question: 'Bolehkah saya membuat tempahan pukal / katering untuk majlis?',
+      category: 'Katering & Majlis',
+      icon: ShoppingBag,
+      answer:
+        'Boleh! Kami menerima tempahan katering untuk majlis hari jadi, jamuan pejabat, kenduri, dan acara korporat. Sila hubungi kami melalui borang di bawah atau WhatsApp kami sekurang-kurangnya 24 hingga 48 jam awal untuk pakej diskaun katering khas.',
+    },
+  ];
+
+  const toggleFaq = (index: number) => {
+    playPopSound();
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,12 +91,93 @@ export const ContactSection: React.FC = () => {
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight">
-            HUBUNGI <span className="text-[#FDB913]">PASUKAN HEMZAL</span>
+            HUBUNGI & <span className="text-[#FDB913]">SOALAN LAZIM (FAQ)</span>
           </h2>
 
           <p className="text-neutral-300 text-sm sm:text-base">
-            Ada sebarang cadangan, pertanyaan menu, atau jemputan kolaborasi? Kami sedia melayani anda dengan penuh mesra.
+            Ada sebarang pertanyaan mengenai penghantaran, tahap kepedasan, atau tempahan majlis? Ketahui jawapannya di bawah atau hantar mesej terus kepada kami.
           </p>
+        </div>
+
+        {/* Collapsible FAQ Accordion Section */}
+        <div className="mb-16 max-w-4xl mx-auto">
+          <div className="flex items-center gap-2 mb-6 justify-center sm:justify-start">
+            <HelpCircle className="w-5 h-5 text-[#FDB913]" />
+            <h3 className="text-xl font-black text-white uppercase tracking-tight">
+              Soalan Lazim Pelanggan (FAQ)
+            </h3>
+          </div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, index) => {
+              const isOpen = openFaqIndex === index;
+              const IconComponent = faq.icon;
+
+              return (
+                <div
+                  key={faq.id}
+                  id={faq.id}
+                  className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                    isOpen
+                      ? 'bg-[#15151b] border-[#FDB913]/50 shadow-lg shadow-black/40'
+                      : 'bg-[#111115] border-white/10 hover:border-white/20 hover:bg-[#141419]'
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => toggleFaq(index)}
+                    aria-expanded={isOpen}
+                    className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3.5">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                          isOpen
+                            ? 'bg-[#FDB913] text-black font-black'
+                            : 'bg-white/5 text-[#FDB913] border border-white/10'
+                        }`}
+                      >
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-[#FDB913] uppercase font-bold tracking-wider block">
+                          {faq.category}
+                        </span>
+                        <h4 className="text-sm sm:text-base font-bold text-white leading-snug">
+                          {faq.question}
+                        </h4>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border transition-transform duration-300 ${
+                        isOpen
+                          ? 'rotate-180 bg-[#E31E24] text-white border-[#E31E24]'
+                          : 'bg-white/5 text-neutral-400 border-white/10'
+                      }`}
+                    >
+                      <ChevronDown className="w-4 h-4" />
+                    </div>
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: 'easeInOut' }}
+                      >
+                        <div className="px-5 sm:px-6 pb-6 pt-1 border-t border-white/5 text-neutral-300 text-xs sm:text-sm leading-relaxed pl-16 sm:pl-20">
+                          {faq.answer}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">

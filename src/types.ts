@@ -9,11 +9,19 @@ export interface CustomizationOption {
 }
 
 export interface PortionOption {
-  label: string; // e.g. "2 PCS", "6 PCS", "10 PCS", "1 CUP 4 ONZ", "2 CUP 4 ONZ"
+  label: string; // e.g. "1 PCS", "2 PCS", "6 PCS", "10 PCS", "1 CUP 4 ONZ", "2 CUP 4 ONZ"
   price: number;
   pieces?: number;
   originalPrice?: number;
   isPopular?: boolean;
+  isCustom?: boolean;
+}
+
+export interface SauceItem {
+  id: string;
+  name: string;
+  price: number; // 0 for free cili, 2 for keju/garlic/korean, 3 for furikake/togarashi
+  description?: string;
 }
 
 export interface MenuItem {
@@ -23,7 +31,7 @@ export interface MenuItem {
   description: string;
   price: number;
   originalPrice?: number;
-  category: 'signature' | 'combos' | 'sides' | 'drinks';
+  category: 'signature' | 'combos' | 'sides';
   image: string;
   isBestSeller?: boolean;
   isChefSpecial?: boolean;
@@ -32,6 +40,9 @@ export interface MenuItem {
   calories?: number;
   servings?: string;
   pieces?: number;
+  pieceUnitPrice?: number; // RM 4.50 per piece for chicken
+  defaultSauce?: string;
+  saucePrice?: number;
   availableDips?: string[];
   sauceInfo?: string;
   includedItems?: string[];
@@ -46,8 +57,9 @@ export interface CartItem {
   item: MenuItem;
   quantity: number;
   selectedPortion?: PortionOption;
-  selectedSpice: SpiceLevel;
+  customPieces?: number;
   selectedDip?: string;
+  selectedDipPrice?: number;
   selectedAddons: CustomizationOption[];
   specialInstructions?: string;
   totalPrice: number;

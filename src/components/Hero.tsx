@@ -186,7 +186,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
           >
             
             {/* Ambient Background Circle */}
-            <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-[#E31E24]/30 to-[#FDB913]/30 blur-3xl" />
+            <div className="absolute w-72 h-80 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-[#E31E24]/30 to-[#FDB913]/30 blur-3xl" />
 
             {/* Glowing Platter Frame */}
             <div className="relative group w-full max-w-md">

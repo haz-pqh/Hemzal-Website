@@ -195,8 +195,8 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
               <div className="relative rounded-3xl overflow-hidden bg-[#161619] border border-white/15 shadow-2xl">
                 <video
                   {/* ref={videoRef} */}
-                  src="hemzal-promo-vid.mp4"
-                  poster="hemzal-promo-pic.png"
+                  src="/hemzal-promo-vid.mp4"
+                  poster="/hemzal-promo-pic.png"
                   autoPlay
                   loop
                   muted

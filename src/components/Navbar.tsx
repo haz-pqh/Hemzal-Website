@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, MapPin, Phone, Menu, X, Flame, Sparkles, Tag } from 'lucide-react';
+import { ShoppingBag, MapPin, Phone, Menu, X, Flame, Sparkles, Tag, UtensilsCrossed, Award, MessageSquare } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
 
 interface NavbarProps {
@@ -32,146 +32,151 @@ export const Navbar: React.FC<NavbarProps> = ({
     setTimeout(() => setPromoCopied(false), 2500);
   };
 
+  const navLinks = [
+    { label: 'Utama', href: '#home' },
+    { label: 'Rahsia Chef', href: '#resepi' },
+    { label: 'Menu & Harga', href: '#menu', badge: 'Hot' },
+    { label: 'Cawangan', href: '#cawangan' },
+    { label: 'Ulasan', href: '#testimoni' },
+    { label: 'Hubungi', href: '#hubungi' },
+  ];
+
   return (
     <header className="fixed top-0 left-0 w-full z-40 select-none">
       {/* Top Banner Ribbon */}
-      <div className="bg-gradient-to-r from-[#E31E24] via-[#B80F14] to-[#E31E24] text-white py-1.5 px-3 sm:px-4 text-[11px] sm:text-xs font-semibold tracking-wide text-center relative z-50 flex items-center justify-center gap-1.5 sm:gap-2 shadow-md">
-        <span className="flex items-center flex-wrap justify-center gap-1 sm:gap-1.5">
-          <Flame className="w-3.5 h-3.5 text-[#FDB913] animate-pulse shrink-0" />
-          <span className="hidden sm:inline">PROMOSI PEMBUKAAN:</span>
-          <span>Gunakan Kod</span>
+      <div className="bg-gradient-to-r from-[#B80F14] via-[#E31E24] to-[#B80F14] text-white py-1.5 px-3 sm:px-4 text-[11px] sm:text-xs font-medium tracking-wide text-center relative z-50 flex items-center justify-center gap-2 shadow-sm border-b border-black/20">
+        <div className="flex items-center flex-wrap justify-center gap-1.5 sm:gap-2">
+          <span className="inline-flex items-center gap-1 font-semibold text-white/90">
+            <Flame className="w-3.5 h-3.5 text-[#FDB913] animate-pulse shrink-0" />
+            <span className="hidden sm:inline">Tawaran Istimewa:</span>
+            <span>Gunakan Kod</span>
+          </span>
+
           <button
             id="copy-promo-btn"
             onClick={handleCopyPromo}
-            className="inline-flex items-center gap-1 bg-black/50 hover:bg-black/70 px-2 py-0.5 rounded border border-[#FDB913]/60 text-[#FDB913] font-bold tracking-wider transition-all cursor-pointer text-[10px] sm:text-xs"
-            title="Klik untuk salin kod"
+            className="inline-flex items-center gap-1.5 bg-black/40 hover:bg-black/60 active:scale-95 px-2.5 py-0.5 rounded-full border border-[#FDB913]/60 text-[#FDB913] font-bold tracking-wider transition-all cursor-pointer text-[10px] sm:text-xs shadow-inner"
+            title="Klik untuk salin kod promo"
           >
             <Tag className="w-3 h-3 shrink-0" />
             <span>HEMZALFIRST</span>
-            <span className="text-[9px] sm:text-[10px] text-white/90 font-normal">({promoCopied ? 'Disalin! ✓' : 'Salin'})</span>
+            <span className="text-[9px] sm:text-[10px] text-white/90 font-normal bg-white/15 px-1.5 py-0.2 rounded-full">
+              {promoCopied ? 'Disalin! ✓' : 'Salin'}
+            </span>
           </button>
-          <span>untuk 15% OFF!</span>
-        </span>
-        <span className="hidden md:inline-block text-white/60">|</span>
-        <span className="hidden md:inline-flex items-center gap-1 text-[#FDB913]">
-          <Sparkles className="w-3 h-3 shrink-0" /> 100% Halal Diiktiraf & Ayam Segar Harian
+
+          <span className="font-semibold text-white">Diskaun 15% Pesanan Pertama</span>
+        </div>
+
+        <span className="hidden lg:inline-block text-white/40 font-light">|</span>
+
+        <span className="hidden lg:inline-flex items-center gap-1.5 text-[#FDB913] font-semibold text-xs">
+          <Sparkles className="w-3.5 h-3.5 shrink-0" />
+          <span>100% Halal Diiktiraf JAKIM & Ayam Segar Harian</span>
         </span>
       </div>
 
-      {/* Main Sticky Navbar */}
+      {/* Main Desktop & Mobile Navbar */}
       <nav
         id="main-navbar"
         className={`w-full transition-all duration-300 ${
           isScrolled
-            ? 'bg-[#0c0c0e]/95 backdrop-blur-md py-2.5 sm:py-3 shadow-2xl border-b border-white/10'
-            : 'bg-gradient-to-b from-[#0c0c0e]/95 via-[#0c0c0e]/80 to-[#0c0c0e]/40 backdrop-blur-sm py-3 sm:py-4 border-b border-white/5'
+            ? 'bg-[#0c0c0e]/95 backdrop-blur-md py-2.5 shadow-2xl border-b border-white/10'
+            : 'bg-[#0c0c0e]/85 backdrop-blur-md py-3.5 border-b border-white/5'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2">
-          {/* Brand Logo */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+          
+          {/* Brand Logo & Tagline */}
           <a
             href="#home"
-            className="flex items-center gap-2 group cursor-pointer focus:outline-none shrink-0"
+            className="flex items-center gap-3 group cursor-pointer focus:outline-none shrink-0"
           >
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-lg shadow-[#E31E24]/30 border border-[#FDB913]/40 group-hover:scale-105 transition-transform shrink-0">
-              <Flame className="w-5 h-5 sm:w-6 sm:h-6 text-[#FDB913] fill-[#FDB913]" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-lg shadow-[#E31E24]/30 border border-[#FDB913]/40 group-hover:scale-105 transition-transform shrink-0">
+              <Flame className="w-5 h-5 text-[#FDB913] fill-[#FDB913]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-black text-xl sm:text-2xl tracking-wider text-white flex items-center">
+              <span className="font-black text-xl sm:text-2xl tracking-wider text-white flex items-center leading-none">
                 HEMZAL<span className="text-[#FDB913]">.</span>
               </span>
-              <span className="text-[8px] sm:text-[9px] tracking-[0.22em] text-[#FDB913] font-bold uppercase -mt-1">
+              <span className="text-[9px] tracking-[0.25em] text-[#FDB913] font-bold uppercase mt-0.5">
                 CRISPY CHICKEN
               </span>
             </div>
           </a>
 
-          {/* Desktop Nav Links */}
-          <div className="hidden lg:flex items-center gap-7 xl:gap-8 text-sm font-bold tracking-wider uppercase text-neutral-200">
-            <a
-              href="#home"
-              className="hover:text-[#FDB913] transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#E31E24] hover:after:w-full after:transition-all"
-            >
-              Utama
-            </a>
-            <a
-              href="#resepi"
-              className="hover:text-[#FDB913] transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#E31E24] hover:after:w-full after:transition-all"
-            >
-              Rahsia Chef
-            </a>
-            <a
-              href="#menu"
-              className="hover:text-[#FDB913] transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#E31E24] hover:after:w-full after:transition-all"
-            >
-              Menu & Harga
-            </a>
-            <a
-              href="#cawangan"
-              className="hover:text-[#FDB913] transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#E31E24] hover:after:w-full after:transition-all flex items-center gap-1"
-            >
-              <MapPin className="w-3.5 h-3.5 text-[#FDB913]" />
-              Cawangan
-            </a>
-            <a
-              href="#testimoni"
-              className="hover:text-[#FDB913] transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#E31E24] hover:after:w-full after:transition-all"
-            >
-              Review
-            </a>
-            <a
-              href="#hubungi"
-              className="hover:text-[#FDB913] transition-colors relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#E31E24] hover:after:w-full after:transition-all"
-            >
-              Hubungi
-            </a>
+          {/* Desktop Navigation Links (User-friendly spacing, readable typography, subtle active hover states) */}
+          <div className="hidden lg:flex items-center gap-1 xl:gap-2">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="relative px-3.5 py-2 rounded-xl text-sm font-semibold text-neutral-300 hover:text-white hover:bg-white/5 transition-all flex items-center gap-1.5 group"
+              >
+                <span>{link.label}</span>
+                {link.badge && (
+                  <span className="bg-[#E31E24] text-white text-[9px] font-black px-1.5 py-0.2 rounded-full uppercase leading-none shadow-sm group-hover:scale-105 transition-transform">
+                    {link.badge}
+                  </span>
+                )}
+                {/* Subtle bottom indicator dot on hover */}
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#FDB913] opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
+            ))}
           </div>
 
-          {/* Action Buttons & Mobile Controls */}
+          {/* Action Buttons (Catering, Cart, Order CTA) */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Catering / Franchise Quick Trigger */}
+            
+            {/* Catering / Franchise Partner Trigger */}
             <button
               id="catering-btn"
               onClick={onOpenFranchise}
-              className="hidden md:inline-flex items-center gap-1.5 text-xs font-bold text-neutral-300 hover:text-white px-3 py-2 rounded-lg border border-white/15 hover:border-[#FDB913]/50 transition-all bg-white/5 cursor-pointer"
+              className="hidden md:inline-flex items-center gap-2 text-xs font-semibold text-neutral-300 hover:text-white px-3.5 py-2.5 rounded-xl border border-white/10 hover:border-[#FDB913]/40 bg-white/5 hover:bg-white/10 transition-all cursor-pointer shadow-sm"
+              title="Tempahan Katering & Peluang Francais"
             >
+              <Award className="w-4 h-4 text-[#FDB913]" />
               <span>Katering / Francais</span>
             </button>
 
-            {/* Cart Button */}
+            {/* Shopping Cart Trigger Button */}
             <button
               id="cart-trigger-btn"
               onClick={() => {
                 playPopSound();
                 onOpenCart();
               }}
-              className="relative flex items-center justify-center gap-1.5 sm:gap-2 bg-[#1b1b1e] hover:bg-[#25252a] text-white p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl border border-white/15 hover:border-[#FDB913]/50 transition-all shadow-md cursor-pointer group shrink-0"
+              className="relative flex items-center justify-center gap-2 bg-[#1b1b1e] hover:bg-[#25252a] text-white px-3.5 py-2.5 rounded-xl border border-white/15 hover:border-[#FDB913]/50 transition-all shadow-md cursor-pointer group shrink-0"
               aria-label="Buka Troli Pesanan"
             >
-              <ShoppingBag className="w-5 h-5 text-[#FDB913] group-hover:scale-110 transition-transform shrink-0" />
+              <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 text-[#FDB913] group-hover:scale-110 transition-transform shrink-0" />
               <span className="text-xs font-bold hidden sm:inline">Troli</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 sm:static sm:top-auto sm:right-auto bg-[#E31E24] text-white text-[10px] sm:text-[11px] font-black min-w-[18px] sm:w-5 h-[18px] sm:h-5 px-1 rounded-full flex items-center justify-center shadow-lg shadow-[#E31E24]/60 animate-bounce border sm:border-0 border-black">
+              
+              {cartCount > 0 ? (
+                <span className="bg-[#E31E24] text-white text-[11px] font-black min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center shadow-lg shadow-[#E31E24]/60 animate-bounce">
                   {cartCount}
                 </span>
+              ) : (
+                <span className="hidden xl:inline text-[11px] text-neutral-400 font-medium">(0)</span>
               )}
             </button>
 
-            {/* Order Now CTA (Desktop & Tablet) */}
+            {/* Direct Order CTA Button */}
             <a
               href="#menu"
-              className="hidden sm:inline-flex items-center justify-center bg-gradient-to-r from-[#E31E24] to-[#C1121F] hover:from-[#FDB913] hover:to-[#E39600] text-white hover:text-neutral-950 font-black text-xs tracking-wider uppercase px-4 sm:px-5 py-2.5 rounded-xl shadow-lg shadow-[#E31E24]/30 hover:shadow-[#FDB913]/30 transition-all transform hover:-translate-y-0.5 cursor-pointer shrink-0"
+              className="hidden sm:inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-[#E31E24] to-[#C1121F] hover:from-[#f52b32] hover:to-[#e31e24] active:scale-95 text-white font-bold text-xs tracking-wider uppercase px-4 sm:px-5 py-2.5 rounded-xl shadow-lg shadow-[#E31E24]/30 hover:shadow-[#E31E24]/50 transition-all cursor-pointer shrink-0"
             >
-              Pesan
+              <UtensilsCrossed className="w-3.5 h-3.5 text-[#FDB913]" />
+              <span>Pesan Sekarang</span>
             </a>
 
-            {/* Mobile Hamburger Toggle Button - ALWAYS visible on mobile & tablet */}
+            {/* Mobile / Tablet Menu Toggle */}
             <button
               id="mobile-menu-toggle"
               onClick={() => {
                 playPopSound();
-                setMobileMenuOpen(!mobileMenuOpen)}
-              }
+                setMobileMenuOpen(!mobileMenuOpen);
+              }}
               className="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl bg-[#1b1b1e] hover:bg-[#25252a] active:bg-[#2e2e35] text-white border border-white/15 hover:border-[#FDB913]/50 transition-all shadow-md cursor-pointer shrink-0"
               aria-label={mobileMenuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
               aria-expanded={mobileMenuOpen}
@@ -182,13 +187,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <Menu className="w-5 h-5 text-neutral-200" />
               )}
             </button>
+
           </div>
         </div>
 
         {/* Mobile Dropdown Menu Drawer */}
         {mobileMenuOpen && (
           <div className="lg:hidden bg-[#121215]/98 backdrop-blur-xl border-b border-white/10 px-5 py-5 space-y-4 shadow-2xl animate-in slide-in-from-top-3 duration-200 max-h-[calc(100vh-100px)] overflow-y-auto">
-            <div className="flex flex-col space-y-1 font-bold text-sm uppercase">
+            <div className="flex flex-col space-y-1 font-semibold text-sm">
               <a
                 href="#home"
                 onClick={() => setMobileMenuOpen(false)}

@@ -88,7 +88,7 @@ export const Testimonials: React.FC = () => {
             </div>
           </div>
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/hemzalcrispychickenhq/"
             target="_blank"
             rel="noopener noreferrer"
             className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold whitespace-nowrap transition-colors"

@@ -187,7 +187,7 @@ export const ContactSection: React.FC = () => {
             
             {/* WhatsApp Box */}
             <a
-              href="https://wa.me/60164175976?text=Hai%20Hemzal%20Crispy%20Chicken,%20saya%20ada%20pertanyaan."
+              href="https://wa.me/601121992135?text=Hai%20Hemzal%20Crispy%20Chicken,%20saya%20ada%20pertanyaan."
               target="_blank"
               rel="noopener noreferrer"
               className="p-6 rounded-3xl bg-[#141418] hover:bg-[#191920] border border-white/10 hover:border-[#25D366]/50 transition-all duration-300 flex items-center gap-4 group block shadow-lg"
@@ -199,7 +199,7 @@ export const ContactSection: React.FC = () => {
                 <span className="text-[10px] uppercase font-bold text-[#25D366] tracking-wider">
                   Respons Pantas (WhatsApp)
                 </span>
-                <h4 className="font-black text-base text-white">+60 16-417 5976</h4>
+                <h4 className="font-black text-base text-white">+60 11-2199 2135</h4>
                 <p className="text-xs text-neutral-400">Tekan untuk sembang terus bersama admin</p>
               </div>
             </a>

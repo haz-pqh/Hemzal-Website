@@ -208,8 +208,6 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                 
                 {/* Gradient Shadow Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0e] via-transparent to-black/30 pointer-events-none" />
-
-                {/* Overlaid Banner at Bottom */}
               
               </div>
 

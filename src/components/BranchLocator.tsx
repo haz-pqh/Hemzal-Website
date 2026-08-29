@@ -21,13 +21,6 @@ export const BranchLocator: React.FC = () => {
     { id: 'all', label: 'Semua Cawangan' },
     { id: 'sl', label: 'Selangor' },
     { id: 'kl', label: 'WP Kuala Lumpur' },
-    // { id: 'bmc', label: 'Bandar Mahkotar Cheras' },
-    // { id: 'ampang', label: 'Selangor' },
-    // { id: 'kv', label: 'Klang Valley' },
-    // { id: 'ns', label: 'Negeri Sembilan' },
-    // { id: 'perak', label: 'Perak' },
-    // { id: 'johor', label: 'Johor' },
-    // { id: 'penang', label: 'Pulau Pinang' },
   ];
 
   const filteredBranches = useMemo(() => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingBag, MapPin, Phone, Menu, X, Flame, UtensilsCrossed, Award } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
+import logo from '/icon.png';
 
 interface NavbarProps {
   cartCount: number;
@@ -52,7 +53,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-3 group cursor-pointer focus:outline-none shrink-0"
           >
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-lg shadow-[#E31E24]/30 border border-[#FDB913]/40 group-hover:scale-105 transition-transform shrink-0">
-              <Flame className="w-5 h-5 text-[#FDB913] fill-[#FDB913]" />
+              <img 
+                src={logo} 
+                alt="Flame Icon" 
+                className="w-5 h-5 object-contain" 
+              />
             </div>
             <div className="flex flex-col items-start leading-none">
               <span className="font-hemzal italic text-2xl sm:text-3xl text-[#E31E24] tracking-normal drop-shadow-[0_2px_8px_rgba(227,30,36,0.3)] group-hover:scale-105 transition-transform origin-left">

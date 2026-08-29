@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Flame, ShieldCheck, Heart, Send, CheckCircle2, Instagram, Facebook, Video, MapPin, Phone, Mail } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { playPopSound } from '../utils/sound';
+import logo from '/icon.png';
 
 interface FooterProps {
   onOpenFranchise: () => void;
@@ -31,7 +32,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-lg shadow-[#E31E24]/30 border border-[#FDB913]/40">
-                <Flame className="w-6 h-6 text-[#FDB913] fill-[#FDB913]" />
+                <img 
+                  src={logo} 
+                  alt="Flame Icon" 
+                  className="w-6 h-6 object-contain" 
+                />
               </div>
               <div className="flex flex-col items-start leading-none">
                 <span className="font-hemzal italic text-3xl text-[#E31E24] tracking-normal drop-shadow-[0_2px_8px_rgba(227,30,36,0.3)]">
@@ -176,7 +181,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
             {/* Social Icons */}
             <div className="pt-2 flex items-center gap-3">
               <a
-                href="https://tiktok.com"
+                href="https://www.tiktok.com/@hemzalcrispychickenhq"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-xl bg-white/5 hover:bg-[#E31E24] flex items-center justify-center text-white transition-colors"
@@ -185,7 +190,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
                 <Video className="w-4 h-4" />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/hemzalcrispychickenhq/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-xl bg-white/5 hover:bg-[#E31E24] flex items-center justify-center text-white transition-colors"
@@ -194,7 +199,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
                 <Instagram className="w-4 h-4" />
               </a>
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/profile.php?id=61565057321647"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded-xl bg-white/5 hover:bg-[#E31E24] flex items-center justify-center text-white transition-colors"

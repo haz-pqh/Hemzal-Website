@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CartItem, PromoVoucher } from '../types';
 import { BRANCHES } from '../data/branchData';
 import { VOUCHERS } from '../data/menuData';
-import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, Tag, Check, Sparkles, MapPin, Truck, Store, MessageSquare } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, Tag, Check, Sparkles, MapPin, Truck, Store, MessageSquare, ExternalLink } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { OrderProcessingAnimation } from './OrderProcessingAnimation';
 import { playPopSound, playCrunchSound } from '../utils/sound';
 
 interface CartDrawerProps {
@@ -23,8 +24,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onRemoveItem,
   onClearCart,
 }) => {
-  if (!isOpen) return null;
-
   const [orderType, setOrderType] = useState<'delivery' | 'pickup'>('delivery');
   const [selectedBranchId, setSelectedBranchId] = useState<string>(BRANCHES[0].id);
   const [deliveryAddress, setDeliveryAddress] = useState<string>('');
@@ -33,6 +32,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [voucherCodeInput, setVoucherCodeInput] = useState<string>('');
   const [appliedVoucher, setAppliedVoucher] = useState<PromoVoucher | null>(null);
   const [voucherError, setVoucherError] = useState<string>('');
+
+  // Lottie checkout loading state
+  const [isCheckingOut, setIsCheckingOut] = useState<boolean>(false);
+  const [checkoutStep, setCheckoutStep] = useState<number>(1);
+  const [checkoutProgress, setCheckoutProgress] = useState<number>(0);
+  const [generatedWaUrl, setGeneratedWaUrl] = useState<string>('');
 
   // Financial calculations
   const rawSubtotal = cart.reduce((sum, item) => sum + item.totalPrice, 0);
@@ -119,8 +124,43 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
     const targetPhone = '60164175976';
     const waUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`;
-    window.open(waUrl, '_blank');
+    setGeneratedWaUrl(waUrl);
+
+    // Trigger Lottie Animation Flow
+    setIsCheckingOut(true);
+    setCheckoutStep(1);
+    setCheckoutProgress(15);
   };
+
+  // Manage Lottie Checkout Steps and Redirection
+  useEffect(() => {
+    if (!isCheckingOut) return;
+
+    const timer1 = setTimeout(() => {
+      setCheckoutStep(2);
+      setCheckoutProgress(55);
+    }, 600);
+
+    const timer2 = setTimeout(() => {
+      setCheckoutStep(3);
+      setCheckoutProgress(90);
+    }, 1200);
+
+    const timer3 = setTimeout(() => {
+      setCheckoutProgress(100);
+      if (generatedWaUrl) {
+        window.open(generatedWaUrl, '_blank');
+      }
+    }, 1800);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, [isCheckingOut, generatedWaUrl]);
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
@@ -436,9 +476,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             {/* WhatsApp Checkout Button */}
             <button
               onClick={handleCheckoutWhatsApp}
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#25D366] via-[#20BA5A] to-[#128C7E] hover:from-[#2bf376] hover:to-[#16a594] text-black font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-[#25D366]/20 transition-all cursor-pointer"
+              disabled={isCheckingOut}
+              className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#25D366] via-[#20BA5A] to-[#128C7E] hover:from-[#2bf376] hover:to-[#16a594] disabled:opacity-75 disabled:cursor-not-allowed text-black font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-[#25D366]/20 transition-all cursor-pointer group"
             >
-              <MessageSquare className="w-5 h-5 fill-black" />
+              <MessageSquare className="w-5 h-5 fill-black group-hover:scale-110 transition-transform" />
               <span>Hantar Pesanan ke WhatsApp • RM {foodTotal.toFixed(2)}</span>
             </button>
 
@@ -452,6 +493,87 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         )}
 
       </div>
+
+      {/* Lottie-Based Checkout Loading Overlay */}
+      {isCheckingOut && (
+        <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in zoom-in-95 duration-200">
+          <div className="w-full max-w-sm bg-[#16161d] border border-white/15 rounded-3xl p-6 sm:p-7 text-center shadow-2xl space-y-4 relative overflow-hidden">
+            
+            {/* Top & bottom gradient glows */}
+            <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-32 bg-[#E31E24]/30 blur-3xl pointer-events-none rounded-full" />
+            <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-48 h-32 bg-[#25D366]/20 blur-3xl pointer-events-none rounded-full" />
+
+            {/* Animated Order Preparation Graphics */}
+            <div className="relative w-44 h-44 mx-auto flex items-center justify-center">
+              <OrderProcessingAnimation step={checkoutStep} />
+            </div>
+
+            {/* Status Headings & Dynamic Steps */}
+            <div className="space-y-1 relative z-10">
+              <span className="inline-flex items-center gap-1.5 bg-[#FDB913]/10 text-[#FDB913] border border-[#FDB913]/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">
+                <Sparkles className="w-3 h-3" /> Memproses Pesanan Hemzal
+              </span>
+              
+              <h3 className="text-xl font-black text-white pt-1">
+                {checkoutStep === 1 && "🍗 Menyusun Pesanan Dapur..."}
+                {checkoutStep === 2 && "🛵 Menyemak Kaedah Penghantaran..."}
+                {checkoutStep === 3 && "💬 Menghubungkan ke WhatsApp..."}
+              </h3>
+
+              <p className="text-xs text-neutral-300 min-h-[32px] flex items-center justify-center">
+                {checkoutStep === 1 && "Mengira jumlah potongan harga & sos celup istimewa..."}
+                {checkoutStep === 2 && "Menyediakan butiran pesanan untuk dapur & rider Grab/Lalamove..."}
+                {checkoutStep === 3 && "Membuka WhatsApp Admin rasmi (+60 16-417 5976)..."}
+              </p>
+            </div>
+
+            {/* Animated Progress Bar */}
+            <div className="w-full bg-[#101014] h-2.5 rounded-full overflow-hidden border border-white/10 p-0.5">
+              <div
+                className="h-full bg-gradient-to-r from-[#E31E24] via-[#FDB913] to-[#25D366] rounded-full transition-all duration-300 ease-out"
+                style={{ width: `${checkoutProgress}%` }}
+              />
+            </div>
+
+            {/* Action Buttons */}
+            <div className="pt-2 space-y-2">
+              <a
+                href={generatedWaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => {
+                  setIsCheckingOut(false);
+                }}
+                className="w-full py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/30 transition-all cursor-pointer"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span>Buka WhatsApp Sekarang</span>
+              </a>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setIsCheckingOut(false);
+                    onClearCart();
+                    onClose();
+                  }}
+                  className="flex-1 py-2 text-[11px] font-semibold text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
+                >
+                  Selesai & Kosongkan
+                </button>
+                <button
+                  onClick={() => setIsCheckingOut(false)}
+                  className="flex-1 py-2 text-[11px] font-semibold text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
+                >
+                  Tutup Status
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

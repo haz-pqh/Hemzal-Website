@@ -12,11 +12,11 @@ export const CateringFranchiseModal: React.FC<CateringFranchiseModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  if (!isOpen) return null;
-
   const [activeTab, setActiveTab] = useState<'catering' | 'franchise'>('catering');
   const [paxCount, setPaxCount] = useState<number>(50);
   const [packageType, setPackageType] = useState<'standard' | 'premium' | 'royale'>('premium');
+
+  if (!isOpen) return null;
 
   // Catering price calculations strictly based on Hemzal Menu (Ayam RM4.50/pc, Coleslaw RM3.50, Sos Gourmet RM2/RM3, Sos Cili Percuma)
   const packages = {

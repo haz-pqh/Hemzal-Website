@@ -5,6 +5,9 @@ import { playCrunchSound } from '../utils/sound';
 import promoVid from '/hemzal-promo-vid.mp4';
 import promoPic from '/hemzal-promo-pic.png';
 
+const promoVid = '/hemzal-promo-vid.mp4';
+const promoPic = '/hemzal-promo-pic.png';
+
 interface HeroProps {
   onExploreMenu: () => void;
   onFindBranch: () => void;
@@ -36,7 +39,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
   return (
     <section
       id="home"
-      className="relative min-h-[92vh] pt-32 pb-16 lg:pt-40 lg:pb-24 flex items-center justify-center overflow-hidden bg-[#0c0c0e]"
+      className="relative min-h-[92vh] pt-32 pb-16 lg:pt-40 lg:pb-24 flex items-center justify-center overflow-hidden"
     >
       {/* Background Ambience Glows */}
       <div className="absolute top-1/4 -left-40 w-96 h-96 bg-[#E31E24]/20 rounded-full blur-[120px] pointer-events-none" />

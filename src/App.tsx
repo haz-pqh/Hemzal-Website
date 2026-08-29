@@ -13,7 +13,7 @@ import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { ItemCustomizerModal } from './components/ItemCustomizerModal';
 import { CateringFranchiseModal } from './components/CateringFranchiseModal';
-import { ShoppingBag, CheckCircle2, Flame, ArrowUp } from 'lucide-react';
+import { ShoppingBag, CheckCircle2, ArrowUp } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { playCrunchSound } from './utils/sound';
 
@@ -189,8 +189,19 @@ export default function App() {
   const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-[#0c0c0e] text-neutral-100 selection:bg-[#E31E24] selection:text-white relative w-full max-w-full overflow-x-hidden">
+    <div className="min-h-screen text-neutral-100 selection:bg-[#E31E24] selection:text-white relative w-full max-w-full overflow-x-hidden bg-[#0c0c0e]">
       
+      {/* Global Fixed Wallpaper Background */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none bg-cover bg-center bg-no-repeat bg-fixed"
+        style={{
+          backgroundImage: `url("/wallpaper.png")`,
+        }}
+      />
+
+      {/* Dark overlay for contrast and content readability */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-[#0c0c0e]/75 backdrop-blur-[0.5px]" />
+
       {/* Navbar */}
       <Navbar
         cartCount={totalCartCount}
@@ -199,7 +210,7 @@ export default function App() {
       />
 
       {/* Main Sections */}
-      <main className="w-full max-w-full overflow-x-hidden">
+      <main className="relative z-10 w-full max-w-full overflow-x-hidden">
         {/* 1. Hero Section */}
         <Hero
           onExploreMenu={() => {
@@ -241,7 +252,9 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <Footer onOpenFranchise={() => setIsFranchiseModalOpen(true)} />
+      <Footer
+        onOpenFranchise={() => setIsFranchiseModalOpen(true)}
+      />
 
       {/* Slide-out Cart Drawer */}
       <CartDrawer
@@ -254,12 +267,14 @@ export default function App() {
       />
 
       {/* Item Customizer Modal */}
-      <ItemCustomizerModal
-        item={customizingState?.item || null}
-        initialPortion={customizingState?.portion}
-        onClose={() => setCustomizingState(null)}
-        onAddToCart={handleAddToCart}
-      />
+      {customizingState && (
+        <ItemCustomizerModal
+          item={customizingState.item}
+          initialPortion={customizingState.portion}
+          onClose={() => setCustomizingState(null)}
+          onAddToCart={handleAddToCart}
+        />
+      )}
 
       {/* Catering & Franchise Modal */}
       <CateringFranchiseModal

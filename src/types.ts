@@ -1,4 +1,4 @@
-export type Region = 'all' | 'kv' | 'ns' | 'perak' | 'johor' | 'penang';
+export type Region = 'all' | 'sl' | 'kl' | 'kv' | 'ns' | 'perak' | 'johor' | 'penang';
 
 export type SpiceLevel = 'Biasa (Mild)' | 'Pedas Padu (Spicy)' | 'Extra Berapi 🔥🔥' | 'Tanpa Pedas (Zero Spice)';
 
@@ -68,7 +68,7 @@ export interface CartItem {
 export interface Branch {
   id: string;
   name: string;
-  region: 'kv' | 'ns' | 'perak' | 'johor' | 'penang';
+  region: 'sl' | 'kl' | 'kv' | 'ns' | 'perak' | 'johor' | 'penang';
   regionLabel: string;
   address: string;
   city: string;

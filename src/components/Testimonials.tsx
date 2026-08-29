@@ -4,7 +4,7 @@ import { Star, CheckCircle2, Quote, Flame, Heart } from 'lucide-react';
 
 export const Testimonials: React.FC = () => {
   return (
-    <section id="testimoni" className="py-20 bg-[#0c0c0e] relative overflow-hidden">
+    <section id="testimoni" className="py-20 bg-[#0c0c0e]/75 backdrop-blur-sm relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}

@@ -17,23 +17,21 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
   onAddToCart,
   initialPortion,
 }) => {
-  if (!item) return null;
-
-  const isChickenItem = item.category === 'signature' || item.pieceUnitPrice !== undefined;
-  const unitPiecePrice = item.pieceUnitPrice || 4.50;
-  const unitSaucePrice = item.saucePrice || 0;
+  const isChickenItem = item ? (item.category === 'signature' || item.pieceUnitPrice !== undefined) : false;
+  const unitPiecePrice = item?.pieceUnitPrice || 4.50;
+  const unitSaucePrice = item?.saucePrice || 0;
   const isSauceSet = unitSaucePrice > 0;
 
   // Initial piece count
-  const initialPieces = initialPortion?.pieces || item.pieces || 2;
+  const initialPieces = initialPortion?.pieces || item?.pieces || 2;
   const [customPieces, setCustomPieces] = useState<number>(initialPieces);
 
   // Selected portion state
-  const defaultPortion = initialPortion || (item.portions && item.portions.length > 0 ? item.portions[0] : undefined);
+  const defaultPortion = initialPortion || (item?.portions && item.portions.length > 0 ? item.portions[0] : undefined);
   const [selectedPortion, setSelectedPortion] = useState<PortionOption | undefined>(defaultPortion);
 
   // Default Dip / Sauce
-  const [selectedDip, setSelectedDip] = useState<string>(item.defaultSauce || 'Sos Cili (Percuma)');
+  const [selectedDip, setSelectedDip] = useState<string>(item?.defaultSauce || 'Sos Cili (Percuma)');
   const [selectedAddons, setSelectedAddons] = useState<CustomizationOption[]>([]);
   const [specialInstructions, setSpecialInstructions] = useState<string>('');
   const [orderQuantity, setOrderQuantity] = useState<number>(1);
@@ -42,6 +40,26 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
   const includedSauceCups = useMemo(() => {
     return isSauceSet ? calculateSauceCups(customPieces, true) : 0;
   }, [isSauceSet, customPieces]);
+
+  // Base price computation
+  const currentBasePrice = useMemo(() => {
+    if (!item) return 0;
+    if (isChickenItem) {
+      return calculateChickenPrice(customPieces, unitPiecePrice, unitSaucePrice);
+    }
+    return selectedPortion ? selectedPortion.price : item.price;
+  }, [item, isChickenItem, customPieces, unitPiecePrice, unitSaucePrice, selectedPortion]);
+
+  const unitTotal = useMemo(() => {
+    const addonsTotal = selectedAddons.reduce((sum, a) => sum + a.price, 0);
+    return currentBasePrice + addonsTotal;
+  }, [currentBasePrice, selectedAddons]);
+
+  const finalTotalPrice = useMemo(() => {
+    return unitTotal * orderQuantity;
+  }, [unitTotal, orderQuantity]);
+
+  if (!item) return null;
 
   // Handler for custom piece counter
   const handlePieceChange = (newPieces: number) => {
@@ -81,23 +99,6 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
       setSelectedAddons([...selectedAddons, addon]);
     }
   };
-
-  // Base price computation
-  const currentBasePrice = useMemo(() => {
-    if (isChickenItem) {
-      return calculateChickenPrice(customPieces, unitPiecePrice, unitSaucePrice);
-    }
-    return selectedPortion ? selectedPortion.price : item.price;
-  }, [isChickenItem, customPieces, unitPiecePrice, unitSaucePrice, selectedPortion, item.price]);
-
-  const unitTotal = useMemo(() => {
-    const addonsTotal = selectedAddons.reduce((sum, a) => sum + a.price, 0);
-    return currentBasePrice + addonsTotal;
-  }, [currentBasePrice, selectedAddons]);
-
-  const finalTotalPrice = useMemo(() => {
-    return unitTotal * orderQuantity;
-  }, [unitTotal, orderQuantity]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

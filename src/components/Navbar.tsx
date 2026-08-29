@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, MapPin, Phone, Menu, X, Flame, Sparkles, Tag, UtensilsCrossed, Award, MessageSquare } from 'lucide-react';
+import { ShoppingBag, MapPin, Phone, Menu, X, Flame, UtensilsCrossed, Award } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
 
 interface NavbarProps {
@@ -15,7 +15,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [promoCopied, setPromoCopied] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,13 +23,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const handleCopyPromo = () => {
-    navigator.clipboard.writeText('HEMZALFIRST');
-    setPromoCopied(true);
-    playPopSound();
-    setTimeout(() => setPromoCopied(false), 2500);
-  };
 
   const navLinks = [
     { label: 'Utama', href: '#home' },
@@ -43,39 +35,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="fixed top-0 left-0 w-full z-40 select-none">
-      {/* Top Banner Ribbon */}
-      <div className="bg-gradient-to-r from-[#B80F14] via-[#E31E24] to-[#B80F14] text-white py-1.5 px-3 sm:px-4 text-[11px] sm:text-xs font-medium tracking-wide text-center relative z-50 flex items-center justify-center gap-2 shadow-sm border-b border-black/20">
-        <div className="flex items-center flex-wrap justify-center gap-1.5 sm:gap-2">
-          <span className="inline-flex items-center gap-1 font-semibold text-white/90">
-            <Flame className="w-3.5 h-3.5 text-[#FDB913] animate-pulse shrink-0" />
-            <span className="hidden sm:inline">Tawaran Istimewa:</span>
-            <span>Gunakan Kod</span>
-          </span>
-
-          <button
-            id="copy-promo-btn"
-            onClick={handleCopyPromo}
-            className="inline-flex items-center gap-1.5 bg-black/40 hover:bg-black/60 active:scale-95 px-2.5 py-0.5 rounded-full border border-[#FDB913]/60 text-[#FDB913] font-bold tracking-wider transition-all cursor-pointer text-[10px] sm:text-xs shadow-inner"
-            title="Klik untuk salin kod promo"
-          >
-            <Tag className="w-3 h-3 shrink-0" />
-            <span>HEMZALFIRST</span>
-            <span className="text-[9px] sm:text-[10px] text-white/90 font-normal bg-white/15 px-1.5 py-0.2 rounded-full">
-              {promoCopied ? 'Disalin! ✓' : 'Salin'}
-            </span>
-          </button>
-
-          <span className="font-semibold text-white">Diskaun 15% Pesanan Pertama</span>
-        </div>
-
-        <span className="hidden lg:inline-block text-white/40 font-light">|</span>
-
-        <span className="hidden lg:inline-flex items-center gap-1.5 text-[#FDB913] font-semibold text-xs">
-          <Sparkles className="w-3.5 h-3.5 shrink-0" />
-          <span>100% Halal Diiktiraf JAKIM & Ayam Segar Harian</span>
-        </span>
-      </div>
-
       {/* Main Desktop & Mobile Navbar */}
       <nav
         id="main-navbar"
@@ -95,12 +54,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-lg shadow-[#E31E24]/30 border border-[#FDB913]/40 group-hover:scale-105 transition-transform shrink-0">
               <Flame className="w-5 h-5 text-[#FDB913] fill-[#FDB913]" />
             </div>
-            <div className="flex flex-col">
-              <span className="font-black text-xl sm:text-2xl tracking-wider text-white flex items-center leading-none">
-                HEMZAL<span className="text-[#FDB913]">.</span>
+            <div className="flex flex-col items-start leading-none">
+              <span className="font-hemzal italic text-2xl sm:text-3xl text-[#E31E24] tracking-normal drop-shadow-[0_2px_8px_rgba(227,30,36,0.3)] group-hover:scale-105 transition-transform origin-left">
+                Hemzal
               </span>
-              <span className="text-[9px] tracking-[0.25em] text-[#FDB913] font-bold uppercase mt-0.5">
-                CRISPY CHICKEN
+              <span className="text-[10px] sm:text-[11px] font-extrabold italic tracking-tight text-neutral-200 uppercase font-['Montserrat',sans-serif] -mt-0.5">
+                Crispy Chicken
               </span>
             </div>
           </a>
@@ -127,7 +86,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Action Buttons (Catering, Cart, Order CTA) */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            
             {/* Catering / Franchise Partner Trigger */}
             <button
               id="catering-btn"
@@ -225,7 +183,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="flex items-center gap-1.5">
                   <MapPin className="w-4 h-4 text-[#FDB913]" /> Cawangan Outlet
                 </span>
-                <span className="text-[11px] text-[#FDB913] bg-[#FDB913]/10 px-2 py-0.5 rounded-md font-bold">15 Outlet</span>
+                <span className="text-[11px] text-[#FDB913] bg-[#FDB913]/10 px-2 py-0.5 rounded-md font-bold">4 Outlet</span>
               </a>
               <a
                 href="#testimoni"

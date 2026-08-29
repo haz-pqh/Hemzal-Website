@@ -46,7 +46,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   };
 
   return (
-    <section id="menu" className="py-20 bg-[#0c0c0e] relative overflow-hidden">
+    <section id="menu" className="py-20 bg-[#0c0c0e]/75 backdrop-blur-sm relative overflow-hidden">
       {/* Subtle Glows */}
       <div className="absolute top-20 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-[radial-gradient(ellipse_at_center,rgba(227,30,36,0.08),transparent_70%)] pointer-events-none" />
 

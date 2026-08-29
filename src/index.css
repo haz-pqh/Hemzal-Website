@@ -85,6 +85,34 @@ html.lenis body {
   background: rgba(253, 185, 19, 0.7);
 }
 
+.font-hemzal {
+  font-family: 'Pacifico', 'Kaushan Script', 'Satisfy', cursive;
+  font-style: italic;
+}
+
+.brand-hemzal-logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  line-height: 1;
+}
+
+.brand-hemzal-logo .brand-title {
+  font-family: 'Pacifico', cursive;
+  font-style: italic;
+  color: #E31E24;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 10px rgba(227, 30, 36, 0.25);
+}
+
+.brand-hemzal-logo .brand-subtitle {
+  font-family: 'Montserrat', 'Plus Jakarta Sans', sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
 html,
 body,
 #root {

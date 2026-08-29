@@ -77,7 +77,7 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section id="hubungi" className="py-20 bg-[#09090c] relative overflow-hidden border-t border-white/5">
+    <section id="hubungi" className="py-20 bg-[#09090c]/80 backdrop-blur-sm relative overflow-hidden border-t border-white/5">
       {/* Glow */}
       <div className="absolute top-1/2 right-10 w-96 h-96 bg-[#E31E24]/10 rounded-full blur-[140px] pointer-events-none" />
 
@@ -187,7 +187,7 @@ export const ContactSection: React.FC = () => {
             
             {/* WhatsApp Box */}
             <a
-              href="https://wa.me/60123456789?text=Hai%20Hemzal%20Crispy%20Chicken,%20saya%20ada%20pertanyaan."
+              href="https://wa.me/60164175976?text=Hai%20Hemzal%20Crispy%20Chicken,%20saya%20ada%20pertanyaan."
               target="_blank"
               rel="noopener noreferrer"
               className="p-6 rounded-3xl bg-[#141418] hover:bg-[#191920] border border-white/10 hover:border-[#25D366]/50 transition-all duration-300 flex items-center gap-4 group block shadow-lg"
@@ -199,7 +199,7 @@ export const ContactSection: React.FC = () => {
                 <span className="text-[10px] uppercase font-bold text-[#25D366] tracking-wider">
                   Respons Pantas (WhatsApp)
                 </span>
-                <h4 className="font-black text-base text-white">+60 12-345 6789</h4>
+                <h4 className="font-black text-base text-white">+60 16-417 5976</h4>
                 <p className="text-xs text-neutral-400">Tekan untuk sembang terus bersama admin</p>
               </div>
             </a>

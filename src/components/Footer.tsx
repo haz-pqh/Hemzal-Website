@@ -20,7 +20,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
   };
 
   return (
-    <footer className="bg-[#08080a] text-white pt-16 pb-12 border-t border-white/10 relative overflow-hidden">
+    <footer className="bg-[#08080a]/90 backdrop-blur-md text-white pt-16 pb-12 border-t border-white/10 relative overflow-hidden">
       {/* Background Decor */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
         
@@ -33,12 +33,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-lg shadow-[#E31E24]/30 border border-[#FDB913]/40">
                 <Flame className="w-6 h-6 text-[#FDB913] fill-[#FDB913]" />
               </div>
-              <div className="flex flex-col">
-                <span className="font-black text-2xl tracking-wider text-white">
-                  HEMZAL<span className="text-[#FDB913]">.</span>
+              <div className="flex flex-col items-start leading-none">
+                <span className="font-hemzal italic text-3xl text-[#E31E24] tracking-normal drop-shadow-[0_2px_8px_rgba(227,30,36,0.3)]">
+                  Hemzal
                 </span>
-                <span className="text-[9px] tracking-[0.25em] text-[#FDB913] font-bold uppercase -mt-1">
-                  CRISPY CHICKEN
+                <span className="text-[11px] font-extrabold italic tracking-tight text-neutral-200 uppercase font-['Montserrat',sans-serif] -mt-0.5">
+                  Crispy Chicken
                 </span>
               </div>
             </div>

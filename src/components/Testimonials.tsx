@@ -1,6 +1,7 @@
 import React from 'react';
 import { REVIEWS } from '../data/reviewData';
 import { Star, CheckCircle2, Quote, Flame, Heart } from 'lucide-react';
+import avatar from '/icon.png';
 
 export const Testimonials: React.FC = () => {
   return (
@@ -51,7 +52,7 @@ export const Testimonials: React.FC = () => {
               <div className="pt-3 border-t border-white/5 space-y-2">
                 <div className="flex items-center gap-3">
                   <img
-                    src={review.avatar}
+                    src={avatar}
                     alt={review.name}
                     className="w-10 h-10 rounded-full object-cover border border-white/10"
                   />

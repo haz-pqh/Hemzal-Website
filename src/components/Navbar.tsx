@@ -52,11 +52,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             href="#home"
             className="flex items-center gap-3 group cursor-pointer focus:outline-none shrink-0"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-lg shadow-[#E31E24]/30 border border-[#FDB913]/40 group-hover:scale-105 transition-transform shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-lg shadow-[#E31E24]/30 border border-[#FDB913]/40 group-hover:scale-105 transition-transform shrink-0 p-2">
               <img 
                 src={logo} 
-                alt="Flame Icon" 
-                className="w-5 h-5 object-contain" 
+                alt="Logo" 
+                className="w-full h-full object-contain select-none pointer-events-none" 
               />
             </div>
             <div className="flex flex-col items-start leading-none">

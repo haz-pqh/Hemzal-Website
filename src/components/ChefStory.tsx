@@ -41,14 +41,14 @@ export const ChefStory: React.FC = () => {
   ];
 
   return (
-    <section id="resepi" className="py-20 bg-[#0f0f12]/80 backdrop-blur-sm relative overflow-hidden border-t border-b border-white/5">
-      {/* Background Ambience */}
+    <section id="resepi" className="py-20 bg-[#0f0f12]/10 backdrop-blur-sm relative overflow-hidden border-t border-b border-white/5">
+      {/* Background Ambience (Dark Theme Retained) */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-[#E31E24]/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#FDB913]/10 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Header */}
+        {/* Section Header (Dark Theme Retained) */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 bg-[#1d1d22] border border-[#FDB913]/30 px-4 py-1.5 rounded-full">
             <Award className="w-4 h-4 text-[#FDB913]" />
@@ -66,7 +66,7 @@ export const ChefStory: React.FC = () => {
           </p>
         </div>
 
-        {/* 4 Pillars Interactive Layout */}
+        {/* 4 Pillars Interactive Layout - Light Theme Cards Only */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
           {/* Left: Pillar Selection List */}
@@ -83,15 +83,15 @@ export const ChefStory: React.FC = () => {
                   }}
                   className={`w-full text-left p-5 rounded-2xl border transition-all cursor-pointer flex items-start gap-4 ${
                     isSelected
-                      ? 'bg-[#1a1a20] border-[#FDB913] shadow-lg shadow-black/40 translate-x-2'
-                      : 'bg-[#141418]/60 hover:bg-[#18181e] border-white/10 hover:border-white/20'
+                      ? 'bg-white border-2 border-[#FDB913] shadow-xl shadow-black/20 translate-x-2'
+                      : 'bg-white/90 hover:bg-white border-neutral-200 shadow-xs'
                   }`}
                 >
                   <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-md ${
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-md transition-all ${
                       isSelected
                         ? 'bg-gradient-to-br from-[#E31E24] to-[#FDB913] text-white'
-                        : 'bg-white/5 text-neutral-400'
+                        : 'bg-neutral-100 text-neutral-500'
                     }`}
                   >
                     <Icon className="w-6 h-6" />
@@ -99,75 +99,69 @@ export const ChefStory: React.FC = () => {
 
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#FDB913]">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#B45309]">
                         Pillar 0{idx + 1}
                       </span>
                       {isSelected && (
-                        <span className="text-[10px] bg-[#E31E24] text-white font-black px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] bg-[#E31E24] text-white font-black px-2 py-0.5 rounded-full shadow-xs">
                           AKTIF
                         </span>
                       )}
                     </div>
-                    <h3 className={`font-black text-base sm:text-lg mt-0.5 ${isSelected ? 'text-white' : 'text-neutral-200'}`}>
+                    <h3 className={`font-black text-base sm:text-lg mt-0.5 ${isSelected ? 'text-neutral-900' : 'text-neutral-800'}`}>
                       {pillar.title}
                     </h3>
-                    <p className="text-xs text-neutral-400 mt-1 line-clamp-2">
+                    <p className="text-xs text-neutral-600 mt-1 line-clamp-2">
                       {pillar.desc}
                     </p>
                   </div>
 
-                  <ChevronRight className={`w-5 h-5 shrink-0 self-center transition-transform ${isSelected ? 'text-[#FDB913] translate-x-1' : 'text-neutral-500'}`} />
+                  <ChevronRight className={`w-5 h-5 shrink-0 self-center transition-transform ${isSelected ? 'text-[#B45309] translate-x-1' : 'text-neutral-400'}`} />
                 </button>
               );
             })}
           </div>
 
-          {/* Right: Active Pillar Showcase Card */}
+          {/* Right: Active Pillar Showcase Card (Light Theme) */}
           <div className="lg:col-span-6">
-            <div className="relative rounded-3xl p-8 sm:p-10 bg-gradient-to-br from-[#18181f] via-[#141418] to-[#101014] border border-[#FDB913]/30 shadow-2xl overflow-hidden">
+            <div className="relative rounded-3xl p-8 sm:p-10 bg-white border border-neutral-200/90 shadow-2xl shadow-black/30 overflow-hidden">
               {/* Decorative Watermark */}
-              <div className="absolute -bottom-10 -right-10 text-white/5 font-black text-9xl select-none pointer-events-none">
+              <div className="absolute -bottom-10 -right-10 text-neutral-100 font-black text-9xl select-none pointer-events-none">
                 0{activePillar + 1}
               </div>
 
               <div className="relative z-10 space-y-6">
-                <div className="inline-flex items-center gap-2 bg-[#FDB913]/10 text-[#FDB913] border border-[#FDB913]/30 px-3.5 py-1 rounded-full text-xs font-black tracking-wider uppercase">
+                <div className="inline-flex items-center gap-2 bg-amber-100 text-[#B45309] border border-amber-300/80 px-3.5 py-1 rounded-full text-xs font-black tracking-wider uppercase">
                   {pillars[activePillar].highlight}
                 </div>
 
-                <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight">
+                <h3 className="text-2xl sm:text-3xl font-black text-neutral-900 leading-tight">
                   {pillars[activePillar].title}
                 </h3>
 
-                <p className="text-neutral-300 text-sm sm:text-base leading-relaxed">
+                <p className="text-neutral-600 text-sm sm:text-base leading-relaxed">
                   {pillars[activePillar].desc}
                 </p>
 
                 {/* Proof Points List */}
-                <div className="space-y-3 pt-4 border-t border-white/10">
-                  <div className="flex items-center gap-3 text-sm text-neutral-200">
-                    <CheckCircle2 className="w-5 h-5 text-[#FDB913] shrink-0" />
+                <div className="space-y-3 pt-4 border-t border-neutral-200">
+                  <div className="flex items-center gap-3 text-sm text-neutral-700">
+                    <CheckCircle2 className="w-5 h-5 text-[#E31E24] shrink-0" />
                     <span>Disediakan segar mengikut piawaian sanitasi gred hotel.</span>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-neutral-200">
-                    <CheckCircle2 className="w-5 h-5 text-[#FDB913] shrink-0" />
+                  <div className="flex items-center gap-3 text-sm text-neutral-700">
+                    <CheckCircle2 className="w-5 h-5 text-[#E31E24] shrink-0" />
                     <span>Minyak masak sentiasa dipantau nilai TPM untuk kerangupan selamat.</span>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-neutral-200">
-                    <CheckCircle2 className="w-5 h-5 text-[#FDB913] shrink-0" />
+                  <div className="flex items-center gap-3 text-sm text-neutral-700">
+                    <CheckCircle2 className="w-5 h-5 text-[#E31E24] shrink-0" />
                     <span>Dijamin 100% Halal dan suci oleh pembekal tempatan bertauliah.</span>
                   </div>
                 </div>
-
+                
                 {/* Interactive Crunch Tryout */}
                 <div className="pt-2">
-                  <button
-                    onClick={playCrunchSound}
-                    className="inline-flex items-center gap-2 bg-[#E31E24] hover:bg-[#FDB913] text-white hover:text-black font-black text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-all cursor-pointer shadow-lg shadow-[#E31E24]/20"
-                  >
-                    <Volume2 className="w-4 h-4" />
-                    <span>Uji Bunyi Kerangupan Pillar Ini</span>
-                  </button>
+                  &nbsp;
                 </div>
               </div>
             </div>

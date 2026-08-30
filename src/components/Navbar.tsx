@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             href="#home"
             className="flex items-center gap-3 group cursor-pointer focus:outline-none shrink-0"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-lg shadow-[#E31E24]/30 border border-[#FDB913]/40 group-hover:scale-105 transition-transform shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-lg shadow-[#E31E24]/30 border border-[#FDB913]/40 group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
               <img 
                 src={logo} 
                 alt="Logo" 

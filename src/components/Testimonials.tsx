@@ -96,7 +96,8 @@ export const Testimonials: React.FC = () => {
             rel="noopener noreferrer"
             className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-bold whitespace-nowrap transition-colors shadow-sm"
           >
-            Ikuti Instagram @Hemzal
+            Ikuti Instagram @hemzalcrispychickenhq
+
           </a>
         </div>
 

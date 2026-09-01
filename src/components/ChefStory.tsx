@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Award, Flame, Sparkles, Shield, HeartHandshake, CheckCircle2, ChevronRight, Quote } from 'lucide-react';
 import { playCrunchSound } from '../utils/sound';
+import chefPic from '/chef.png';
 
 export const ChefStory: React.FC = () => {
   const [activePillar, setActivePillar] = useState(0);
@@ -71,7 +72,7 @@ export const ChefStory: React.FC = () => {
               <div className="absolute -inset-1 bg-gradient-to-r from-[#E31E24] to-[#FDB913] rounded-2xl blur opacity-30 group-hover:opacity-75 transition duration-500" />
               <div className="relative aspect-[4/5] sm:aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 bg-neutral-900">
                 <img
-                  src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=800"
+                  src="{chefPic}"
                   alt="Chef Mohammad Helmi"
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />

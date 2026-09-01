@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Award, Flame, Sparkles, Shield, HeartHandshake, CheckCircle2, ChevronRight, Quote } from 'lucide-react';
+import { Award, Flame, Sparkles, Shield, CheckCircle2, ChevronRight, Quote } from 'lucide-react';
 import { playCrunchSound } from '../utils/sound';
 import chefPic from '/chef.png';
 
@@ -45,21 +45,21 @@ export const ChefStory: React.FC = () => {
     <section id="resepi" className="py-20 bg-[#0f0f12]/10 backdrop-blur-sm relative overflow-hidden border-t border-b border-white/5">
       {/* Background Ambience */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-[#E31E24]/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#FDB913]/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#F0B012]/10 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <div className="inline-flex items-center gap-2 bg-[#1d1d22] border border-[#FDB913]/30 px-4 py-1.5 rounded-full">
-            <Award className="w-4 h-4 text-[#FDB913]" />
-            <span className="text-xs font-bold uppercase tracking-widest text-[#FDB913]">
+          <div className="inline-flex items-center gap-2 bg-[#1d1d22] border border-[#F0B012]/30 px-4 py-1.5 rounded-full">
+            <Award className="w-4 h-4 text-[#F0B012]" />
+            <span className="text-xs font-bold uppercase tracking-widest text-[#F0B012]">
               Sentuhan Pakar Kulinari Antarabangsa
             </span>
           </div>
           
           <h2 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight">
-            RAHSIA DI SEBALIK KEHEBATAN <span className="text-[#FDB913]">HEMZAL</span>
+            RAHSIA DI SEBALIK KEHEBATAN <span className="text-[#F0B012]">HEMZAL</span>
           </h2>
         </div>
 
@@ -69,19 +69,19 @@ export const ChefStory: React.FC = () => {
             
             {/* Chef Image Container */}
             <div className="lg:col-span-5 relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#E31E24] to-[#FDB913] rounded-2xl blur opacity-30 group-hover:opacity-75 transition duration-500" />
-              <div className="relative aspect-[4/5] sm:aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 bg-neutral-900">
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#E31E24] to-[#F0B012] rounded-2xl blur opacity-30 group-hover:opacity-75 transition duration-500" />
+              <div className="relative aspect-[4/5] sm:aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 bg-[#F0B012]">
                 <img
                   src={chefPic}
                   alt="Chef Mohammad Helmi"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 relative z-10"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-20" />
                 
                 {/* Image Overlay Badge */}
-                <div className="absolute bottom-4 left-4 right-4 bg-black/60 backdrop-blur-md p-3 rounded-xl border border-white/10">
+                <div className="absolute bottom-4 left-4 right-4 bg-black/60 backdrop-blur-md p-3 rounded-xl border border-white/10 z-30">
                   <p className="text-white font-black text-sm">Chef Mohammad Helmi</p>
-                  <p className="text-[#FDB913] text-xs font-medium">Pengasas & Master Recipe Creator</p>
+                  <p className="text-[#F0B012] text-xs font-medium">Pengasas & Master Recipe Creator</p>
                 </div>
               </div>
             </div>
@@ -97,8 +97,8 @@ export const ChefStory: React.FC = () => {
                 </h3>
               </div>
 
-              <div className="relative pl-6 border-l-2 border-[#FDB913]/60 italic text-neutral-300 text-sm sm:text-base leading-relaxed">
-                <Quote className="w-8 h-8 text-[#FDB913]/20 absolute -top-3 -left-3 pointer-events-none" />
+              <div className="relative pl-6 border-l-2 border-[#F0B012]/60 italic text-neutral-300 text-sm sm:text-base leading-relaxed">
+                <Quote className="w-8 h-8 text-[#F0B012]/20 absolute -top-3 -left-3 pointer-events-none" />
                 <p>
                   "Saya memindahkan teknik perapan rahsia, kawalan suhu kulinari tepat, dan adunan rempah segar yang dipelajari di dapur profesional antarabangsa terus ke dalam setiap ketulan ayam goreng Hemzal."
                 </p>
@@ -111,15 +111,15 @@ export const ChefStory: React.FC = () => {
               {/* Quick Stats Grid */}
               <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/10">
                 <div>
-                  <div className="text-xl sm:text-2xl font-black text-[#FDB913]">18</div>
+                  <div className="text-xl sm:text-2xl font-black text-[#F0B012]">18</div>
                   <div className="text-[11px] text-neutral-400 font-medium uppercase tracking-wider">Rempah Botani</div>
                 </div>
                 <div>
-                  <div className="text-xl sm:text-2xl font-black text-[#FDB913]">24 Jam</div>
+                  <div className="text-xl sm:text-2xl font-black text-[#F0B012]">24 Jam</div>
                   <div className="text-[11px] text-neutral-400 font-medium uppercase tracking-wider">Proses Perapan</div>
                 </div>
                 <div>
-                  <div className="text-xl sm:text-2xl font-black text-[#FDB913]">100%</div>
+                  <div className="text-xl sm:text-2xl font-black text-[#F0B012]">100%</div>
                   <div className="text-[11px] text-neutral-400 font-medium uppercase tracking-wider">Halal Tempatan</div>
                 </div>
               </div>
@@ -145,14 +145,14 @@ export const ChefStory: React.FC = () => {
                   }}
                   className={`w-full text-left p-5 rounded-2xl border transition-all cursor-pointer flex items-start gap-4 ${
                     isSelected
-                      ? 'bg-white border-2 border-[#FDB913] shadow-xl shadow-black/20 translate-x-2'
+                      ? 'bg-white border-2 border-[#F0B012] shadow-xl shadow-black/20 translate-x-2'
                       : 'bg-white/90 hover:bg-white border-neutral-200 shadow-xs'
                   }`}
                 >
                   <div
                     className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-md transition-all ${
                       isSelected
-                        ? 'bg-gradient-to-br from-[#E31E24] to-[#FDB913] text-white'
+                        ? 'bg-gradient-to-br from-[#E31E24] to-[#F0B012] text-white'
                         : 'bg-neutral-100 text-neutral-500'
                     }`}
                   >

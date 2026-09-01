@@ -93,7 +93,7 @@ export const ChefStory: React.FC = () => {
                   15+ Tahun Pengalaman Hotel 5-Bintang
                 </span>
                 <h3 className="text-2xl sm:text-4xl font-black text-neutral-900 leading-tight">
-                  "Misi Kami: Kualiti Gourmet 5-Star Untuk Semua."
+                  "Misi Kami: Kualiti 5-Star Untuk Semua."
                 </h3>
               </div>
 

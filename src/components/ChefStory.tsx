@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Award, Flame, Sparkles, Shield, HeartHandshake, CheckCircle2, ChevronRight, Volume2 } from 'lucide-react';
+import { Award, Flame, Sparkles, Shield, HeartHandshake, CheckCircle2, ChevronRight, Quote } from 'lucide-react';
 import { playCrunchSound } from '../utils/sound';
 
 export const ChefStory: React.FC = () => {
@@ -42,14 +42,14 @@ export const ChefStory: React.FC = () => {
 
   return (
     <section id="resepi" className="py-20 bg-[#0f0f12]/10 backdrop-blur-sm relative overflow-hidden border-t border-b border-white/5">
-      {/* Background Ambience (Dark Theme Retained) */}
+      {/* Background Ambience */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-[#E31E24]/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#FDB913]/10 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Header (Dark Theme Retained) */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
           <div className="inline-flex items-center gap-2 bg-[#1d1d22] border border-[#FDB913]/30 px-4 py-1.5 rounded-full">
             <Award className="w-4 h-4 text-[#FDB913]" />
             <span className="text-xs font-bold uppercase tracking-widest text-[#FDB913]">
@@ -60,13 +60,74 @@ export const ChefStory: React.FC = () => {
           <h2 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight">
             RAHSIA DI SEBALIK KEHEBATAN <span className="text-[#FDB913]">HEMZAL</span>
           </h2>
-          
-          <p className="text-neutral-300 text-sm sm:text-base leading-relaxed">
-            Dicipta oleh <strong className="text-white">Chef Mohammad Helmi</strong>, bekas Chef Eksekutif rangkaian hotel 5-bintang dengan pengalaman kulinari lebih 15 tahun. Misi kami: membawakan ayam goreng kualiti tertinggi pada harga yang berpatutan untuk semua.
-          </p>
         </div>
 
-        {/* 4 Pillars Interactive Layout - Light Theme Cards Only */}
+        {/* Chef Spotlight & Profile Section */}
+        <div className="mb-16 bg-gradient-to-r from-[#17171c] to-[#1d1d24] border border-white/10 rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-2xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Chef Image Container */}
+            <div className="lg:col-span-5 relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#E31E24] to-[#FDB913] rounded-2xl blur opacity-30 group-hover:opacity-75 transition duration-500" />
+              <div className="relative aspect-[4/5] sm:aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 bg-neutral-900">
+                <img
+                  src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=800"
+                  alt="Chef Mohammad Helmi"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                
+                {/* Image Overlay Badge */}
+                <div className="absolute bottom-4 left-4 right-4 bg-black/60 backdrop-blur-md p-3 rounded-xl border border-white/10">
+                  <p className="text-white font-black text-sm">Chef Mohammad Helmi</p>
+                  <p className="text-[#FDB913] text-xs font-medium">Pengasas & Master Recipe Creator</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Chef Bio & Philosophy */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="space-y-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#E31E24] bg-[#E31E24]/10 px-3 py-1 rounded-md border border-[#E31E24]/20">
+                  15+ Tahun Pengalaman Hotel 5-Bintang
+                </span>
+                <h3 className="text-2xl sm:text-4xl font-black text-white leading-tight">
+                  "Misi Kami: Kualiti Gourmet 5-Star Untuk Semua."
+                </h3>
+              </div>
+
+              <div className="relative pl-6 border-l-2 border-[#FDB913]/60 italic text-neutral-300 text-sm sm:text-base leading-relaxed">
+                <Quote className="w-8 h-8 text-[#FDB913]/20 absolute -top-3 -left-3 pointer-events-none" />
+                <p>
+                  "Saya memindahkan teknik perapan rahsia, kawalan suhu kulinari tepat, dan adunan rempah segar yang dipelajari di dapur profesional antarabangsa terus ke dalam setiap ketulan ayam goreng Hemzal."
+                </p>
+              </div>
+
+              <p className="text-neutral-400 text-sm leading-relaxed">
+                Setiap resepi yang dihidangkan menjalani beratus-ratus jam ujian rasa bagi memastikan keseimbangan kerangupan luaran dan kelembutan isi yang jus di bahagian dalam.
+              </p>
+
+              {/* Quick Stats Grid */}
+              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/10">
+                <div>
+                  <div className="text-xl sm:text-2xl font-black text-[#FDB913]">18</div>
+                  <div className="text-[11px] text-neutral-400 font-medium uppercase tracking-wider">Rempah Botani</div>
+                </div>
+                <div>
+                  <div className="text-xl sm:text-2xl font-black text-[#FDB913]">24 Jam</div>
+                  <div className="text-[11px] text-neutral-400 font-medium uppercase tracking-wider">Proses Perapan</div>
+                </div>
+                <div>
+                  <div className="text-xl sm:text-2xl font-black text-[#FDB913]">100%</div>
+                  <div className="text-[11px] text-neutral-400 font-medium uppercase tracking-wider">Halal Tempatan</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* 4 Pillars Interactive Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
           {/* Left: Pillar Selection List */}
@@ -122,10 +183,9 @@ export const ChefStory: React.FC = () => {
             })}
           </div>
 
-          {/* Right: Active Pillar Showcase Card (Light Theme) */}
+          {/* Right: Active Pillar Showcase Card */}
           <div className="lg:col-span-6">
             <div className="relative rounded-3xl p-8 sm:p-10 bg-white border border-neutral-200/90 shadow-2xl shadow-black/30 overflow-hidden">
-              {/* Decorative Watermark */}
               <div className="absolute -bottom-10 -right-10 text-neutral-100 font-black text-9xl select-none pointer-events-none">
                 0{activePillar + 1}
               </div>
@@ -143,7 +203,6 @@ export const ChefStory: React.FC = () => {
                   {pillars[activePillar].desc}
                 </p>
 
-                {/* Proof Points List */}
                 <div className="space-y-3 pt-4 border-t border-neutral-200">
                   <div className="flex items-center gap-3 text-sm text-neutral-700">
                     <CheckCircle2 className="w-5 h-5 text-[#E31E24] shrink-0" />
@@ -157,11 +216,6 @@ export const ChefStory: React.FC = () => {
                     <CheckCircle2 className="w-5 h-5 text-[#E31E24] shrink-0" />
                     <span>Dijamin 100% Halal dan suci oleh pembekal tempatan bertauliah.</span>
                   </div>
-                </div>
-                
-                {/* Interactive Crunch Tryout */}
-                <div className="pt-2">
-                  &nbsp;
                 </div>
               </div>
             </div>

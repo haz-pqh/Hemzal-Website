@@ -42,7 +42,7 @@ export const ChefStory: React.FC = () => {
   ];
 
   return (
-    <section id="resepi" className="py-20 bg-neutral-50/80 relative overflow-hidden border-t border-b border-neutral-200">
+    <section id="resepi" className="py-20 bg-[#0e0e11]/10 backdrop-blur-sm relative overflow-hidden border-t border-b border-white/5">
       {/* Soft Background Accent Glows */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#E31E24]/5 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#FDB913]/10 rounded-full blur-[100px] pointer-events-none" />

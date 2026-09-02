@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Flame, ShieldCheck, Heart, Send, CheckCircle2, Instagram, Facebook, Video, MapPin, Phone, Mail } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { playPopSound } from '../utils/sound';
+import logo from '/icon.png';
 
 interface FooterProps {
   onOpenFranchise: () => void;

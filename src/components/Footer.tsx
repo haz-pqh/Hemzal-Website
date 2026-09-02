@@ -30,8 +30,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
           {/* Col 1: Brand Info */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-lg shadow-[#E31E24]/30 border border-[#FDB913]/40">
-                <Flame className="w-6 h-6 text-[#FDB913] fill-[#FDB913]" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-[#990D11] flex items-center justify-center shadow-md border border-white/40 group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+                <img 
+                  src={logo} 
+                  alt="Logo" 
+                  className="w-full h-full object-contain select-none pointer-events-none" 
+                />
               </div>
               <div className="flex flex-col items-start leading-none">
                 <span className="font-hemzal italic text-3xl text-[#E31E24] tracking-normal drop-shadow-[0_2px_8px_rgba(227,30,36,0.3)]">

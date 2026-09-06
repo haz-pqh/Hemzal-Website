@@ -397,14 +397,18 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
                       <div className="flex items-center gap-2">
                         {/* Customize Button */}
-                        <button
-                          onClick={() => onSelectItem(item, activePortion)}
-                          className="px-3 py-2.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border border-neutral-300/80 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-                          title="Pilih kepedasan & sos"
-                        >
-                          <Eye className="w-3.5 h-3.5 text-neutral-700" />
-                          <span>Kustom</span>
-                        </button>
+                        {if (item.id === "hemzal-special-bucket"){
+                          <button
+                            onClick={() => onSelectItem(item, activePortion)}
+                            className="px-3 py-2.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border border-neutral-300/80 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                            title="Pilih kepedasan & sos"
+                          >
+                            <Eye className="w-3.5 h-3.5 text-neutral-700" />
+                            <span>Kustom</span>
+                          </button>
+                        }else{
+                          return;
+                        }}
 
                         {/* Quick Add Button */}
                         <button

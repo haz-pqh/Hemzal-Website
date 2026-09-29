@@ -1,9 +1,66 @@
 import React, { useState, useMemo } from 'react';
 import { MenuItem, PortionOption } from '../types';
-import { Flame, Star, Search, Plus, Sparkles, ShoppingBag, Eye, Layers, ShieldCheck } from 'lucide-react';
+import { Flame, Star, Search, Plus, Sparkles, ShoppingBag, Eye, Layers, ShieldCheck, Leaf, CheckCircle2 } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
 import { useLanguage } from '../context/LanguageContext';
 import { getLocalizedMenuItem } from '../data/menuData';
+
+interface DietaryBadgeConfig {
+  icon: React.ReactNode;
+  bgClass: string;
+  label: string;
+}
+
+const getDietaryBadgeConfig = (diet: string, language: string): DietaryBadgeConfig => {
+  const lower = diet.toLowerCase();
+  if (lower.includes('halal')) {
+    return {
+      icon: <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />,
+      bgClass: 'bg-emerald-50 text-emerald-800 border-emerald-300/80 hover:bg-emerald-100/80',
+      label: '100% Halal',
+    };
+  }
+  if (lower.includes('spicy') && !lower.includes('non')) {
+    return {
+      icon: <Flame className="w-3 h-3 text-rose-600 fill-rose-600/30 shrink-0" />,
+      bgClass: 'bg-rose-50 text-rose-700 border-rose-300/80 hover:bg-rose-100/80',
+      label: language === 'en' ? 'Spicy' : 'Pedas',
+    };
+  }
+  if (lower.includes('gluten')) {
+    return {
+      icon: <Sparkles className="w-3 h-3 text-amber-600 shrink-0" />,
+      bgClass: 'bg-amber-50 text-amber-800 border-amber-300/80 hover:bg-amber-100/80',
+      label: language === 'en' ? 'Gluten-Free' : 'Bebas Gluten',
+    };
+  }
+  if (lower.includes('veg')) {
+    return {
+      icon: <Leaf className="w-3 h-3 text-teal-600 shrink-0" />,
+      bgClass: 'bg-teal-50 text-teal-800 border-teal-300/80 hover:bg-teal-100/80',
+      label: 'Vegetarian',
+    };
+  }
+  if (lower.includes('non-spicy') || lower.includes('tidak pedas')) {
+    return {
+      icon: <CheckCircle2 className="w-3 h-3 text-sky-600 shrink-0" />,
+      bgClass: 'bg-sky-50 text-sky-700 border-sky-300/80 hover:bg-sky-100/80',
+      label: language === 'en' ? 'Non-Spicy' : 'Tidak Pedas',
+    };
+  }
+  if (lower.includes('chef')) {
+    return {
+      icon: <Star className="w-3 h-3 text-amber-600 fill-amber-500/30 shrink-0" />,
+      bgClass: 'bg-amber-50 text-amber-800 border-amber-300/80 hover:bg-amber-100/80',
+      label: language === 'en' ? "Chef's Special" : 'Pilihan Chef',
+    };
+  }
+  return {
+    icon: <Sparkles className="w-3 h-3 text-indigo-600 shrink-0" />,
+    bgClass: 'bg-indigo-50 text-indigo-700 border-indigo-200/80 hover:bg-indigo-100/80',
+    label: diet,
+  };
+};
 
 interface MenuSectionProps {
   items: MenuItem[];
@@ -142,6 +199,18 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                   <span className="bg-black/30 backdrop-blur-md text-[#FDB913] font-semibold text-xs px-3 py-1 rounded-full border border-white/20">
                     www.hemzalcrispychicken.com
                   </span>
+                  {specialBucketItem.dietaryInfo && specialBucketItem.dietaryInfo.map((diet, idx) => {
+                    const badge = getDietaryBadgeConfig(diet, language);
+                    return (
+                      <span
+                        key={idx}
+                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wide border shadow-xs ${badge.bgClass}`}
+                      >
+                        {badge.icon}
+                        <span>{badge.label}</span>
+                      </span>
+                    );
+                  })}
                 </div>
 
                 <div>
@@ -348,6 +417,25 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                       <p className="text-xs font-bold text-[#B45309]">
                         {item.tagline}
                       </p>
+
+                      {/* Colorful Dietary Info Badges */}
+                      {item.dietaryInfo && item.dietaryInfo.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1.5 py-1">
+                          {item.dietaryInfo.map((diet, idx) => {
+                            const badge = getDietaryBadgeConfig(diet, language);
+                            return (
+                              <span
+                                key={idx}
+                                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wide border shadow-2xs transition-colors ${badge.bgClass}`}
+                              >
+                                {badge.icon}
+                                <span>{badge.label}</span>
+                              </span>
+                            );
+                          })}
+                        </div>
+                      )}
+
                       <p className="text-xs text-neutral-600 line-clamp-2 leading-relaxed">
                         {item.description}
                       </p>

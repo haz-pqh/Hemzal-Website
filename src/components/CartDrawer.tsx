@@ -317,119 +317,19 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             </div>
           ) : (
             <>
-              {/* 1. CART ITEMS SECTION */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between px-0.5">
-                  <span className="text-xs font-black uppercase tracking-wider text-neutral-700 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#D97706]" />
-                    {language === 'en' ? 'Your Ordered Items' : 'Item Dalam Troli'}
-                  </span>
-                  <span className="text-[11px] font-bold text-[#B45309] bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
-                    {totalItemsCount} {language === 'en' ? 'Pcs / Sets' : 'Set'}
-                  </span>
-                </div>
-
-                <div className="space-y-2.5">
-                  {cart.map((cartItem) => {
-                    const itemName = (language === 'en' && cartItem.item.nameEn) ? cartItem.item.nameEn : cartItem.item.name;
-                    return (
-                      <div
-                        key={cartItem.cartId}
-                        className="bg-white p-3.5 sm:p-4 rounded-2xl border border-neutral-200/90 hover:border-amber-400/50 shadow-sm space-y-3 transition-all"
-                      >
-                        <div className="flex items-start gap-3">
-                          <img
-                            src={cartItem.item.image}
-                            alt={itemName}
-                            className="w-16 h-16 rounded-xl object-cover shrink-0 bg-neutral-100 border border-neutral-200 shadow-2xs"
-                          />
-                          <div className="flex-1 min-w-0 pr-2">
-                            <h4 className="font-black text-sm text-neutral-900 leading-snug">
-                              {itemName}
-                            </h4>
-                            
-                            <div className="text-xs text-[#B45309] font-bold flex items-center gap-1.5 mt-0.5">
-                              {cartItem.selectedPortion && (
-                                <span className="bg-amber-500/15 text-[#B45309] px-2 py-0.5 rounded font-black text-[10px]">
-                                  {cartItem.selectedPortion.label}
-                                </span>
-                              )}
-                              <span>RM {(cartItem.totalPrice / cartItem.quantity).toFixed(2)}</span>
-                            </div>
-
-                            {/* Dip info */}
-                            {cartItem.selectedDip && (
-                              <p className="text-[11px] text-neutral-600 mt-1 flex items-center gap-1 font-medium">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#FDB913] shrink-0" />
-                                <span className="truncate">{cartItem.selectedDip}</span>
-                              </p>
-                            )}
-
-                            {/* Addons info */}
-                            {cartItem.selectedAddons.length > 0 && (
-                              <p className="text-[11px] text-neutral-500 mt-0.5 truncate">
-                                + {cartItem.selectedAddons.map((a) => a.name).join(', ')}
-                              </p>
-                            )}
-
-                            {/* Special Note */}
-                            {cartItem.specialInstructions && (
-                              <p className="text-[10px] text-neutral-500 italic mt-0.5 truncate">
-                                ✍️ "{cartItem.specialInstructions}"
-                              </p>
-                            )}
-                          </div>
-
-                          <button
-                            type="button"
-                            onClick={() => onRemoveItem(cartItem.cartId)}
-                            className="text-neutral-400 hover:text-red-600 transition-colors p-1.5 rounded-lg hover:bg-red-50"
-                            title={t('common.clear')}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-
-                        {/* Quantity and Line Total */}
-                        <div className="flex items-center justify-between pt-2.5 border-t border-neutral-100">
-                          <div className="flex items-center bg-neutral-100 rounded-xl border border-neutral-200/80 p-0.5">
-                            <button
-                              type="button"
-                              onClick={() => onUpdateQuantity(cartItem.cartId, -1)}
-                              className="w-7 h-7 rounded-lg flex items-center justify-center text-neutral-700 hover:bg-white hover:text-black cursor-pointer transition-colors shadow-2xs"
-                              aria-label="Decrease"
-                            >
-                              <Minus className="w-3.5 h-3.5" />
-                            </button>
-                            <span className="w-8 text-center font-black text-xs text-neutral-900">
-                              {cartItem.quantity}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => onUpdateQuantity(cartItem.cartId, 1)}
-                              className="w-7 h-7 rounded-lg flex items-center justify-center text-neutral-700 hover:bg-white hover:text-black cursor-pointer transition-colors shadow-2xs"
-                              aria-label="Increase"
-                            >
-                              <Plus className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-
-                          <strong className="text-base font-black text-[#D97706]">
-                            RM {cartItem.totalPrice.toFixed(2)}
-                          </strong>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 2. ORDER TYPE & RECIPIENT DETAILS */}
+              {/* 1. ORDER TYPE & RECIPIENT DETAILS (KAEDAH & MAKLUMAT PENGHANTARAN) */}
               <div className="bg-white p-4 sm:p-5 rounded-2xl border border-neutral-200 shadow-sm space-y-4">
-                <span className="text-xs font-black uppercase tracking-wider text-neutral-800 flex items-center gap-1.5">
-                  <Truck className="w-3.5 h-3.5 text-[#E31E24]" />
-                  {language === 'en' ? 'Fulfillment & Delivery Details' : 'Kaedah & Maklumat Penghantaran'}
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black uppercase tracking-wider text-neutral-800 flex items-center gap-1.5">
+                    <Truck className="w-3.5 h-3.5 text-[#E31E24]" />
+                    {language === 'en' ? 'Fulfillment & Delivery Details' : 'Kaedah & Maklumat Penghantaran'}
+                  </span>
+                  <span className="text-[10px] font-bold text-amber-800 bg-amber-500/15 px-2 py-0.5 rounded-full border border-amber-500/30">
+                    {orderType === 'delivery' 
+                      ? (language === 'en' ? 'Rider Delivery' : 'Penghantaran Rider') 
+                      : (language === 'en' ? 'Self Pickup' : 'Ambil di Cawangan')}
+                  </span>
+                </div>
 
                 {/* Delivery vs Pickup Selector */}
                 <div className="grid grid-cols-2 gap-2 p-1 bg-neutral-100 rounded-2xl border border-neutral-200/80">
@@ -540,6 +440,119 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       className="w-full bg-neutral-50 border border-neutral-300 rounded-xl px-3 py-2 text-xs text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:border-[#D97706] focus:bg-white shadow-2xs"
                     />
                   </div>
+                </div>
+
+                {/* Preparation Time Notice */}
+                <div className="text-[10px] text-neutral-500 bg-neutral-50 px-2.5 py-1.5 rounded-lg border border-neutral-200/60 flex items-center justify-between">
+                  <span>🕒 {language === 'en' ? 'Estimated Kitchen Prep Time:' : 'Anggaran Masa Penyediaan Dapur:'}</span>
+                  <span className="font-bold text-neutral-800">15 – 25 {language === 'en' ? 'Mins' : 'Minit'}</span>
+                </div>
+              </div>
+
+              {/* 2. CART ITEMS SECTION (PLACED UNDER KAEDAH & MAKLUMAT PENGHANTARAN) */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between px-0.5">
+                  <span className="text-xs font-black uppercase tracking-wider text-neutral-700 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-[#D97706]" />
+                    {language === 'en' ? 'Your Ordered Items' : 'Item Pesanan Anda'}
+                  </span>
+                  <span className="text-[11px] font-bold text-[#B45309] bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                    {totalItemsCount} {language === 'en' ? 'Pcs / Sets' : 'Set'}
+                  </span>
+                </div>
+
+                <div className="space-y-2.5">
+                  {cart.map((cartItem) => {
+                    const itemName = (language === 'en' && cartItem.item.nameEn) ? cartItem.item.nameEn : cartItem.item.name;
+                    return (
+                      <div
+                        key={cartItem.cartId}
+                        className="bg-white p-3.5 sm:p-4 rounded-2xl border border-neutral-200/90 hover:border-amber-400/50 shadow-sm space-y-3 transition-all"
+                      >
+                        <div className="flex items-start gap-3">
+                          <img
+                            src={cartItem.item.image}
+                            alt={itemName}
+                            className="w-16 h-16 rounded-xl object-cover shrink-0 bg-neutral-100 border border-neutral-200 shadow-2xs"
+                          />
+                          <div className="flex-1 min-w-0 pr-2">
+                            <h4 className="font-black text-sm text-neutral-900 leading-snug">
+                              {itemName}
+                            </h4>
+                            
+                            <div className="text-xs text-[#B45309] font-bold flex items-center gap-1.5 mt-0.5">
+                              {cartItem.selectedPortion && (
+                                <span className="bg-amber-500/15 text-[#B45309] px-2 py-0.5 rounded font-black text-[10px]">
+                                  {cartItem.selectedPortion.label}
+                                </span>
+                              )}
+                              <span>RM {(cartItem.totalPrice / cartItem.quantity).toFixed(2)}</span>
+                            </div>
+
+                            {/* Dip info */}
+                            {cartItem.selectedDip && (
+                              <p className="text-[11px] text-neutral-600 mt-1 flex items-center gap-1 font-medium">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FDB913] shrink-0" />
+                                <span className="truncate">{cartItem.selectedDip}</span>
+                              </p>
+                            )}
+
+                            {/* Addons info */}
+                            {cartItem.selectedAddons.length > 0 && (
+                              <p className="text-[11px] text-neutral-500 mt-0.5 truncate">
+                                + {cartItem.selectedAddons.map((a) => a.name).join(', ')}
+                              </p>
+                            )}
+
+                            {/* Special Note */}
+                            {cartItem.specialInstructions && (
+                              <p className="text-[10px] text-neutral-500 italic mt-0.5 truncate">
+                                ✍️ "{cartItem.specialInstructions}"
+                              </p>
+                            )}
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => onRemoveItem(cartItem.cartId)}
+                            className="text-neutral-400 hover:text-red-600 transition-colors p-1.5 rounded-lg hover:bg-red-50"
+                            title={t('common.clear')}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        {/* Quantity and Line Total */}
+                        <div className="flex items-center justify-between pt-2.5 border-t border-neutral-100">
+                          <div className="flex items-center bg-neutral-100 rounded-xl border border-neutral-200/80 p-0.5">
+                            <button
+                              type="button"
+                              onClick={() => onUpdateQuantity(cartItem.cartId, -1)}
+                              className="w-7 h-7 rounded-lg flex items-center justify-center text-neutral-700 hover:bg-white hover:text-black cursor-pointer transition-colors shadow-2xs"
+                              aria-label="Decrease"
+                            >
+                              <Minus className="w-3.5 h-3.5" />
+                            </button>
+                            <span className="w-8 text-center font-black text-xs text-neutral-900">
+                              {cartItem.quantity}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => onUpdateQuantity(cartItem.cartId, 1)}
+                              className="w-7 h-7 rounded-lg flex items-center justify-center text-neutral-700 hover:bg-white hover:text-black cursor-pointer transition-colors shadow-2xs"
+                              aria-label="Increase"
+                            >
+                              <Plus className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+
+                          <strong className="text-base font-black text-[#D97706]">
+                            RM {cartItem.totalPrice.toFixed(2)}
+                          </strong>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 

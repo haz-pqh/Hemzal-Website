@@ -40,6 +40,7 @@ export interface MenuItem {
   isChefSpecial?: boolean;
   isNew?: boolean;
   spiceLevel: 0 | 1 | 2 | 3;
+  dietaryInfo?: string[]; // e.g. ['Halal', 'Spicy', 'Gluten-Free']
   calories?: number;
   servings?: string;
   servingsEn?: string;

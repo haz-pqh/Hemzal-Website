@@ -3,6 +3,7 @@ import { Flame, Star, Volume2, ShieldCheck, Award, ArrowRight, Sparkles, Clock, 
 import { motion } from 'motion/react';
 import { playCrunchSound } from '../utils/sound';
 import { getTimeGreeting, TimeGreeting } from '../utils/greeting';
+import { useLanguage } from '../context/LanguageContext';
 import promoVid from '/hemzal-promo-vid.mp4';
 import promoPic from '/hemzal-promo-pic.png';
 
@@ -12,17 +13,19 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
+  const { language, t } = useLanguage();
   const [crunchActive, setCrunchActive] = useState(false);
-  const [greeting, setGreeting] = useState<TimeGreeting>(() => getTimeGreeting());
+  const [greeting, setGreeting] = useState<TimeGreeting>(() => getTimeGreeting(new Date(), language));
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    setGreeting(getTimeGreeting(new Date(), language));
     // Update greeting every minute so it transitions smoothly as time passes
     const timer = setInterval(() => {
-      setGreeting(getTimeGreeting());
+      setGreeting(getTimeGreeting(new Date(), language));
     }, 60000);
     return () => clearInterval(timer);
-  }, []);
+  }, [language]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -96,7 +99,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                 <span className="flex h-2 w-2 rounded-full bg-[#E31E24] animate-ping" />
                 <Award className="w-4 h-4 text-[#D97706]" />
                 <span className="text-xs font-bold uppercase tracking-widest text-[#B45309]">
-                  Resepi Eksklusif Chef Mohammad Helmi
+                  {t('hero.award')}
                 </span>
               </motion.div>
             </div>
@@ -108,9 +111,9 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
               transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight text-neutral-900 leading-[1.05] uppercase"
             >
-              RANGUP DI <span className="text-[#D97706] drop-shadow-[0_2px_12px_rgba(217,119,6,0.2)]">LUAR</span>,
+              {t('hero.headline1')} <span className="text-[#D97706] drop-shadow-[0_2px_12px_rgba(217,119,6,0.2)]">{t('hero.headlineOutside')}</span>,
               <br />
-              JUICY DI <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E31E24] to-[#C1121F]">DALAM.</span>
+              {t('hero.headline2')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E31E24] to-[#C1121F]">{t('hero.headlineInside')}</span>
             </motion.h1>
 
             {/* Subheading */}
@@ -120,7 +123,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
               transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="text-base sm:text-lg text-neutral-600 max-w-2xl font-normal leading-relaxed"
             >
-              Nikmati ayam goreng gourmet Malaysia bertaraf hotel 5-bintang. Diperap 24 jam dengan 18 rempah rahsia, disalut tepung keemasan rangup dan dihidang panas bersama sos istimewa.
+              {t('hero.subheading')}
             </motion.p>
 
             {/* Interactive Crunch Audio Button */}
@@ -140,7 +143,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                 }`}
               >
                 <Volume2 className={`w-4 h-4 ${crunchActive ? 'animate-bounce' : ''}`} />
-                <span>{crunchActive ? '💥 KRUP KRAP! RANGUP PADU!' : '🔊 Dengar Bunyi Kerangupan'}</span>
+                <span>{crunchActive ? t('hero.crunchActive') : t('hero.crunchPrompt')}</span>
               </button>
             </motion.div>
 
@@ -157,7 +160,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-[#E31E24] via-[#cc141a] to-[#a60d12] hover:from-[#FDB913] hover:to-[#e39600] text-white hover:text-neutral-950 font-black text-sm uppercase tracking-wider px-8 py-4 rounded-2xl shadow-lg shadow-[#E31E24]/25 hover:shadow-[#FDB913]/30 transition-all transform hover:-translate-y-1 cursor-pointer group"
               >
                 <Flame className="w-5 h-5 text-[#FDB913] group-hover:text-neutral-950 transition-colors" />
-                <span>Pesan Menu Online</span>
+                <span>{t('hero.orderOnline')}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
 
@@ -166,7 +169,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                 onClick={onFindBranch}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-neutral-100 text-neutral-800 hover:text-neutral-900 font-bold text-sm uppercase tracking-wider px-7 py-4 rounded-2xl border border-neutral-300 hover:border-neutral-400 transition-all cursor-pointer shadow-sm"
               >
-                <span>Cari Cawangan Terdekat</span>
+                <span>{t('hero.findNearest')}</span>
               </button>
             </motion.div>
 
@@ -180,32 +183,32 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
               <div className="flex items-center gap-2.5 bg-white p-2.5 rounded-xl border border-neutral-200/80 shadow-sm">
                 <ShieldCheck className="w-5 h-5 text-[#D97706] shrink-0" />
                 <div className="text-[11px]">
-                  <p className="font-bold text-neutral-900">100% Halal</p>
-                  <p className="text-neutral-500">Diiktiraf JAKIM</p>
+                  <p className="font-bold text-neutral-900">{t('hero.halal')}</p>
+                  <p className="text-neutral-500">{t('hero.halalSub')}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2.5 bg-white p-2.5 rounded-xl border border-neutral-200/80 shadow-sm">
                 <Clock className="w-5 h-5 text-[#E31E24] shrink-0" />
                 <div className="text-[11px]">
-                  <p className="font-bold text-neutral-900">24 Jam</p>
-                  <p className="text-neutral-500">Perapan Rempah</p>
+                  <p className="font-bold text-neutral-900">{t('hero.marinade')}</p>
+                  <p className="text-neutral-500">{t('hero.marinadeSub')}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2.5 bg-white p-2.5 rounded-xl border border-neutral-200/80 shadow-sm">
                 <Sparkles className="w-5 h-5 text-[#D97706] shrink-0" />
                 <div className="text-[11px]">
-                  <p className="font-bold text-neutral-900">Ayam Segar</p>
-                  <p className="text-neutral-500">Bukan Beku</p>
+                  <p className="font-bold text-neutral-900">{t('hero.freshChicken')}</p>
+                  <p className="text-neutral-500">{t('hero.freshChickenSub')}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2.5 bg-white p-2.5 rounded-xl border border-neutral-200/80 shadow-sm">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
                 <div className="text-[11px]">
-                  <p className="font-bold text-neutral-900">Saiz Mega</p>
-                  <p className="text-neutral-500">Potongan Gergasi</p>
+                  <p className="font-bold text-neutral-900">{t('hero.megaSize')}</p>
+                  <p className="text-neutral-500">{t('hero.megaSizeSub')}</p>
                 </div>
               </div>
             </motion.div>
@@ -254,7 +257,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                   <div className="flex items-center gap-1">
                     <span className="font-black text-xs sm:text-sm text-neutral-900">4.9 / 5.0</span>
                   </div>
-                  <p className="text-[9px] sm:text-[10px] text-neutral-500">12,000+ Review</p>
+                  <p className="text-[9px] sm:text-[10px] text-neutral-500">{t('hero.floatingReviewsCount')}</p>
                 </div>
               </div>
 
@@ -264,8 +267,8 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
                   <Flame className="w-4 h-4 sm:w-5 sm:h-5 fill-[#E31E24]" />
                 </div>
                 <div>
-                  <p className="font-black text-[11px] sm:text-xs text-neutral-900 uppercase tracking-wider">Potongan Mega</p>
-                  <p className="text-[9px] sm:text-[10px] text-[#B45309]">Extra Rangup & Berjus</p>
+                  <p className="font-black text-[11px] sm:text-xs text-neutral-900 uppercase tracking-wider">{t('hero.floatingMegaCut')}</p>
+                  <p className="text-[9px] sm:text-[10px] text-[#B45309]">{t('hero.floatingMegaCutSub')}</p>
                 </div>
               </div>
 

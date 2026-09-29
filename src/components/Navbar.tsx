@@ -13,6 +13,8 @@ import {
   MessageSquareText
 } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { useLanguage } from '../context/LanguageContext';
 import logo from '/icon.png';
 
 interface NavbarProps {
@@ -28,21 +30,23 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll); return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll); 
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
-    { label: 'Utama', href: '#home', icon: Home },
-    { label: 'Resepi', href: '#resepi', icon: Flame },
-    { label: 'Menu', href: '#menu', badge: 'Hot', icon: Utensils },
-    { label: 'Lokasi', href: '#cawangan', icon: MapPin },
-    { label: 'Ulasan', href: '#testimoni', icon: Star },
-    { label: 'Hubungi', href: '#hubungi', icon: MessageSquareText },
+    { label: t('nav.home'), href: '#home', icon: Home },
+    { label: t('nav.recipe'), href: '#resepi', icon: Flame },
+    { label: t('nav.menu'), href: '#menu', badge: t('nav.hot'), icon: Utensils },
+    { label: t('nav.locations'), href: '#cawangan', icon: MapPin },
+    { label: t('nav.reviews'), href: '#testimoni', icon: Star },
+    { label: t('nav.contact'), href: '#hubungi', icon: MessageSquareText },
   ];
 
   return (
@@ -56,7 +60,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             : 'bg-[#FDB913]/95 backdrop-blur-md py-3.5 border-b border-amber-600/20'
         }`}
       >
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 flex items-center justify-between gap-6">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 flex items-center justify-between gap-4 sm:gap-6">
           
           {/* Brand Logo & Tagline */}
           <a
@@ -103,8 +107,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          {/* Action Buttons & Language Switcher */}
+          <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
+            {/* Language Switcher Component (Desktop / Tablet) */}
+            <LanguageSwitcher />
+
             {/* Catering Trigger */}
             <button
               id="catering-btn"
@@ -113,7 +120,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               title="Tempahan Katering & Peluang Francais"
             >
               <Award className="w-4 h-4 text-[#E31E24]" />
-              <span>Katering / Francais</span>
+              <span>{t('nav.catering')}</span>
             </button>
 
             {/* Direct Order CTA Button */}
@@ -122,7 +129,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="hidden sm:inline-flex items-center justify-center gap-1.5 bg-[#E31E24] hover:bg-[#c1121f] active:scale-95 text-white font-black text-xs tracking-wider uppercase px-5 sm:px-6 py-2.5 rounded-xl shadow-md transition-all cursor-pointer shrink-0"
             >
               <UtensilsCrossed className="w-3.5 h-3.5 text-[#FDB913]" />
-              <span>Pesan Sekarang</span>
+              <span>{t('nav.orderNow')}</span>
             </a>
 
             {/* Mobile / Tablet Menu Toggle */}
@@ -149,7 +156,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Mobile Dropdown Drawer */}
         {mobileMenuOpen && (
           <div className="lg:hidden bg-[#FDB913] border-b border-amber-600/30 px-6 py-5 space-y-4 shadow-2xl animate-in slide-in-from-top-3 duration-200 max-h-[calc(100vh-100px)] overflow-y-auto">
-            <div className="flex flex-col space-y-1.5 font-extrabold text-sm">
+            {/* Language Switcher in Mobile Drawer */}
+            <LanguageSwitcher variant="mobile" />
+
+            <div className="flex flex-col space-y-1.5 font-extrabold text-sm pt-1">
               {navLinks.map((link) => {
                 const IconComponent = link.icon;
                 return (
@@ -182,7 +192,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full text-center py-3 rounded-xl bg-[#E31E24] hover:bg-[#c1121f] text-white font-black text-xs uppercase tracking-wider shadow-md"
               >
-                🍗 Pesan Menu Sekarang
+                🍗 {t('nav.orderNow')}
               </a>
               <button
                 onClick={() => {
@@ -191,13 +201,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
                 className="w-full text-center py-2.5 rounded-xl border border-neutral-900/30 hover:border-neutral-900 text-neutral-900 font-extrabold text-xs bg-white/40"
               >
-                🤝 Katering Kenduri & Francais
+                🤝 {t('nav.catering')}
               </button>
               <a
                 href="tel:+60123456789"
                 className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-neutral-900 text-white font-bold text-xs shadow-sm"
               >
-                <Phone className="w-4 h-4 text-[#FDB913]" /> Hotline Dapur: +60 12-345 6789
+                <Phone className="w-4 h-4 text-[#FDB913]" /> {t('nav.kitchenHotline')}: +60 12-345 6789
               </a>
             </div>
           </div>

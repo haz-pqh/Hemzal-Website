@@ -16,8 +16,10 @@ import { CateringFranchiseModal } from './components/CateringFranchiseModal';
 import { ShoppingBag, CheckCircle2, ArrowUp } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { playCrunchSound } from './utils/sound';
+import { useLanguage } from './context/LanguageContext';
 
 export default function App() {
+  const { language, t } = useLanguage();
   // Cart state persisted to localStorage
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
@@ -127,7 +129,8 @@ export default function App() {
     });
 
     const portionLabel = newCartItem.selectedPortion ? ` (${newCartItem.selectedPortion.label})` : '';
-    showToast(`✓ "${newCartItem.item.name}${portionLabel}" ditambah ke troli!`);
+    const itemName = language === 'en' && newCartItem.item.nameEn ? newCartItem.item.nameEn : newCartItem.item.name;
+    showToast(`✓ "${itemName}${portionLabel}" ${t('common.toastAdded')}`);
   };
 
   // Quick add with defaults
@@ -290,7 +293,7 @@ export default function App() {
             setIsCartOpen(true);
           }}
           className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-[#E31E24] via-[#cc141a] to-[#FDB913] text-white p-4 rounded-full shadow-2xl shadow-[#E31E24]/50 flex items-center gap-3 border-2 border-white/20 hover:scale-105 transition-transform cursor-pointer"
-          aria-label="Lihat Troli"
+          aria-label={t('common.viewCart')}
         >
           <div className="relative">
             <ShoppingBag className="w-6 h-6 text-white" />
@@ -299,7 +302,7 @@ export default function App() {
             </span>
           </div>
           <span className="font-black text-xs uppercase tracking-wider hidden sm:inline pr-1">
-            Lihat Troli
+            {t('common.viewCart')}
           </span>
         </button>
       )}
@@ -309,7 +312,7 @@ export default function App() {
         <button
           onClick={scrollToTop}
           className={`fixed bottom-6 ${totalCartCount > 0 ? 'left-6' : 'right-6'} z-30 w-11 h-11 rounded-full bg-[#18181f]/90 hover:bg-[#22222a] border border-white/15 text-white flex items-center justify-center shadow-xl transition-all cursor-pointer hover:border-[#FDB913]`}
-          aria-label="Kembali ke atas"
+          aria-label={t('common.backToTop')}
         >
           <ArrowUp className="w-5 h-5 text-[#FDB913]" />
         </button>

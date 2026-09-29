@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Flame, ShieldCheck, Heart, Send, CheckCircle2, Instagram, Facebook, Video, MapPin, Phone, Mail } from 'lucide-react';
+import { Flame, ShieldCheck, Send, CheckCircle2, Instagram, Facebook, Video, Phone, Mail } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { playPopSound } from '../utils/sound';
+import { useLanguage } from '../context/LanguageContext';
 
 interface FooterProps {
   onOpenFranchise: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
+  const { t } = useLanguage();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
 
@@ -44,15 +46,15 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
             </div>
 
             <p className="text-xs text-neutral-400 leading-relaxed">
-              Pengalaman ayam goreng gourmet premium Malaysia. Dihasilkan dengan resepi eksklusif 18 rempah ratus Chef Mohammad Helmi, menjanjikan isi berjus dan kulit keemasan super rangup dalam setiap suapan.
+              {t('footer.brandDesc')}
             </p>
 
             {/* Halal Badge */}
             <div className="flex items-center gap-2.5 bg-[#141418] p-3 rounded-2xl border border-white/10 w-fit">
               <ShieldCheck className="w-5 h-5 text-emerald-400" />
               <div className="text-[11px]">
-                <p className="font-bold text-white">100% Halal Diiktiraf JAKIM</p>
-                <p className="text-neutral-400 text-[10px]">100% Milikan Bumiputera & Suci</p>
+                <p className="font-bold text-white">{t('footer.halalTitle')}</p>
+                <p className="text-neutral-400 text-[10px]">{t('footer.halalSub')}</p>
               </div>
             </div>
           </div>
@@ -60,37 +62,37 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
           {/* Col 2: Navigation Links */}
           <div className="lg:col-span-2 space-y-3 text-xs">
             <h4 className="font-black text-sm text-[#FDB913] uppercase tracking-wider">
-              Pautan Pantas
+              {t('footer.quickLinks')}
             </h4>
             <ul className="space-y-2 text-neutral-300">
               <li>
                 <a href="#home" className="hover:text-[#FDB913] transition-colors">
-                  Laman Utama
+                  {t('nav.home')}
                 </a>
               </li>
               <li>
                 <a href="#resepi" className="hover:text-[#FDB913] transition-colors">
-                  Rahsia & Resepi Chef
+                  {t('nav.recipe')}
                 </a>
               </li>
               <li>
                 <a href="#menu" className="hover:text-[#FDB913] transition-colors">
-                  Menu & Senarai Harga
+                  {t('nav.menu')}
                 </a>
               </li>
               <li>
                 <a href="#cawangan" className="hover:text-[#FDB913] transition-colors">
-                  Senarai 15 Cawangan
+                  {t('nav.locations')}
                 </a>
               </li>
               <li>
                 <a href="#testimoni" className="hover:text-[#FDB913] transition-colors">
-                  Ulasan & Review Foodie
+                  {t('nav.reviews')}
                 </a>
               </li>
               <li>
                 <a href="#hubungi" className="hover:text-[#FDB913] transition-colors">
-                  Hubungi Khidmat Pelanggan
+                  {t('nav.contact')}
                 </a>
               </li>
             </ul>
@@ -99,7 +101,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
           {/* Col 3: Business & Events */}
           <div className="lg:col-span-3 space-y-3 text-xs">
             <h4 className="font-black text-sm text-[#FDB913] uppercase tracking-wider">
-              Perniagaan & Acara
+              {t('footer.businessLinks')}
             </h4>
             <ul className="space-y-2 text-neutral-300">
               <li>
@@ -107,7 +109,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
                   onClick={onOpenFranchise}
                   className="hover:text-[#FDB913] transition-colors cursor-pointer text-left"
                 >
-                  Katering Kenduri & Jamuan Pejabat
+                  {t('footer.cateringLink')}
                 </button>
               </li>
               <li>
@@ -115,7 +117,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
                   onClick={onOpenFranchise}
                   className="hover:text-[#FDB913] transition-colors cursor-pointer text-left"
                 >
-                  Peluang Francais & Rakan Niaga
+                  {t('footer.franchiseLink')}
                 </button>
               </li>
               <li>
@@ -123,7 +125,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
                   href="#hubungi"
                   className="hover:text-[#FDB913] transition-colors"
                 >
-                  Pesanan Pukal Korporat
+                  {t('footer.bulkOrderLink')}
                 </a>
               </li>
             </ul>
@@ -141,16 +143,16 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
           {/* Col 4: Newsletter Voucher */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="font-black text-sm text-[#FDB913] uppercase tracking-wider">
-              Dapatkan Baucar RM10 Percuma
+              {t('footer.voucherTitle')}
             </h4>
             <p className="text-xs text-neutral-400">
-              Langgan buletin kami untuk menerima diskaun mingguan dan menu rahsia bermusim.
+              {t('footer.voucherDesc')}
             </p>
 
             {newsletterSubscribed ? (
               <div className="bg-emerald-500/15 border border-emerald-500/30 p-3 rounded-xl text-xs text-emerald-300 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Terima kasih! Baucar RM10 telah dihantar ke emel anda.</span>
+                <span>{t('footer.subscribedSuccess')}</span>
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="space-y-2">
@@ -160,12 +162,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
                     required
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
-                    placeholder="Emel anda..."
+                    placeholder={t('footer.emailPlaceholder')}
                     className="flex-1 px-3 py-2 bg-[#141418] border border-white/10 rounded-xl text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#FDB913]"
                   />
                   <button
                     type="submit"
                     className="px-3.5 py-2 bg-[#E31E24] hover:bg-[#FDB913] text-white hover:text-black font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center"
+                    aria-label="Subscribe"
                   >
                     <Send className="w-3.5 h-3.5" />
                   </button>
@@ -211,12 +214,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenFranchise }) => {
         {/* Bottom Copyright & Disclaimer */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-400 gap-4 text-center sm:text-left">
           <p>
-            © {new Date().getFullYear()} Hemzal Crispy Chicken. Hak cipta terpelihara.
+            © {new Date().getFullYear()} Hemzal Crispy Chicken. {t('footer.copyright')}
           </p>
           <div className="flex items-center gap-4 text-neutral-400">
-            <span>Dasar Privasi</span>
+            <span>{t('footer.privacy')}</span>
             <span>•</span>
-            <span>Terma & Syarat</span>
+            <span>{t('footer.terms')}</span>
             <span>•</span>
             <span className="text-[#FDB913] font-bold">www.hemzalcrispychicken.com</span>
           </div>

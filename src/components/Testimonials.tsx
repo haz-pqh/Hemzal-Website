@@ -1,9 +1,12 @@
 import React from 'react';
 import { REVIEWS } from '../data/reviewData';
 import { Star, CheckCircle2, Quote, Flame, Heart } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 import avatar from '/icon.png';
 
 export const Testimonials: React.FC = () => {
+  const { language, t } = useLanguage();
+
   return (
     <section id="testimoni" className="py-20 bg-neutral-50 border-b border-neutral-200/80 relative overflow-hidden">
       {/* Subtle Ambient Red Glow */}
@@ -15,68 +18,73 @@ export const Testimonials: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
           <div className="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-widest text-[#B45309]">
             <Heart className="w-3.5 h-3.5 fill-[#E31E24] text-[#E31E24]" />
-            <span>Komen & Maklum Balas Peminat Ayam</span>
+            <span>{t('testimonials.badge')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-black text-neutral-900 uppercase tracking-tight">
-            APA KATA <span className="text-[#D97706] drop-shadow-[0_2px_10px_rgba(217,119,6,0.15)]">FOODIE MALAYSIA</span>?
+            {t('testimonials.title')}
           </h2>
 
           <p className="text-neutral-700 text-sm sm:text-base font-medium">
-            Lebih 250,000 rakyat Malaysia telah menikmati keenakan ayam goreng Hemzal Crispy Chicken.
+            {t('testimonials.desc')}
           </p>
         </div>
 
         {/* Reviews Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {REVIEWS.map((review) => (
-            <div
-              key={review.id}
-              className="bg-white hover:bg-neutral-50/50 rounded-3xl border border-neutral-200/80 hover:border-[#D97706]/40 p-6 flex flex-col justify-between space-y-4 shadow-sm hover:shadow-xl transition-all duration-300 group"
-            >
-              <div className="space-y-3">
-                {/* Rating stars & Quote icon */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-[#D97706] text-[#D97706]" />
-                    ))}
-                  </div>
-                  <Quote className="w-5 h-5 text-neutral-300 group-hover:text-[#E31E24] transition-colors" />
-                </div>
+          {REVIEWS.map((review) => {
+            const comment = language === 'en' && review.commentEn ? review.commentEn : review.comment;
+            const fav = language === 'en' && review.favoriteItemEn ? review.favoriteItemEn : review.favoriteItem;
 
-                {/* Comment */}
-                <p className="text-xs text-neutral-600 leading-relaxed italic">
-                  "{review.comment}"
-                </p>
-              </div>
-
-              {/* User info & Favorite item */}
-              <div className="pt-3 border-t border-neutral-200/80 space-y-2">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={avatar}
-                    alt={review.name}
-                    className="w-10 h-10 rounded-full object-cover border border-neutral-200 shadow-sm"
-                  />
-                  <div>
+            return (
+              <div
+                key={review.id}
+                className="bg-white hover:bg-neutral-50/50 rounded-3xl border border-neutral-200/80 hover:border-[#D97706]/40 p-6 flex flex-col justify-between space-y-4 shadow-sm hover:shadow-xl transition-all duration-300 group"
+              >
+                <div className="space-y-3">
+                  {/* Rating stars & Quote icon */}
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1">
-                      <h4 className="font-bold text-xs text-neutral-900">{review.name}</h4>
-                      {review.verified && (
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                      )}
+                      {[...Array(review.rating)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-[#D97706] text-[#D97706]" />
+                      ))}
                     </div>
-                    <p className="text-[10px] text-neutral-500">{review.handle} • {review.location}</p>
+                    <Quote className="w-5 h-5 text-neutral-300 group-hover:text-[#E31E24] transition-colors" />
+                  </div>
+
+                  {/* Comment */}
+                  <p className="text-xs text-neutral-600 leading-relaxed italic">
+                    "{comment}"
+                  </p>
+                </div>
+
+                {/* User info & Favorite item */}
+                <div className="pt-3 border-t border-neutral-200/80 space-y-2">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={avatar}
+                      alt={review.name}
+                      className="w-10 h-10 rounded-full object-cover border border-neutral-200 shadow-sm"
+                    />
+                    <div>
+                      <div className="flex items-center gap-1">
+                        <h4 className="font-bold text-xs text-neutral-900">{review.name}</h4>
+                        {review.verified && (
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        )}
+                      </div>
+                      <p className="text-[10px] text-neutral-500">{review.handle} • {review.location}</p>
+                    </div>
+                  </div>
+
+                  <div className="text-[10px] bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-lg text-[#B45309] font-semibold truncate">
+                    ❤️ {t('testimonials.favorite')}: {fav}
                   </div>
                 </div>
 
-                <div className="text-[10px] bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-lg text-[#B45309] font-semibold truncate">
-                  ❤️ Kegemaran: {review.favoriteItem}
-                </div>
               </div>
-
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Social Feed Hash Tag Banner */}
@@ -86,8 +94,8 @@ export const Testimonials: React.FC = () => {
               <Flame className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-black text-sm text-neutral-900 uppercase">Kongsikan Detik Kerangupan Anda!</h4>
-              <p className="text-xs text-neutral-600">Tag kami di TikTok & Instagram dengan hashtag <strong className="text-[#B45309]">#HemzalCrispyChicken</strong> untuk peluang menang baucar RM50 mingguan.</p>
+              <h4 className="font-black text-sm text-neutral-900 uppercase">{t('testimonials.shareMoment')}</h4>
+              <p className="text-xs text-neutral-600">{t('testimonials.socialPrompt')}</p>
             </div>
           </div>
           <a
@@ -96,8 +104,7 @@ export const Testimonials: React.FC = () => {
             rel="noopener noreferrer"
             className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-bold whitespace-nowrap transition-colors shadow-sm"
           >
-            Ikuti Instagram @hemzalcrispychickenhq
-
+            {t('testimonials.followInsta')}
           </a>
         </div>
 

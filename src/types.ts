@@ -27,8 +27,11 @@ export interface SauceItem {
 export interface MenuItem {
   id: string;
   name: string;
+  nameEn?: string;
   tagline: string;
+  taglineEn?: string;
   description: string;
+  descriptionEn?: string;
   price: number;
   originalPrice?: number;
   category: 'signature' | 'combos' | 'sides';
@@ -39,13 +42,18 @@ export interface MenuItem {
   spiceLevel: 0 | 1 | 2 | 3;
   calories?: number;
   servings?: string;
+  servingsEn?: string;
   pieces?: number;
   pieceUnitPrice?: number; // RM 4.50 per piece for chicken
   defaultSauce?: string;
+  defaultSauceEn?: string;
   saucePrice?: number;
   availableDips?: string[];
+  availableDipsEn?: string[];
   sauceInfo?: string;
+  sauceInfoEn?: string;
   includedItems?: string[];
+  includedItemsEn?: string[];
   portions?: PortionOption[];
   options?: {
     addons?: CustomizationOption[];
@@ -91,11 +99,14 @@ export interface Review {
   name: string;
   handle: string;
   location: string;
+  locationEn?: string;
   avatar: string;
   rating: number;
   date: string;
   comment: string;
+  commentEn?: string;
   favoriteItem: string;
+  favoriteItemEn?: string;
   verified: boolean;
 }
 

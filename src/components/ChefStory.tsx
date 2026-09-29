@@ -1,41 +1,51 @@
 import React, { useState } from 'react';
 import { Award, Flame, Sparkles, Shield, CheckCircle2, ChevronRight, Star, HeartHandshake, ChefHat } from 'lucide-react';
 import { playCrunchSound } from '../utils/sound';
+import { useLanguage } from '../context/LanguageContext';
 
 const chefPic = '/chef.png';
 
 export const ChefStory: React.FC = () => {
+  const { language, t } = useLanguage();
   const [activePillar, setActivePillar] = useState(0);
 
   const pillars = [
     {
-      title: 'Perapan 24-Jam 18 Rempah Botani',
-      tag: 'Kekayaan Rasa Menusuk Tulang',
-      desc: 'Setiap potongan ayam diperap selama 24 jam penuh dalam adunan rahsia 18 rempah semula jadi tanpa MSG tiruan melampau, menjadikan isi ayam berperisa dari kulit sampai ke tulang.',
+      title: language === 'en' ? '24-Hour 18 Botanical Spices Marinade' : 'Perapan 24-Jam 18 Rempah Botani',
+      tag: language === 'en' ? 'Deep Flavor to the Bone' : 'Kekayaan Rasa Menusuk Tulang',
+      desc: language === 'en'
+        ? 'Every piece of chicken is deeply marinated for 24 hours in a proprietary blend of 18 natural herbs & spices with zero artificial MSG overload, infusing rich flavor from golden skin to the bone.'
+        : 'Setiap potongan ayam diperap selama 24 jam penuh dalam adunan rahsia 18 rempah semula jadi tanpa MSG tiruan melampau, menjadikan isi ayam berperisa dari kulit sampai ke tulang.',
       icon: Flame,
       color: 'from-[#E31E24] to-[#ff4a50]',
       highlight: '24H Secret Spice Infusion',
     },
     {
-      title: 'Teknik Double-Dredge Golden Crust',
-      tag: 'Kerangupan Berlapis Bertaraf Dunia',
-      desc: 'Dihasilkan menggunakan teknik salutan tepung dua peringkat dengan kawalan suhu minyak tepat 175°C untuk menghasilkan kerak emas bersisik yang kekal rangup lebih 45 minit.',
+      title: language === 'en' ? 'Double-Dredge Golden Crust Technique' : 'Teknik Double-Dredge Golden Crust',
+      tag: language === 'en' ? 'World-Class Multi-Layered Crunch' : 'Kerangupan Berlapis Bertaraf Dunia',
+      desc: language === 'en'
+        ? 'Crafted using a two-stage flour dredging technique with precise oil temperature control at 175°C to create a flaky, golden crust that stays crispy for over 45 minutes.'
+        : 'Dihasilkan menggunakan teknik salutan tepung dua peringkat dengan kawalan suhu minyak tepat 175°C untuk menghasilkan kerak emas bersisik yang kekal rangup lebih 45 minit.',
       icon: Sparkles,
       color: 'from-[#FDB913] to-[#e69800]',
       highlight: 'Ultra-Crispy 45 Min Retention',
     },
     {
-      title: '100% Ayam Segar Gred-A Tempatan',
-      tag: 'Bukan Daging Ayam Import Beku',
-      desc: 'Kami hanya menggunakan ayam segar tempatan yang dibekalkan setiap pagi dari ladang berstatus Halal JAKIM. Tekstur daging lembut, berserat halus dan tidak berbau hamis.',
+      title: language === 'en' ? '100% Fresh Local Grade-A Chicken' : '100% Ayam Segar Gred-A Tempatan',
+      tag: language === 'en' ? 'Never Frozen Import Meat' : 'Bukan Daging Ayam Import Beku',
+      desc: language === 'en'
+        ? 'We strictly use fresh local poultry delivered daily every morning from JAKIM Halal-certified farms. The meat is tender, succulent, and perfectly juicy.'
+        : 'Kami hanya menggunakan ayam segar tempatan yang dibekalkan setiap pagi dari ladang berstatus Halal JAKIM. Tekstur daging lembut, berserat halus dan tidak berbau hamis.',
       icon: Shield,
       color: 'from-emerald-500 to-emerald-700',
       highlight: 'Fresh Daily Farm Delivery',
     },
     {
-      title: 'Sos Gourmet Ciptaan Chef Eksekutif',
-      tag: 'Artisan Molten Cheese & Habanero',
-      desc: 'Dicipta khas oleh Chef Mohammad Helmi, sos kami dimasak segar setiap hari dengan keju import New Zealand dan cili Habanero segar untuk ledakan rasa yang tiada tandingan.',
+      title: language === 'en' ? 'Executive Chef Artisan Sauces' : 'Sos Gourmet Ciptaan Chef Eksekutif',
+      tag: language === 'en' ? 'Artisan Molten Cheese & Habanero' : 'Artisan Molten Cheese & Habanero',
+      desc: language === 'en'
+        ? 'Created exclusively by Chef Mohammad Helmi, our sauces are simmered fresh daily with New Zealand imported cheese and fresh Highland Habanero chilies for unmatched flavor bursts.'
+        : 'Dicipta khas oleh Chef Mohammad Helmi, sos kami dimasak segar setiap hari dengan keju import New Zealand dan cili Habanero segar untuk ledakan rasa yang tiada tandingan.',
       icon: Award,
       color: 'from-purple-500 to-pink-600',
       highlight: 'Artisan Crafted Sauces',
@@ -55,16 +65,16 @@ export const ChefStory: React.FC = () => {
           <div className="inline-flex items-center gap-2 bg-[#1d1d22] border border-[#FDB913]/30 px-4 py-1.5 rounded-full">
             <Award className="w-4 h-4 text-[#FDB913]" />
             <span className="text-xs font-bold uppercase tracking-widest text-[#FDB913]">
-              Sentuhan Pakar Kulinari Antarabangsa
+              {t('chef.badge')}
             </span>
           </div>
           
           <h2 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight">
-            RAHSIA DI SEBALIK KEHEBATAN <span className="text-[#FDB913]">HEMZAL</span>
+            {t('chef.title')} <span className="text-[#FDB913]">HEMZAL</span>
           </h2>
           
           <p className="text-neutral-300 text-sm sm:text-base leading-relaxed">
-            Dicipta oleh <strong className="text-white">Chef Mohammad Helmi</strong>, bekas Chef Eksekutif rangkaian hotel 5-bintang dengan pengalaman kulinari lebih 15 tahun. Misi kami: membawakan ayam goreng kualiti tertinggi pada harga yang berpatutan untuk semua.
+            {t('chef.desc')}
           </p>
         </div>
 
@@ -110,35 +120,35 @@ export const ChefStory: React.FC = () => {
             <div className="md:col-span-7 lg:col-span-8 space-y-5 text-left">
               <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/25 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider text-[#B45309]">
                 <Award className="w-3.5 h-3.5 text-[#D97706]" />
-                <span>Pengasas & Ketua Kulinari Hemzal</span>
+                <span>{t('chef.role')}</span>
               </div>
 
               <div className="space-y-2">
                 <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-neutral-900 leading-tight">
-                  "Setiap Gigitan Mesti <span className="text-[#E31E24]">Berbunyi Kerangupan</span> & Mengalirkan Jus."
+                  {t('chef.quote')}
                 </h3>
                 <p className="text-xs sm:text-sm font-bold text-[#B45309]">
-                  — 15+ Tahun Pengalaman Kulinari Hotel 5-Bintang
+                  — {t('chef.experience')}
                 </p>
               </div>
 
               <p className="text-neutral-600 text-sm sm:text-base leading-relaxed">
-                Bermula dari dapur hotel mewah bertaraf 5-bintang, Chef Mohammad Helmi membawa formula rahsia perapan botani 24 jam dan teknik kawalan suhu minyak terperinci ke hidangan harian anda. Tiada jalan pintas — setiap ketul ayam Hemzal disalut dan digoreng panas mengikut piawaian kulinari bertaraf dunia.
+                {t('chef.quoteSub')}
               </p>
 
               {/* 3 Quick Chef Highlights */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
                 <div className="bg-neutral-50 border border-neutral-200 p-3.5 rounded-2xl shadow-2xs">
-                  <span className="text-xs font-black text-neutral-900 block">18 Rempah Botani</span>
-                  <span className="text-[11px] text-neutral-600">Perapan rahsia tanpa MSG melampau</span>
+                  <span className="text-xs font-black text-neutral-900 block">{t('chef.highlight1Title')}</span>
+                  <span className="text-[11px] text-neutral-600">{t('chef.highlight1Desc')}</span>
                 </div>
                 <div className="bg-neutral-50 border border-neutral-200 p-3.5 rounded-2xl shadow-2xs">
-                  <span className="text-xs font-black text-neutral-900 block">Kawalan Minyak 175°C</span>
-                  <span className="text-[11px] text-neutral-600">Kekal rangup berjam tanpa berminyak</span>
+                  <span className="text-xs font-black text-neutral-900 block">{t('chef.highlight2Title')}</span>
+                  <span className="text-[11px] text-neutral-600">{t('chef.highlight2Desc')}</span>
                 </div>
                 <div className="bg-neutral-50 border border-neutral-200 p-3.5 rounded-2xl shadow-2xs">
-                  <span className="text-xs font-black text-neutral-900 block">Sos Resepi Asli</span>
-                  <span className="text-[11px] text-neutral-600">Keju New Zealand & cili segar tempatan</span>
+                  <span className="text-xs font-black text-neutral-900 block">{t('chef.highlight3Title')}</span>
+                  <span className="text-[11px] text-neutral-600">{t('chef.highlight3Desc')}</span>
                 </div>
               </div>
             </div>
@@ -152,7 +162,7 @@ export const ChefStory: React.FC = () => {
           {/* Left: Pillar Selection List */}
           <div className="lg:col-span-6 space-y-3">
             <h4 className="text-xs font-black uppercase tracking-wider text-[#FDB913] mb-2 px-1">
-              4 Tonggak Utama Kerangupan Hemzal:
+              {t('chef.pillarsHeading')}
             </h4>
             {pillars.map((pillar, idx) => {
               const Icon = pillar.icon;
@@ -183,11 +193,11 @@ export const ChefStory: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase tracking-wider text-[#B45309]">
-                        Pillar 0{idx + 1}
+                        {t('chef.pillarTag')} 0{idx + 1}
                       </span>
                       {isSelected && (
                         <span className="text-[10px] bg-[#E31E24] text-white font-black px-2 py-0.5 rounded-full shadow-xs">
-                          AKTIF
+                          {t('chef.activeStatus')}
                         </span>
                       )}
                     </div>
@@ -230,15 +240,15 @@ export const ChefStory: React.FC = () => {
                 <div className="space-y-3 pt-4 border-t border-neutral-200">
                   <div className="flex items-center gap-3 text-sm text-neutral-700">
                     <CheckCircle2 className="w-5 h-5 text-[#E31E24] shrink-0" />
-                    <span>Disediakan segar mengikut piawaian sanitasi gred hotel.</span>
+                    <span>{t('chef.proofPoint1')}</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm text-neutral-700">
                     <CheckCircle2 className="w-5 h-5 text-[#E31E24] shrink-0" />
-                    <span>Minyak masak sentiasa dipantau nilai TPM untuk kerangupan selamat.</span>
+                    <span>{t('chef.proofPoint2')}</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm text-neutral-700">
                     <CheckCircle2 className="w-5 h-5 text-[#E31E24] shrink-0" />
-                    <span>Dijamin 100% Halal dan suci oleh pembekal tempatan bertauliah.</span>
+                    <span>{t('chef.proofPoint3')}</span>
                   </div>
                 </div>
               </div>

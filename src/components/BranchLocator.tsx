@@ -12,18 +12,18 @@ import {
   AlertCircle, 
   RefreshCw, 
   Trophy,
-  ExternalLink,
-  Store,
-  Sparkles
+  Store
 } from 'lucide-react';
 import { playPopSound } from '../utils/sound';
 import { calculateDistance, formatDistance } from '../utils/distance';
+import { useLanguage } from '../context/LanguageContext';
 
 export interface BranchWithDistance extends Branch {
   distanceKm?: number;
 }
 
 export const BranchLocator: React.FC = () => {
+  const { language, t } = useLanguage();
   const [selectedRegion, setSelectedRegion] = useState<Region>('all');
   const [branchSearch, setBranchSearch] = useState<string>('');
   const [onlyOpen, setOnlyOpen] = useState<boolean>(false);
@@ -47,7 +47,9 @@ export const BranchLocator: React.FC = () => {
 
     if (!navigator.geolocation) {
       setGeoStatus('error');
-      setGeoError('Pelayar anda tidak menyokong fungsi pengesanan lokasi GPS.');
+      setGeoError(language === 'en' 
+        ? 'Your browser does not support GPS geolocation.' 
+        : 'Pelayar anda tidak menyokong fungsi pengesanan lokasi GPS.');
       return;
     }
 
@@ -64,13 +66,19 @@ export const BranchLocator: React.FC = () => {
       (error) => {
         setGeoStatus('error');
         if (error.code === error.PERMISSION_DENIED) {
-          setGeoError('Akses lokasi ditolak. Sila benarkan kebenaran lokasi pada pelayar/telefon anda.');
+          setGeoError(language === 'en'
+            ? 'Location access denied. Please grant location permissions in your browser or device.'
+            : 'Akses lokasi ditolak. Sila benarkan kebenaran lokasi pada pelayar/telefon anda.');
         } else if (error.code === error.POSITION_UNAVAILABLE) {
-          setGeoError('Lokasi GPS tidak dapat diperoleh buat masa ini.');
+          setGeoError(language === 'en'
+            ? 'GPS location is unavailable at this moment.'
+            : 'Lokasi GPS tidak dapat diperoleh buat masa ini.');
         } else if (error.code === error.TIMEOUT) {
-          setGeoError('Masa mengesan lokasi telah tamat. Sila cuba lagi.');
+          setGeoError(language === 'en'
+            ? 'Location request timed out. Please try again.'
+            : 'Masa mengesan lokasi telah tamat. Sila cuba lagi.');
         } else {
-          setGeoError('Gagal mengesan lokasi GPS.');
+          setGeoError(language === 'en' ? 'Failed to detect GPS location.' : 'Gagal mengesan lokasi GPS.');
         }
       },
       {
@@ -89,13 +97,12 @@ export const BranchLocator: React.FC = () => {
   };
 
   const regionTabs: { id: Region; label: string }[] = [
-    { id: 'all', label: 'Semua Cawangan' },
-    { id: 'sl', label: 'Selangor' },
-    { id: 'kl', label: 'WP Kuala Lumpur' },
+    { id: 'all', label: t('branch.tabAll') },
+    { id: 'sl', label: t('branch.tabSelangor') },
+    { id: 'kl', label: t('branch.tabKL') },
   ];
 
   const filteredBranches: BranchWithDistance[] = useMemo(() => {
-    // Enrich with distance if user location is available
     let list: BranchWithDistance[] = BRANCHES.map((b) => {
       const distanceKm = userLocation
         ? calculateDistance(userLocation.lat, userLocation.lng, b.lat, b.lng)
@@ -106,7 +113,6 @@ export const BranchLocator: React.FC = () => {
       };
     });
 
-    // If user location is active, sort by distance ascending (closest first)
     if (userLocation) {
       list.sort((a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity));
     }
@@ -123,6 +129,14 @@ export const BranchLocator: React.FC = () => {
     });
   }, [selectedRegion, branchSearch, onlyOpen, currentHour, userLocation]);
 
+  const formatFeature = (feat: string) => {
+    if (language === 'en') {
+      if (feat === 'Surau Available') return 'Prayer Room (Surau)';
+      if (feat === 'Parking Luas') return 'Spacious Parking';
+    }
+    return feat;
+  };
+
   return (
     <section id="cawangan" className="py-20 bg-[#0e0e11]/10 backdrop-blur-sm relative overflow-hidden border-t border-b border-white/5">
       {/* Background Glows */}
@@ -135,15 +149,15 @@ export const BranchLocator: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
           <div className="inline-flex items-center gap-1.5 bg-[#1b1b20] border border-[#FDB913]/30 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-widest text-[#FDB913]">
             <MapPin className="w-3.5 h-3.5 text-[#FDB913]" />
-            <span>Rangkaian Outlet Hemzal</span>
+            <span>{t('branch.badge')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight">
-            SENARAI <span className="text-[#FDB913]">CAWANGAN KAMI</span>
+            {t('branch.title')}
           </h2>
 
           <p className="text-neutral-300 text-sm sm:text-base">
-            Cari restoran Hemzal Crispy Chicken berdekatan anda untuk pesanan bawa pulang atau pandu arah pantas dengan Google Maps & Waze.
+            {t('branch.subtitle')}
           </p>
         </div>
 
@@ -161,18 +175,18 @@ export const BranchLocator: React.FC = () => {
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="font-black text-base sm:text-lg text-neutral-900 leading-snug">
-                  Cari Cawangan Paling Dekat Dengan Anda
+                  {t('branch.gpsTitle')}
                 </h3>
                 {geoStatus === 'success' && (
                   <span className="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-emerald-300 shadow-2xs">
-                    GPS Aktif & Disusun
+                    {language === 'en' ? 'GPS Active & Sorted' : 'GPS Aktif & Disusun'}
                   </span>
                 )}
               </div>
               <p className="text-xs text-neutral-600 mt-0.5">
                 {geoStatus === 'success'
-                  ? 'Cawangan telah disusun bermula dari yang paling dekat dengan lokasi semasa anda.'
-                  : 'Aktifkan GPS peranti anda untuk mengira jarak tepat (km) ke setiap outlet Hemzal.'}
+                  ? t('branch.gpsActive')
+                  : t('branch.gpsDesc')}
               </p>
               {geoError && (
                 <p className="text-xs text-[#E31E24] font-bold mt-1.5 flex items-center gap-1.5 animate-shake">
@@ -188,10 +202,10 @@ export const BranchLocator: React.FC = () => {
               <button
                 onClick={handleResetLocation}
                 className="w-full md:w-auto px-5 py-3 rounded-2xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-extrabold text-xs flex items-center justify-center gap-2 border border-neutral-300 transition-all cursor-pointer shadow-xs active:scale-95"
-                title="Padam susunan GPS"
+                title={t('branch.btnResetGps')}
               >
                 <RefreshCw className="w-3.5 h-3.5" />
-                <span>Nyahaktif GPS</span>
+                <span>{t('branch.btnResetGps')}</span>
               </button>
             ) : (
               <button
@@ -201,7 +215,7 @@ export const BranchLocator: React.FC = () => {
                 className="w-full md:w-auto px-6 py-3.5 rounded-2xl bg-[#E31E24] hover:bg-[#c1121f] active:scale-95 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#E31E24]/25 transition-all cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <LocateFixed className={`w-4 h-4 text-[#FDB913] ${geoStatus === 'locating' ? 'animate-spin' : ''}`} />
-                <span>{geoStatus === 'locating' ? 'Mengesan Lokasi GPS...' : 'Kesan Cawangan Paling Dekat'}</span>
+                <span>{geoStatus === 'locating' ? t('branch.btnDetecting') : t('branch.btnDetect')}</span>
               </button>
             )}
           </div>
@@ -219,7 +233,7 @@ export const BranchLocator: React.FC = () => {
                 type="text"
                 value={branchSearch}
                 onChange={(e) => setBranchSearch(e.target.value)}
-                placeholder="Cari bandar, kawasan atau negeri..."
+                placeholder={t('branch.searchPlaceholder')}
                 className="w-full pl-10 pr-4 py-2.5 bg-[#17171c] border border-white/10 rounded-xl text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#FDB913] transition-colors"
               />
               {branchSearch && (
@@ -227,7 +241,7 @@ export const BranchLocator: React.FC = () => {
                   onClick={() => setBranchSearch('')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400 hover:text-white"
                 >
-                  Padam
+                  {t('common.clear')}
                 </button>
               )}
             </div>
@@ -242,7 +256,7 @@ export const BranchLocator: React.FC = () => {
               }`}
             >
               <span className={`w-2 h-2 rounded-full ${onlyOpen ? 'bg-emerald-400 animate-ping' : 'bg-neutral-500'}`} />
-              <span>Tapis: Buka Sekarang Sahaja</span>
+              <span>{t('branch.onlyOpen')}</span>
             </button>
           </div>
 
@@ -279,8 +293,8 @@ export const BranchLocator: React.FC = () => {
         {filteredBranches.length === 0 ? (
           <div className="text-center py-16 bg-[#141418] rounded-3xl border border-white/10">
             <MapPin className="w-12 h-12 text-[#FDB913] mx-auto mb-3 opacity-50" />
-            <h3 className="text-lg font-bold text-white">Tiada cawangan dijumpai</h3>
-            <p className="text-xs text-neutral-400 mt-1">Sila pilih kawasan lain atau semak ejaan carian anda.</p>
+            <h3 className="text-lg font-bold text-white">{t('branch.noBranchFound')}</h3>
+            <p className="text-xs text-neutral-400 mt-1">{t('branch.tryOtherFilter')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
@@ -301,7 +315,7 @@ export const BranchLocator: React.FC = () => {
                   {isClosest && (
                     <div className="absolute top-0 right-0 bg-gradient-to-l from-[#FDB913] to-[#e0a410] text-neutral-950 font-black text-[10px] uppercase tracking-wider px-3.5 py-1 rounded-bl-xl shadow-xs flex items-center gap-1.5">
                       <Trophy className="w-3.5 h-3.5 text-neutral-950 fill-neutral-950" />
-                      <span>Cawangan Paling Dekat</span>
+                      <span>{t('branch.closest')}</span>
                     </div>
                   )}
 
@@ -339,7 +353,7 @@ export const BranchLocator: React.FC = () => {
                             : 'bg-neutral-100 text-neutral-800 border border-neutral-300/80'
                         }`}>
                           <Compass className="w-3.5 h-3.5 text-[#D97706]" />
-                          <span>{formatDistance(branch.distanceKm)} dari anda</span>
+                          <span>{formatDistance(branch.distanceKm)} {t('branch.fromYou')}</span>
                         </div>
                       </div>
                     )}
@@ -354,7 +368,7 @@ export const BranchLocator: React.FC = () => {
                         }`}
                       >
                         <span className={`w-1.5 h-1.5 rounded-full ${open ? 'bg-emerald-600 animate-pulse' : 'bg-rose-600'}`} />
-                        {open ? 'Dapur Dibuka' : 'Tutup Sementara'}
+                        {open ? t('branch.open') : t('branch.closed')}
                       </span>
                       <span className="text-neutral-600 flex items-center gap-1.5 text-xs font-medium bg-neutral-100 px-3 py-1 rounded-full border border-neutral-200">
                         <Clock className="w-3.5 h-3.5 text-neutral-500" /> {branch.openingHours}
@@ -363,7 +377,9 @@ export const BranchLocator: React.FC = () => {
 
                     {/* Full Address */}
                     <div className="bg-neutral-50 p-3.5 rounded-2xl border border-neutral-200/80 text-xs text-neutral-700 leading-relaxed space-y-1">
-                      <span className="text-[10px] font-black uppercase text-neutral-500 block">Alamat Outlet:</span>
+                      <span className="text-[10px] font-black uppercase text-neutral-500 block">
+                        {language === 'en' ? 'Outlet Address:' : 'Alamat Outlet:'}
+                      </span>
                       <p className="font-medium text-neutral-900">{branch.address}</p>
                     </div>
 
@@ -374,7 +390,7 @@ export const BranchLocator: React.FC = () => {
                           key={feat}
                           className="text-[11px] font-semibold bg-white text-neutral-700 px-2.5 py-1 rounded-lg border border-neutral-200 shadow-2xs"
                         >
-                          {feat}
+                          {formatFeature(feat)}
                         </span>
                       ))}
                     </div>
@@ -383,7 +399,7 @@ export const BranchLocator: React.FC = () => {
                   {/* Action Buttons: 1-Tap Waze & Google Maps Navigation */}
                   <div className="space-y-2.5 pt-4 border-t border-neutral-200">
                     <span className="text-[10px] font-black uppercase tracking-wider text-neutral-500 block">
-                      Aplikasi Panduan Arah (1-Tap Navigasi):
+                      {language === 'en' ? 'Direct Navigation (1-Tap Nav):' : 'Aplikasi Panduan Arah (1-Tap Navigasi):'}
                     </span>
                     
                     <div className="grid grid-cols-2 gap-2.5">
@@ -393,7 +409,7 @@ export const BranchLocator: React.FC = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2 bg-[#4285F4]/10 hover:bg-[#4285F4] text-[#1a73e8] hover:text-white border border-[#4285F4]/30 font-black text-xs py-3 rounded-2xl transition-all shadow-xs group/gmaps active:scale-95"
-                        title="Buka panduan arah laluan di Google Maps"
+                        title={t('branch.googleMaps')}
                       >
                         <Navigation className="w-4 h-4 text-[#1a73e8] group-hover/gmaps:text-white group-hover/gmaps:rotate-45 transition-transform" />
                         <span>Google Maps</span>
@@ -405,22 +421,22 @@ export const BranchLocator: React.FC = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2 bg-[#33ccff]/15 hover:bg-[#33ccff] text-[#0088cc] hover:text-neutral-950 border border-[#33ccff]/40 font-black text-xs py-3 rounded-2xl transition-all shadow-xs group/waze active:scale-95"
-                        title="Pandu arah terus dengan Waze"
+                        title={t('branch.waze')}
                       >
                         <Navigation className="w-4 h-4 text-[#0088cc] group-hover/waze:text-neutral-950 group-hover/waze:rotate-45 transition-transform" />
-                        <span>Pandu di Waze</span>
+                        <span>{t('branch.waze')}</span>
                       </a>
                     </div>
 
                     {/* Direct WhatsApp to Branch */}
                     <a
-                      href={`https://wa.me/${branch.whatsapp}?text=Hai%20Hemzal%20${encodeURIComponent(branch.name)},%20saya%20ingin%20membuat%20pesanan%20ayam%20goreng.`}
+                      href={`https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(language === 'en' ? `Hi Hemzal ${branch.name}, I would like to place a fried chicken order.` : `Hai Hemzal ${branch.name}, saya ingin membuat pesanan ayam goreng.`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full flex items-center justify-center gap-2 bg-emerald-50 hover:bg-[#25D366] text-emerald-800 hover:text-neutral-950 font-black text-xs uppercase tracking-wider py-3 rounded-2xl border border-emerald-300 hover:border-[#25D366] transition-all cursor-pointer shadow-xs active:scale-95 group/wa"
                     >
                       <Phone className="w-3.5 h-3.5 text-emerald-600 group-hover/wa:text-neutral-950" />
-                      <span>WhatsApp Outlet ({branch.phone})</span>
+                      <span>{t('branch.whatsapp')} ({branch.phone})</span>
                     </a>
                   </div>
 

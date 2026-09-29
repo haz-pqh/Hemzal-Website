@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { MenuItem, CustomizationOption, CartItem, PortionOption } from '../types';
-import { X, Plus, Minus, Check, Sparkles, MessageSquare, ShoppingBag, Layers, Flame, Info } from 'lucide-react';
+import { X, Plus, Minus, Check, Sparkles, MessageSquare, ShoppingBag, Layers, Flame } from 'lucide-react';
 import { playPopSound, playCrunchSound } from '../utils/sound';
-import { GOURMET_SAUCES, calculateSauceCups, calculateChickenPrice } from '../data/menuData';
+import { GOURMET_SAUCES, calculateSauceCups, calculateChickenPrice, getLocalizedMenuItem, getLocalizedSauce } from '../data/menuData';
+import { useLanguage } from '../context/LanguageContext';
 
 interface ItemCustomizerModalProps {
   item: MenuItem | null;
@@ -12,11 +13,17 @@ interface ItemCustomizerModalProps {
 }
 
 export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
-  item,
+  item: rawItem,
   onClose,
   onAddToCart,
   initialPortion,
 }) => {
+  const { language, t } = useLanguage();
+
+  const item = useMemo(() => {
+    return rawItem ? getLocalizedMenuItem(rawItem, language) : null;
+  }, [rawItem, language]);
+
   const isChickenItem = item ? (item.category === 'signature' || item.pieceUnitPrice !== undefined) : false;
   const unitPiecePrice = item?.pieceUnitPrice || 4.50;
   const unitSaucePrice = item?.saucePrice || 0;
@@ -36,7 +43,7 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
   const [specialInstructions, setSpecialInstructions] = useState<string>('');
   const [orderQuantity, setOrderQuantity] = useState<number>(1);
 
-  // Calculate included sauce cups dynamically: 2-3 pcs=1 cup, 4-5 pcs=2 cups, 6-7 pcs=3 cups, 8-9 pcs=4 cups, 10-11 pcs=5 cups
+  // Calculate included sauce cups dynamically
   const includedSauceCups = useMemo(() => {
     return isSauceSet ? calculateSauceCups(customPieces, true) : 0;
   }, [isSauceSet, customPieces]);
@@ -67,7 +74,6 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
     playPopSound();
     setCustomPieces(newPieces);
     
-    // Calculate exact price: (pieces * RM 4.50) + (cups * saucePrice)
     const calculatedPrice = calculateChickenPrice(newPieces, unitPiecePrice, unitSaucePrice);
     
     const matchingPredefined = item.portions?.find((p) => p.pieces === newPieces);
@@ -147,7 +153,7 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
           <button
             onClick={onClose}
             className="absolute top-3.5 right-3.5 w-9 h-9 rounded-full bg-black/65 hover:bg-black text-white flex items-center justify-center border border-white/20 transition-all cursor-pointer shadow-lg"
-            aria-label="Tutup modal"
+            aria-label={t('common.close')}
           >
             <X className="w-5 h-5" />
           </button>
@@ -155,14 +161,14 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
           {/* Title on bottom of image */}
           <div className="absolute bottom-3 left-4 right-4">
             <span className="text-[10px] text-[#FDB913] font-black uppercase tracking-wider flex items-center gap-1">
-              <Sparkles className="w-3 h-3" /> Pilihan Kustomisasi & Pakej
+              <Sparkles className="w-3 h-3" /> {t('customizer.title')}
             </span>
             <h3 className="text-lg sm:text-xl font-black text-white leading-tight drop-shadow">{item.name}</h3>
             <p className="text-xs text-neutral-300 font-medium mt-0.5">
-              Kadar: <span className="text-[#FDB913] font-bold">RM {currentBasePrice.toFixed(2)}</span>
+              {t('customizer.rate')}: <span className="text-[#FDB913] font-bold">RM {currentBasePrice.toFixed(2)}</span>
               {isChickenItem ? (
                 <span className="ml-1.5 text-white/90 bg-black/50 px-2 py-0.5 rounded text-[11px] font-bold">
-                  ({customPieces} Ketul Ayam)
+                  ({customPieces} {language === 'en' ? 'Pcs Chicken' : 'Ketul Ayam'})
                 </span>
               ) : (
                 selectedPortion && <span className="ml-1 text-white/80">({selectedPortion.label})</span>
@@ -181,7 +187,7 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
             </p>
             {item.sauceInfo && (
               <p className="text-[11px] text-[#FDB913] font-semibold flex items-center gap-1.5 pt-0.5">
-                <Sparkles className="w-3.5 h-3.5 shrink-0" /> Termasuk: {item.sauceInfo}
+                <Sparkles className="w-3.5 h-3.5 shrink-0" /> {t('customizer.included')}: {item.sauceInfo}
               </p>
             )}
           </div>
@@ -190,7 +196,7 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
           {item.includedItems && item.includedItems.length > 0 && (
             <div className="bg-[#1c1c24] p-3.5 rounded-2xl border border-[#FDB913]/30 space-y-2">
               <span className="text-xs font-black uppercase text-[#FDB913] flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" /> Kandungan Pakej Lengkap:
+                <Sparkles className="w-3.5 h-3.5" /> {t('customizer.includedItemsTitle')}
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-neutral-200">
                 {item.includedItems.map((inc, i) => (
@@ -208,14 +214,14 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
             <div className="space-y-3 bg-[#181820] p-4 rounded-2xl border border-[#E31E24]/30 shadow-inner">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-1.5">
-                  <Layers className="w-4 h-4 text-[#FDB913]" /> 1. Pilih Kuantiti Ketul (PCS)
+                  <Layers className="w-4 h-4 text-[#FDB913]" /> {t('customizer.step1Pieces')}
                 </label>
                 <span className="text-[11px] bg-[#E31E24] text-white px-2 py-0.5 rounded-full font-bold">
-                  1 Ketul = RM 4.50
+                  {language === 'en' ? '1 Piece = RM 4.50' : '1 Ketul = RM 4.50'}
                 </span>
               </div>
 
-              {/* Official Flyer Preset Buttons (2 PCS, 6 PCS, 10 PCS) */}
+              {/* Preset Buttons (2 PCS, 6 PCS, 10 PCS) */}
               <div className="grid grid-cols-3 gap-2.5">
                 {[2, 6, 10].map((pcs) => {
                   const isSelected = customPieces === pcs;
@@ -234,7 +240,7 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
                     >
                       {pcs === 6 && (
                         <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#FDB913] text-black text-[9px] font-black px-2 py-0.5 rounded-full uppercase leading-none shadow-sm">
-                          Popular
+                          {t('common.popular')}
                         </span>
                       )}
                       <span className="text-sm font-black tracking-wide block">{pcs} PCS</span>
@@ -248,18 +254,20 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
               <div className="bg-[#121216] p-3.5 rounded-xl border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div className="space-y-1">
                   <span className="text-xs font-bold text-white block">
-                    Kustom Sebarang Bilangan Ketul ({customPieces} PCS)
+                    {language === 'en' ? `Custom Quantity (${customPieces} PCS)` : `Kustom Sebarang Bilangan Ketul (${customPieces} PCS)`}
                   </span>
                   <div className="text-[11px] text-neutral-300 font-mono">
                     ({customPieces} pcs × RM 4.50)
                     {isSauceSet && (
-                      <span className="text-[#FDB913]"> + ({includedSauceCups} cup sos × RM {unitSaucePrice.toFixed(2)})</span>
+                      <span className="text-[#FDB913]"> + ({includedSauceCups} {language === 'en' ? 'cup dip' : 'cup sos'} × RM {unitSaucePrice.toFixed(2)})</span>
                     )}
                     {' '}= <strong className="text-[#FDB913] font-sans text-xs">RM {currentBasePrice.toFixed(2)}</strong>
                   </div>
                   {isSauceSet && (
                     <span className="text-[10px] text-emerald-400 block font-sans">
-                      ✓ Termasuk {includedSauceCups} cup sos gourmet ({item.defaultSauce || 'Sos'}) + Sos Cili Percuma
+                      ✓ {language === 'en' 
+                        ? `Includes ${includedSauceCups} gourmet sauce cup(s) (${item.defaultSauce || 'Sauce'}) + Free Chili Sauce`
+                        : `Termasuk ${includedSauceCups} cup sos gourmet (${item.defaultSauce || 'Sos'}) + Sos Cili Percuma`}
                     </span>
                   )}
                 </div>
@@ -270,21 +278,23 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
                     onClick={() => handlePieceChange(Math.max(1, customPieces - 1))}
                     disabled={customPieces <= 1}
                     className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/15 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center text-white cursor-pointer transition-colors"
-                    aria-label="Kurangkan ketul"
+                    aria-label="Decrease pieces"
                   >
                     <Minus className="w-3.5 h-3.5" />
                   </button>
                   
                   <div className="px-3 min-w-[56px] text-center">
                     <span className="font-black text-sm text-[#FDB913]">{customPieces}</span>
-                    <span className="text-[9px] text-neutral-400 block uppercase font-bold">Ketul</span>
+                    <span className="text-[9px] text-neutral-400 block uppercase font-bold">
+                      {language === 'en' ? 'PCS' : 'Ketul'}
+                    </span>
                   </div>
 
                   <button
                     type="button"
                     onClick={() => handlePieceChange(customPieces + 1)}
                     className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-white cursor-pointer transition-colors"
-                    aria-label="Tambah ketul"
+                    aria-label="Increase pieces"
                   >
                     <Plus className="w-3.5 h-3.5" />
                   </button>
@@ -298,9 +308,9 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
             <div className="space-y-2.5">
               <label className="text-xs font-black uppercase tracking-wider text-neutral-300 flex items-center justify-between">
                 <span className="flex items-center gap-1.5">
-                  <Layers className="w-4 h-4 text-[#FDB913]" /> 1. Pilih Saiz Bahagian
+                  <Layers className="w-4 h-4 text-[#FDB913]" /> {t('customizer.step1Portion')}
                 </span>
-                <span className="text-[11px] text-[#FDB913] font-normal">Wajib</span>
+                <span className="text-[11px] text-[#FDB913] font-normal">{t('customizer.required')}</span>
               </label>
               <div className="grid grid-cols-2 gap-2">
                 {item.portions.map((portion) => {
@@ -318,7 +328,7 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
                     >
                       {portion.isPopular && (
                         <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#FDB913] text-black text-[9px] font-black px-1.5 py-0.2 rounded-full uppercase leading-none">
-                          Popular
+                          {t('common.popular')}
                         </span>
                       )}
                       <span className="text-sm font-black tracking-wide block">{portion.label}</span>
@@ -336,10 +346,10 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
               <Flame className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
               <div>
                 <strong className="text-emerald-300 font-black block">
-                  Sos Cili Sentiasa PERCUMA (RM 0.00)!
+                  {t('customizer.freeChiliBannerTitle')}
                 </strong>
                 <p className="text-[11px] text-emerald-200/90 leading-tight">
-                  Setiap pesanan ayam goreng Hemzal akan dibekalkan dengan Sos Cili secara percuma.
+                  {t('customizer.freeChiliBannerDesc')}
                 </p>
               </div>
             </div>
@@ -350,21 +360,22 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-black uppercase tracking-wider text-neutral-200 flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-[#FDB913]" /> 2. Pilihan Sos Utama
+                  <Sparkles className="w-4 h-4 text-[#FDB913]" /> {t('customizer.step2Sauce')}
                 </label>
-                <span className="text-[11px] text-neutral-400">Pilih 1 Sos</span>
+                <span className="text-[11px] text-neutral-400">{t('customizer.chooseOneSauce')}</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {GOURMET_SAUCES.map((sauce) => {
-                  const isSelected = selectedDip.includes(sauce.name) || (sauce.id === 'sos-cili' && selectedDip.toLowerCase().includes('cili'));
+                {GOURMET_SAUCES.map((rawSauce) => {
+                  const sauce = getLocalizedSauce(rawSauce, language);
+                  const isSelected = selectedDip.includes(rawSauce.name) || (rawSauce.id === 'sos-cili' && selectedDip.toLowerCase().includes('cili'));
                   return (
                     <button
                       type="button"
                       key={sauce.id}
                       onClick={() => {
                         playPopSound();
-                        setSelectedDip(`${sauce.name}${sauce.price > 0 ? ` (+RM${sauce.price.toFixed(2)})` : ' (Percuma)'}`);
+                        setSelectedDip(`${sauce.name}${sauce.price > 0 ? ` (+RM${sauce.price.toFixed(2)})` : ` (${t('common.free')})`}`);
                       }}
                       className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-1.5 ${
                         isSelected
@@ -382,7 +393,7 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
                             ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                             : 'bg-white/10 text-[#FDB913]'
                         }`}>
-                          {sauce.price === 0 ? 'PERCUMA' : `RM ${sauce.price.toFixed(2)}/cup`}
+                          {sauce.price === 0 ? t('common.free') : `RM ${sauce.price.toFixed(2)}/cup`}
                         </span>
                       </div>
                       <span className="text-[10px] text-neutral-400 line-clamp-1">
@@ -395,14 +406,14 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
             </div>
           )}
 
-          {/* 3. Tambahan Pilihan (Add-ons seperti Coleslaw Hemzal Special & Extra Sos) */}
+          {/* 3. Tambahan Pilihan (Add-ons) */}
           {item.options?.addons && item.options.addons.length > 0 && (
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-black uppercase tracking-wider text-neutral-300 flex items-center gap-1.5">
-                  <Plus className="w-4 h-4 text-[#FDB913]" /> 3. Tambahan Add-On (Coleslaw / Sos)
+                  <Plus className="w-4 h-4 text-[#FDB913]" /> {t('customizer.step3Addons')}
                 </label>
-                <span className="text-[11px] text-neutral-400">Pilihan Tambahan</span>
+                <span className="text-[11px] text-neutral-400">{t('customizer.optional')}</span>
               </div>
               
               <div className="space-y-2">
@@ -440,13 +451,13 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
           {/* 4. Nota Khas / Arahan */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-neutral-400 flex items-center gap-1.5">
-              <MessageSquare className="w-3.5 h-3.5" /> 4. Nota Khas untuk Dapur (Pilihan)
+              <MessageSquare className="w-3.5 h-3.5" /> {t('customizer.step4Notes')}
             </label>
             <input
               type="text"
               value={specialInstructions}
               onChange={(e) => setSpecialInstructions(e.target.value)}
-              placeholder="Cth: Nak bahagian drumstick, sos asingkan, dsb."
+              placeholder={t('customizer.notesPlaceholder')}
               className="w-full px-3.5 py-2.5 bg-[#1a1a20] border border-white/10 rounded-xl text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#FDB913]"
             />
           </div>
@@ -464,7 +475,7 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
                 }}
                 className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-white cursor-pointer"
                 disabled={orderQuantity <= 1}
-                aria-label="Kurangkan bilangan set"
+                aria-label="Decrease quantity"
               >
                 <Minus className="w-3.5 h-3.5" />
               </button>
@@ -478,7 +489,7 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
                   setOrderQuantity(orderQuantity + 1);
                 }}
                 className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/15 flex items-center justify-center text-white cursor-pointer"
-                aria-label="Tambah bilangan set"
+                aria-label="Increase quantity"
               >
                 <Plus className="w-3.5 h-3.5" />
               </button>
@@ -490,7 +501,7 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
               className="flex-1 py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#E31E24] to-[#C1121F] hover:from-[#FDB913] hover:to-[#e39600] text-white hover:text-black font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#E31E24]/30 transition-all cursor-pointer"
             >
               <ShoppingBag className="w-4 h-4" />
-              <span>Tambah • RM {finalTotalPrice.toFixed(2)}</span>
+              <span>{t('customizer.addToCart')} • RM {finalTotalPrice.toFixed(2)}</span>
             </button>
 
           </div>

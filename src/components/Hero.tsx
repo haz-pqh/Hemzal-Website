@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Flame, Star, Volume2, ShieldCheck, Award, ArrowRight, Sparkles, Clock, CheckCircle2 } from 'lucide-react';
+import { Flame, Star, Volume2, ShieldCheck, Award, ArrowRight, Sparkles, Clock, CheckCircle2, Sunrise, Sun, Sunset, Moon } from 'lucide-react';
 import { motion } from 'motion/react';
 import { playCrunchSound } from '../utils/sound';
+import { getTimeGreeting, TimeGreeting } from '../utils/greeting';
 import promoVid from '/hemzal-promo-vid.mp4';
 import promoPic from '/hemzal-promo-pic.png';
 
@@ -12,7 +13,16 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
   const [crunchActive, setCrunchActive] = useState(false);
+  const [greeting, setGreeting] = useState<TimeGreeting>(() => getTimeGreeting());
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    // Update greeting every minute so it transitions smoothly as time passes
+    const timer = setInterval(() => {
+      setGreeting(getTimeGreeting());
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -52,19 +62,44 @@ export const Hero: React.FC<HeroProps> = ({ onExploreMenu, onFindBranch }) => {
           {/* Left Column: Hero Copy */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
             
-            {/* Top Eyebrow Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-full px-4 py-1.5 shadow-sm"
-            >
-              <span className="flex h-2 w-2 rounded-full bg-[#E31E24] animate-ping" />
-              <Award className="w-4 h-4 text-[#D97706]" />
-              <span className="text-xs font-bold uppercase tracking-widest text-[#B45309]">
-                Resepi Eksklusif Chef Mohammad Helmi
-              </span>
-            </motion.div>
+            {/* Top Eyebrow Badges */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
+              {/* Dynamic Time-of-Day Personalized Greeting */}
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="inline-flex items-center gap-2 bg-white border border-amber-500/30 rounded-full px-3.5 py-1.5 shadow-sm text-xs"
+              >
+                <span className="flex items-center justify-center w-5 h-5 rounded-full bg-amber-500/15 text-[#D97706]">
+                  {greeting.period === 'pagi' && <Sunrise className="w-3.5 h-3.5" />}
+                  {greeting.period === 'tengah_hari' && <Sun className="w-3.5 h-3.5" />}
+                  {greeting.period === 'petang' && <Sunset className="w-3.5 h-3.5" />}
+                  {greeting.period === 'malam' && <Moon className="w-3.5 h-3.5" />}
+                </span>
+                <span className="font-extrabold text-[#E31E24]">
+                  {greeting.greeting}!
+                </span>
+                <span className="text-neutral-300">•</span>
+                <span className="text-neutral-700 font-medium hidden sm:inline text-[11px]">
+                  {greeting.message}
+                </span>
+              </motion.div>
+
+              {/* Chef Award Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+                className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 rounded-full px-4 py-1.5 shadow-sm"
+              >
+                <span className="flex h-2 w-2 rounded-full bg-[#E31E24] animate-ping" />
+                <Award className="w-4 h-4 text-[#D97706]" />
+                <span className="text-xs font-bold uppercase tracking-widest text-[#B45309]">
+                  Resepi Eksklusif Chef Mohammad Helmi
+                </span>
+              </motion.div>
+            </div>
 
             {/* Main Headline */}
             <motion.h1

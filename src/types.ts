@@ -82,6 +82,8 @@ export interface Branch {
   wazeUrl: string;
   googleMapsUrl: string;
   isHQ?: boolean;
+  lat: number;
+  lng: number;
 }
 
 export interface Review {

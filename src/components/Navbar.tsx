@@ -16,10 +16,14 @@ import { playPopSound } from '../utils/sound';
 import logo from '/icon.png';
 
 interface NavbarProps {
+  cartCount?: number;
+  onOpenCart?: () => void;
   onOpenFranchise: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
+  cartCount,
+  onOpenCart,
   onOpenFranchise,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
